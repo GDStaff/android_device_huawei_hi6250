@@ -116,13 +116,42 @@ void vendor_load_default_properties() {
      */
 }
 
+static int find_product_path(char *path) {
+    char *tmodel = strdup(model);
+    char *thex = strstr(tmodel, "X");
+    char *post;
+    int i = 0, ret = -1;
+    if(thex) {
+        thex[0] = '\0';
+        post = thex + 1;
+        for(i = 0; i < 10;i ++) {
+            sprintf(path, "/product/hw_oem/%s%d%s/prop/local.prop",tmodel,i,post);
+	    if(!access(path, O_RDONLY)) {
+		ret = 0;
+		goto end;
+	    }
+        }
+	ret = -1;
+    } else {
+        sprintf(path, "/product/hw_oem/%s/prop/local.prop",tmodel);
+	ret = 0;
+    }
+end:
+    return ret;
+}
+
 static void load_product_props() {
     char prod_prop_path[255];
     char *linebuf = NULL;
     size_t size = PROP_NAME_MAX + PROP_VALUE_MAX + 2;
-    if(!strcmp(model, "WAS-LX3"))
-	model = "WAS-L23";
-    sprintf(prod_prop_path, "/product/hw_oem/%s/prop/local.prop",model);
+
+    if(find_product_path(prod_prop_path)) {
+	klog_write(0, "huawei_init: Couldn't find product prop path.");
+	return;
+    } else {
+	klog_write(0, "huawei_init: product path: %s\n", prod_prop_path);
+    }
+
     FILE *fd = fopen(prod_prop_path, "r");
     if(!fd) {
 	klog_write(0, "huawei_init: Couldn't read %s?\n", prod_prop_path);
