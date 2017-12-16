@@ -19,7 +19,7 @@ ifeq ($(I_AM_METICULUS), true)
 # so you can see whats going on.
 # Resolve depenancy issue: sudo apt-get install libc++-dev
 $(shell echo "Using Meticulus's Ninja" >&2)
-$(shell cp -f $(LOCAL_PATH)/prebuilt/ninja prebuilts/ninja/linux-x86/ninja)
+$(shell cp -f $(LOCAL_PATH)/prebuilt/ninja prebuilts/build-tools/linux-x86/bin/ninja)
 
 # Meticulus recovery init rc
 PRODUCT_COPY_FILES += \
@@ -38,7 +38,7 @@ PRODUCT_PACKAGES += \
     volumeinput
 
 # Meticulus Releasetools
-TARGET_RELEASETOOLS_EXTENSIONS := device/huawei/hi6250
+#TARGET_RELEASETOOLS_EXTENSIONS := device/huawei/hi6250
 else
 $(shell cd prebuilts/build-tools && git checkout linux-x86/bin/ninja)
 endif

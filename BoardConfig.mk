@@ -77,14 +77,16 @@ WARSAW_SHIMS := '/hwvendor/lib64/hwcam/hwcam.hi6250.m.WARSAW.so|libshim_libui.so
 
 COMMON_SHIMS := '/hwvendor/lib/hw/audio.primary.hisi.so|libshim.so:/hwvendor/lib64/libcamera_algo.so|libshim_libui.so:/hwvendor/lib64/hw/fingerprint.hi6250.so|libshim.so'
 
+OREO_SHIMS := '/hwvendor/lib/hw/audio.primary.hisi.so|libshim_icu.so'
+
 # Linker
-LD_SHIM_LIBS := $(COMMON_SHIMS):$(BERLIN_SHIMS):$(DALLAS_SHIMS):$(NEMO_SHIMS):$(PRAGUE_SHIMS):$(VENUS_SHIMS):$(WARSAW_SHIMS)
+LD_SHIM_LIBS := $(COMMON_SHIMS):$(BERLIN_SHIMS):$(DALLAS_SHIMS):$(NEMO_SHIMS):$(PRAGUE_SHIMS):$(VENUS_SHIMS):$(WARSAW_SHIMS):$(OREO_SHIMS)
 
 ## Uncomment to see LD_SHIM_LIBS var
 #$(shell echo $(LD_SHIM_LIBS) >&2)
 
 # RIL
-BOARD_RIL_CLASS := ../../../device/huawei/hi6250/ril/
+#BOARD_RIL_CLASS := ../../../device/huawei/hi6250/ril/
 SIM_COUNT := 2
 BOARD_PROVIDES_RILD := true
 BOARD_PROVIDES_LIBRIL := true
@@ -97,7 +99,7 @@ BOARD_EGL_CFG := device/huawei/hi6250/egl.cfg
 HWUI_COMPILE_SYMBOLS := true
 
 # Surfaceflinger
-NUM_FRAMEBUFFER_SURFACE_BUFFERS := 6
+NUM_FRAMEBUFFER_SURFACE_BUFFERS := 3
 
 # NFC
 BOARD_NFC_CHIPSET := pn548
@@ -135,11 +137,9 @@ TARGET_RECOVERY_FSTAB := device/huawei/hi6250/rootdir/fstab.hi6250
 BOARD_HARDWARE_CLASS := device/huawei/hi6250/cmhw/
 
 # SELinux
-BOARD_SEPOLICY_DIRS += \
-	device/huawei/hi6250/sepolicy
+#BOARD_SEPOLICY_DIRS += device/huawei/hi6250/sepolicy
 
 ifneq ($(TARGET_PRODUCT), aosp_hi6250)
-BOARD_SEPOLICY_DIRS += \
-	device/huawei/hi6250/cm_sepolicy
+BOARD_SEPOLICY_DIRS += device/huawei/hi6250/cm_sepolicy
 endif
 

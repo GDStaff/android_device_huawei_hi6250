@@ -5,7 +5,6 @@ allow zygote kernel_devicetree:file r_file_perms;
 allow zygote kernel_devicetree:dir { search };
 allow zygote self:capability { sys_nice };
 allow zygote self:process { execmem };
-allow zygote zygote_tmpfs:file { execute };
 allow zygote user_profile_data_file:file r_file_perms;
 allow zygote sysfs:file rw_file_perms;
 allow zygote gnss:unix_stream_socket { connectto };

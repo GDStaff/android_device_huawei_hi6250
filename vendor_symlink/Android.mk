@@ -16,7 +16,6 @@
 
 
 toplinks := \
-    bin \
     app \
     build.prop \
     firmware \
@@ -25,6 +24,127 @@ toplinks := \
     phone.prop \
     usr \
     xbin
+
+binlinks := \
+    6c8cf255-ca98-439e-a98e-ade64022ecb6.sec \
+    868ccafb-794b-46c6-b5c4-9f1462de4e02.sec \
+    883890ba-3ef8-4f0b-9c02-f5874acbf2ff.sec \
+    993e26b8-0273-408e-98d3-60c997c37121.sec \
+    9b17660b-8968-4eed-917e-dd32379bd548.sec \
+    HwCamCfgSvr \
+    applypatch \
+    atcmdserver \
+    b4b71581-add2-e89f-d536-f35436dc7973.sec \
+    bastetd \
+    bfgin_cmd_app \
+    blkid \
+    bootstat \
+    chargelogcat \
+    chargemonitor \
+    checkntfs \
+    chr_logd \
+    data_cleaner \
+    debuggerd \
+    debuggerd64 \
+    defragd \
+    dhcp6s \
+    dhcpcd \
+    diagserver \
+    e2fsck \
+    e4defrag \
+    eventcat \
+    exfatfsck \
+    f2fsdefrag \
+    factory_log_service \
+    fd1bbfb2-9a62-4b27-8fdb-a503529076af.sec \
+    fingerprintd \
+    fm_server_hisi \
+    fpc_1021_ta.sec \
+    fpc_1021_ta_berlin.sec \
+    fpc_1021_ta_sw15.sec \
+    fpc_1021_ta_venus.sec \
+    fpc_1022_ta.sec \
+    fpc_1022_ta_sw20.sec \
+    fpc_1023_ta.sec \
+    fpc_1268_ta.sec \
+    fsck.f2fs \
+    fsck_msdos \
+    fwrt_emmc_screen_test \
+    gatekeeperd \
+    gnss_control_hisi \
+    gnss_engine_hisi \
+    gnss_supl20clientd_hisi \
+    goodix_3288_ta.sec \
+    gpsdaemon \
+    grep \
+    hiscoutmanager \
+    hivwserver \
+    hostapd \
+    hostapd_hisi \
+    hw_cdmamodem_service \
+    hwnff \
+    hwnffserver \
+    iked \
+    isplogcat \
+    keystore \
+    limit_current \
+    lmkd \
+    logcat \
+    logd \
+    logwrapper \
+    mac_addr_normalization \
+    make_ext4fs \
+    make_f2fs \
+    mdnsd \
+    mkexfatfs \
+    mkntfs \
+    modemlogcat_lte \
+    ndc \
+    netcfg \
+    netd \
+    ntfs-3g \
+    oam_hisi \
+    octty \
+    perfhub \
+    pmom_cat \
+    pppoe \
+    r \
+    radvd \
+    reboot \
+    resize.f2fs \
+    resize2fs \
+    rild \
+    run-as \
+    schedtest \
+    sdcard \
+    secdiscard \
+    secure_storage \
+    sgdisk \
+    sh \
+    shex \
+    shs \
+    silead_6165_ta.sec \
+    silead_6185_ta.sec \
+    sleeplogcat \
+    start_connectivity_hisi \
+    syna_109A0_ta.sec \
+    syna_155A_ta.sec \
+    thermal-daemon \
+    tlogcat \
+    toolbox \
+    tui_daemon \
+    tzdatacheck \
+    uncrypt \
+    unrmd \
+    vdc \
+    vold \
+    wifichrdump \
+    wifiwakeupsrc \
+    wl \
+    wpa_cli \
+    wpa_cli_hisi \
+    wpa_supplicant \
+    wpa_supplicant_hisi
 
 etclinks := \
     accelpackages.xml \
@@ -96,7 +216,6 @@ etclinks := \
     hsmConfig \
     HwFrameworkNormalization.xml \
     ikedconfig \
-    init \
     media_codecs_google_audio.xml \
     media_codecs_google_telephony.xml \
     media_codecs_google_video.xml \
@@ -190,7 +309,6 @@ etclinks := \
     hsmConfig \
     HwFrameworkNormalization.xml \
     ikedconfig \
-    init \
     media_codecs_google_audio.xml \
     media_codecs_google_telephony.xml \
     media_codecs_google_video.xml \
@@ -686,9 +804,11 @@ symlinks := \
     $(shell rm -rf $(PRODUCT_OUT)/system/vendor/lib64/hw 2> /dev/null) \
     $(shell rm -rf $(PRODUCT_OUT)/system/vendor/lib/hw 2> /dev/null) \
     $(shell rm -rf $(PRODUCT_OUT)/system/vendor/etc 2> /dev/null) \
+    $(shell rm -rf $(PRODUCT_OUT)/system/vendor/bin 2> /dev/null) \
     $(shell mkdir -p $(PRODUCT_OUT)/system/vendor/lib64/hw 2> /dev/null) \
     $(shell mkdir -p $(PRODUCT_OUT)/system/vendor/lib/hw 2> /dev/null) \
     $(shell mkdir -p $(PRODUCT_OUT)/system/vendor/etc 2> /dev/null) \
+    $(shell mkdir -p $(PRODUCT_OUT)/system/vendor/bin 2> /dev/null) \
     $(foreach link, $(toplinks), \
     $(shell ln -s /hwvendor/$(link) $(PRODUCT_OUT)/system/vendor/$(link) 2> /dev/null)) \
     $(foreach link, $(liblinks), \
@@ -701,6 +821,8 @@ symlinks := \
     $(shell ln -s /hwvendor/lib64/hw/$(link) $(PRODUCT_OUT)/system/vendor/lib64/hw/$(link) 2> /dev/null)) \
     $(foreach link, $(etclinks), \
     $(shell ln -s /hwvendor/etc/$(link) $(PRODUCT_OUT)/system/vendor/etc/$(link) 2> /dev/null)) \
+    $(foreach link, $(binlinks), \
+    $(shell ln -s /hwvendor/bin/$(link) $(PRODUCT_OUT)/system/vendor/bin/$(link) 2> /dev/null)) \
     $(shell mkdir -p $(PRODUCT_OUT)/system/bin) \
     $(shell mkdir -p $(PRODUCT_OUT)/system/etc) \
     $(shell ln -s /hwvendor/lib64/hw/gps.hisi.default.so $(PRODUCT_OUT)/system/vendor/lib64/hw/gps.hisi.so 2> /dev/null) \

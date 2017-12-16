@@ -1,33 +1,57 @@
-From 855b1295f08cb7b7bc9e97660e7c344a6d984396 Mon Sep 17 00:00:00 2001
+From a9054fbaa636add6419acc0bc5ce38018fa73556 Mon Sep 17 00:00:00 2001
 From: Meticulus <theonejohnnyd@gmail.com>
-Date: Mon, 20 Nov 2017 15:32:08 -0600
-Subject: [PATCH] Allow dynamic zygote whitelist
+Date: Tue, 12 Dec 2017 07:41:14 -0600
+Subject: [PATCH] "0001-Allow-dynamic-zygote-whitelist
+ _______________________________
 
--I need to specify a path that has a var that is discovered
-at runtime. Statically put it in like this.
-
-Change-Id: I044ef35dfe51d3b09e3f72af9cbdd22198d11cdc
+*Previous From 36238c7c11dc2fff52c4c3d383d257968c169ef9 Mon Sep 17 00:00:00 2001
+*Previous From: Meticulus <theonejohnnyd@gmail.com>
+*Previous Date: Tue, 12 Dec 2017 07:39:48 -0600
+*Previous Subject: [PATCH] "0001-Allow-dynamic-zygote-whitelist
+*_______________________________
+*
+**Previous From 764f81c89dec7ca6d865b78e538062b96dd2c2c9 Mon Sep 17 00:00:00 2001
+**Previous From: Meticulus <theonejohnnyd@gmail.com>
+**Previous Date: Tue, 12 Dec 2017 07:32:38 -0600
+**Previous Subject: [PATCH] "0001-Allow-dynamic-zygote-whitelist
+**_______________________________
+**
+***Previous From 6ed1aaeac1b3c600a95fb85fea855f738de0d9ee Mon Sep 17 00:00:00 2001
+***Previous From: Meticulus <theonejohnnyd@gmail.com>
+***Previous Date: Tue, 12 Dec 2017 05:46:22 -0600
+***Previous Subject: [PATCH] "0001-Allow-dynamic-zygote-whitelist
+***_______________________________
+***
+****Previous From 855b1295f08cb7b7bc9e97660e7c344a6d984396 Mon Sep 17 00:00:00 2001
+****Previous From: Meticulus <theonejohnnyd@gmail.com>
+****Previous Date: Mon, 20 Nov 2017 15:32:08 -0600
+****Previous Subject: [PATCH] Allow dynamic zygote whitelist
+****
+****-I need to specify a path that has a var that is discovered
+****at runtime. Statically put it in like this.
+****
+****Change-Id: I044ef35dfe51d3b09e3f72af9cbdd22198d11cdc""""
 ---
- core/jni/fd_utils-inl.h | 6 ++++++
+ core/jni/fd_utils.cpp | 6 ++++++
  1 file changed, 6 insertions(+)
 
-diff --git a/core/jni/fd_utils-inl.h b/core/jni/fd_utils-inl.h
-index a68a602..25260ce 100644
---- a/core/jni/fd_utils-inl.h
-+++ b/core/jni/fd_utils-inl.h
-@@ -269,6 +269,12 @@ class FileDescriptorInfo {
-       }
-     }
+diff --git a/core/jni/fd_utils.cpp b/core/jni/fd_utils.cpp
+index 956b724..f79150e 100644
+--- a/core/jni/fd_utils.cpp
++++ b/core/jni/fd_utils.cpp
+@@ -67,6 +67,12 @@ bool FileDescriptorWhitelist::IsAllowed(const std::string& path) const {
+       return true;
+   }
  
-+    static const std::string kProductPrefix = "/product/hw_oem";
-+    static const std::string kPropSuffix = ".prop";
-+    if (StartsWith(path, kProductPrefix) && EndsWith(path, kPropSuffix)) {
-+      return true;
-+    }
++  static const char* kProductPrefix = "/product/hw_oem";
++  static const char* kPropSuffix = ".prop";
++  if (android::base::StartsWith(path, kProductPrefix) && android::base::EndsWith(path, kPropSuffix)) {
++    return true;
++  }
 +
-     static const std::string kFrameworksPrefix = "/system/framework/";
-     static const std::string kJarSuffix = ".jar";
-     if (StartsWith(path, kFrameworksPrefix) && EndsWith(path, kJarSuffix)) {
+   static const char* kFrameworksPrefix = "/system/framework/";
+   static const char* kJarSuffix = ".jar";
+   if (android::base::StartsWith(path, kFrameworksPrefix)
 -- 
 2.7.4
 

@@ -26,7 +26,7 @@
 /dev/tfa9895            u:object_r:audio_device:s0
 /dev/ear_pa             u:object_r:audio_device:s0
 /dev/ttyAMA4		u:object_r:hci_attach_dev:s0
-/dev/ttyAMA3		u:object_r:gps_device:s0
+#/dev/ttyAMA3		u:object_r:gps_device:s0
 /dev/gpstty        	u:object_r:bluetooth_device:s0
 /dev/hwfm		u:object_r:con_device:s0
 /dev/dsm		u:object_r:dmd_device:s0

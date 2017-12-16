@@ -1,0 +1,135 @@
+From d1cd27a9a3d7a837dc4486935b4bf577aec35226 Mon Sep 17 00:00:00 2001
+From: Meticulus <theonejohnnyd@gmail.com>
+Date: Tue, 12 Dec 2017 05:29:48 -0600
+Subject: [PATCH] "0001-sepolicy-patch _______________________________
+
+*Previous From c29de7d512886795240f794124598d597f07dd12 Mon Sep 17 00:00:00 2001
+*Previous From: Meticulus <theonejohnnyd@gmail.com>
+*Previous Date: Fri, 1 Dec 2017 04:47:53 -0600
+*Previous Subject: [PATCH] "0001-sepolicy-patch _______________________________
+*
+**Previous From b469cd826322cec0d92188c9790ca3dec2c3e557 Mon Sep 17 00:00:00 2001
+**Previous From: Meticulus <theonejohnnyd@gmail.com>
+**Previous Date: Sat, 8 Apr 2017 15:52:17 -0500
+**Previous Subject: [PATCH] 0001-sepolicy-patch
+**
+**Change-Id: I62d72022d19714ac8a719d22bc651a3348dabe94"
+*
+*Change-Id: Id916b91b48d9a6de5a7141a64a47941d99488dca"
+---
+ private/app.te    |  2 +-
+ private/domain.te |  1 +
+ private/logd.te   | 12 ++++++------
+ public/domain.te  | 20 ++++++++++----------
+ public/init.te    |  2 +-
+ 5 files changed, 19 insertions(+), 18 deletions(-)
+
+diff --git a/private/app.te b/private/app.te
+index b5aef1c..ff01426 100644
+--- a/private/app.te
++++ b/private/app.te
+@@ -427,7 +427,7 @@ neverallow appdomain exec_type:file
+ # This is the default type for anything under /data not otherwise
+ # specified in file_contexts.  Define a different type for portions
+ # that should be writable by apps.
+-neverallow appdomain system_data_file:dir_file_class_set
++neverallow { appdomain -nfc } system_data_file:dir_file_class_set
+     { create write setattr relabelfrom relabelto append unlink link rename };
+ 
+ # Write to various other parts of /data.
+diff --git a/private/domain.te b/private/domain.te
+index d37a0bd..1fc7602 100644
+--- a/private/domain.te
++++ b/private/domain.te
+@@ -11,6 +11,7 @@ neverallow {
+   -dumpstate
+   -storaged
+   -system_server
++  -tee
+   userdebug_or_eng(`-perfprofd')
+ } self:capability sys_ptrace;
+ 
+diff --git a/private/logd.te b/private/logd.te
+index 4338e40..c338da2 100644
+--- a/private/logd.te
++++ b/private/logd.te
+@@ -5,12 +5,12 @@ init_daemon_domain(logd)
+ # logd is not allowed to write anywhere other than /data/misc/logd, and then
+ # only on userdebug or eng builds
+ # TODO: deal with tmpfs_domain pub/priv split properly
+-neverallow logd {
+-  file_type
+-  -logd_tmpfs
+-  -runtime_event_log_tags_file
+-  userdebug_or_eng(`-coredump_file -misc_logd_file')
+-}:file { create write append };
++#neverallow logd {
++#  file_type
++#  -logd_tmpfs
++#  -runtime_event_log_tags_file
++#  userdebug_or_eng(`-coredump_file -misc_logd_file')
++#}:file { create write append };
+ 
+ # protect the event-log-tags file
+ neverallow {
+diff --git a/public/domain.te b/public/domain.te
+index add74be..adbd696 100644
+--- a/public/domain.te
++++ b/public/domain.te
+@@ -426,7 +426,7 @@ neverallow { domain -recovery } contextmount_type:dir_file_class_set
+ # system_app_service rather than the generic type.
+ # New service_types are defined in {,hw,vnd}service.te and new mappings
+ # from service name to service_type are defined in {,hw,vnd}service_contexts.
+-neverallow * default_android_service:service_manager add;
++neverallow { domain -perfhub -hwcamcfgsvr } default_android_service:service_manager add;
+ neverallow * default_android_vndservice:service_manager { add find };
+ neverallow * default_android_hwservice:hwservice_manager { add find };
+ 
+@@ -441,7 +441,7 @@ neverallow * hidl_base_hwservice:hwservice_manager find;
+ 
+ # Require that domains explicitly label unknown properties, and do not allow
+ # anyone but init to modify unknown properties.
+-neverallow { domain -init } default_prop:property_service set;
++neverallow { domain -init -tee } default_prop:property_service set;
+ neverallow { domain -init } mmc_prop:property_service set;
+ 
+ # Do not allow reading device's serial number from system properties except form
+@@ -867,14 +867,14 @@ neverallow ~domain domain:process { transition dyntransition };
+ # Example type transition:
+ #  mydomain.te:file_type_auto_trans(mydomain, system_data_file, new_file_type)
+ #
+-neverallow {
+-  domain
+-  -system_server
+-  -system_app
+-  -init
+-  -installd # for relabelfrom and unlink, check for this in explicit neverallow
+-  with_asan(`-asan_extract')
+-} system_data_file:file no_w_file_perms;
++#neverallow {
++#  domain
++#  -system_server
++#  -system_app
++#  -init
++#  -installd # for relabelfrom and unlink, check for this in explicit neverallow
++#  with_asan(`-asan_extract')
++#} system_data_file:file no_w_file_perms;
+ # do not grant anything greater than r_file_perms and relabelfrom unlink
+ # to installd
+ neverallow installd system_data_file:file ~{ r_file_perms relabelfrom unlink };
+diff --git a/public/init.te b/public/init.te
+index 6d43ef4..29dad9a 100644
+--- a/public/init.te
++++ b/public/init.te
+@@ -419,7 +419,7 @@ neverallow init shell_data_file:lnk_file read;
+ neverallow init app_data_file:lnk_file read;
+ 
+ # init should never execute a program without changing to another domain.
+-neverallow init { file_type fs_type }:file execute_no_trans;
++#neverallow init { file_type fs_type }:file execute_no_trans;
+ 
+ # Init never adds or uses services via service_manager.
+ neverallow init service_manager_type:service_manager { add find };
+-- 
+2.7.4
+

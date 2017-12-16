@@ -1,20 +1,32 @@
-From f4f6a6fedc7604f23aa5c753bf4f8a6d4cee7c52 Mon Sep 17 00:00:00 2001
+From a05a0a5dec42a908ec18daf8b8d3b06ef46c15fa Mon Sep 17 00:00:00 2001
 From: Meticulus <theonejohnnyd@gmail.com>
-Date: Wed, 25 Jan 2017 14:49:12 -0600
-Subject: [PATCH] init: remove zygote service writes
+Date: Tue, 12 Dec 2017 05:09:15 -0600
+Subject: [PATCH] "0001-init-remove-zygote-service-writes
+ _______________________________
 
-Change-Id: Id8f1dc435e44bf22a7d962672496d7550164481a
+*Previous From 16b3d853006c97390138281928abc9db0e78beb1 Mon Sep 17 00:00:00 2001
+*Previous From: Meticulus <theonejohnnyd@gmail.com>
+*Previous Date: Tue, 12 Dec 2017 05:09:01 -0600
+*Previous Subject: [PATCH] "0001-init-remove-zygote-service-writes
+*_______________________________
+*
+**Previous From f4f6a6fedc7604f23aa5c753bf4f8a6d4cee7c52 Mon Sep 17 00:00:00 2001
+**Previous From: Meticulus <theonejohnnyd@gmail.com>
+**Previous Date: Wed, 25 Jan 2017 14:49:12 -0600
+**Previous Subject: [PATCH] init: remove zygote service writes
+**
+**Change-Id: Id8f1dc435e44bf22a7d962672496d7550164481a""
 ---
- rootdir/init.zygote64_32.rc | 4 ----
- 1 file changed, 4 deletions(-)
+ rootdir/init.zygote64_32.rc | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
 diff --git a/rootdir/init.zygote64_32.rc b/rootdir/init.zygote64_32.rc
-index a422fcc..105e42e 100644
+index 09db7b0..46dffe3 100644
 --- a/rootdir/init.zygote64_32.rc
 +++ b/rootdir/init.zygote64_32.rc
-@@ -1,16 +1,12 @@
- service zygote /system/bin/app_process64 -Xzygote /system/bin --zygote --start-system-server --socket-name=zygote
-     class main
+@@ -4,14 +4,11 @@ service zygote /system/bin/app_process64 -Xzygote /system/bin --zygote --start-s
+     user root
+     group root readproc
      socket zygote stream 660 root system
 -    onrestart write /sys/android_power/request_state wake
 -    onrestart write /sys/power/state on
@@ -22,13 +34,18 @@ index a422fcc..105e42e 100644
      onrestart restart cameraserver
      onrestart restart media
      onrestart restart netd
+     onrestart restart wificond
 -    writepid /dev/cpuset/foreground/tasks
  
- service zygote_secondary /system/bin/app_process32 -Xzygote /system/bin --zygote --socket-name=zygote_secondary
+ service zygote_secondary /system/bin/app_process32 -Xzygote /system/bin --zygote --socket-name=zygote_secondary --enable-lazy-preload
      class main
+@@ -19,5 +16,4 @@ service zygote_secondary /system/bin/app_process32 -Xzygote /system/bin --zygote
+     user root
+     group root readproc
      socket zygote_secondary stream 660 root system
-     onrestart restart zygote
+-    onrestart restart zygote
 -    writepid /dev/cpuset/foreground/tasks
++    onrestart restart zygote 
 -- 
-1.9.1
+2.7.4
 

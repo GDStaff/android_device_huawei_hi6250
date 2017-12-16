@@ -1,0 +1,39 @@
+From 8067cb69bbf8cd34890af3cdcd8dd5969463f75e Mon Sep 17 00:00:00 2001
+From: Meticulus <theonejohnnyd@gmail.com>
+Date: Tue, 12 Dec 2017 06:16:27 -0600
+Subject: [PATCH] build: Set props when I say so
+
+---
+ core/main.mk | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/core/main.mk b/core/main.mk
+index c326311..b434f03 100755
+--- a/core/main.mk
++++ b/core/main.mk
+@@ -241,16 +241,16 @@ endif
+ #
+ # -----------------------------------------------------------------
+ # Validate ADDITIONAL_DEFAULT_PROPERTIES.
+-ifneq ($(ADDITIONAL_DEFAULT_PROPERTIES),)
+-$(error ADDITIONAL_DEFAULT_PROPERTIES must not be set before here: $(ADDITIONAL_DEFAULT_PROPERTIES))
+-endif
++#ifneq ($(ADDITIONAL_DEFAULT_PROPERTIES),)
++#$(error ADDITIONAL_DEFAULT_PROPERTIES must not be set before here: $(ADDITIONAL_DEFAULT_PROPERTIES))
++#endif
+ 
+ #
+ # -----------------------------------------------------------------
+ # Validate ADDITIONAL_BUILD_PROPERTIES.
+-ifneq ($(ADDITIONAL_BUILD_PROPERTIES),)
+-$(error ADDITIONAL_BUILD_PROPERTIES must not be set before here: $(ADDITIONAL_BUILD_PROPERTIES))
+-endif
++#ifneq ($(ADDITIONAL_BUILD_PROPERTIES),)
++#$(error ADDITIONAL_BUILD_PROPERTIES must not be set before here: $(ADDITIONAL_BUILD_PROPERTIES))
++#endif
+ 
+ #
+ # -----------------------------------------------------------------
+-- 
+2.7.4
+

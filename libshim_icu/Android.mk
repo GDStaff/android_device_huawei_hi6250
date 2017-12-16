@@ -1,6 +1,4 @@
-#
-# Copyright (C) 2017 Jonathan Jason Dennis [Meticulus]
-#                                       theonejohnnyd@gmail.com
+# Copyright (C) 2011 The Android Open Source Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,7 +11,13 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-#
 
-allow debuggerd properties_device:file r_file_perms;
-allow debuggerd kernel_devicetree:file r_file_perms;
+LOCAL_PATH := $(call my-dir)
+
+include $(CLEAR_VARS)
+
+LOCAL_SHARED_LIBRARIES := libicuuc libicui18n
+LOCAL_MODULE := libshim_icu
+LOCAL_SRC_FILES := icu55.c
+
+include $(BUILD_SHARED_LIBRARY)
