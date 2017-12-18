@@ -1,33 +1,41 @@
-From 8b1d80437fd0f5af16c6b04d0cf9f9bce4edbd5a Mon Sep 17 00:00:00 2001
+From 80158b6f471578547a6c9cbe19a5858b38ad302e Mon Sep 17 00:00:00 2001
 From: Meticulus <theonejohnnyd@gmail.com>
-Date: Tue, 12 Dec 2017 06:13:05 -0600
+Date: Sun, 17 Dec 2017 04:44:59 -0600
 Subject: [PATCH] "0001-keymaster-don-t-build-keymaster
  _______________________________
 
-*Previous From 0fa4b46bdba29ee557e18d64b98765fe06c3e100 Mon Sep 17 00:00:00 2001
+*Previous From 8b1d80437fd0f5af16c6b04d0cf9f9bce4edbd5a Mon Sep 17 00:00:00 2001
 *Previous From: Meticulus <theonejohnnyd@gmail.com>
-*Previous Date: Tue, 12 Dec 2017 06:07:33 -0600
+*Previous Date: Tue, 12 Dec 2017 06:13:05 -0600
 *Previous Subject: [PATCH] "0001-keymaster-don-t-build-keymaster
 *_______________________________
 *
-**Previous From 865016a32ed44251cf54a5d6e89c77924ff263f3 Mon Sep 17 00:00:00 2001
+**Previous From 0fa4b46bdba29ee557e18d64b98765fe06c3e100 Mon Sep 17 00:00:00 2001
 **Previous From: Meticulus <theonejohnnyd@gmail.com>
-**Previous Date: Thu, 23 Nov 2017 13:50:15 -0600
+**Previous Date: Tue, 12 Dec 2017 06:07:33 -0600
 **Previous Subject: [PATCH] "0001-keymaster-don-t-build-keymaster
 **_______________________________
 **
-***Previous From edc2273263ecd265b450f7368d0e80bca106d2b4 Mon Sep 17 00:00:00 2001
+***Previous From 865016a32ed44251cf54a5d6e89c77924ff263f3 Mon Sep 17 00:00:00 2001
 ***Previous From: Meticulus <theonejohnnyd@gmail.com>
-***Previous Date: Fri, 17 Nov 2017 19:31:11 -0600
-***Previous Subject: [PATCH] keymaster: don't build keymaster
+***Previous Date: Thu, 23 Nov 2017 13:50:15 -0600
+***Previous Subject: [PATCH] "0001-keymaster-don-t-build-keymaster
+***_______________________________
 ***
-***Change-Id: I43328ad64d6c2d5fe5a159c6c049214473ebedc1"
+****Previous From edc2273263ecd265b450f7368d0e80bca106d2b4 Mon Sep 17 00:00:00 2001
+****Previous From: Meticulus <theonejohnnyd@gmail.com>
+****Previous Date: Fri, 17 Nov 2017 19:31:11 -0600
+****Previous Subject: [PATCH] keymaster: don't build keymaster
+****
+****Change-Id: I43328ad64d6c2d5fe5a159c6c049214473ebedc1"
+***
+***Change-Id: I03a087b5188de8e695d06da85cf465910a796dc9"
 **
-**Change-Id: I03a087b5188de8e695d06da85cf465910a796dc9"
+**Change-Id: I502a29b88acb5afff4ab46b6ccb31e9a58a7cdea"
 *
-*Change-Id: I502a29b88acb5afff4ab46b6ccb31e9a58a7cdea"
+*Change-Id: I468c7d44975d4f7f5dce4f75816e70439be8acbb"
 
-Change-Id: I468c7d44975d4f7f5dce4f75816e70439be8acbb
+Change-Id: I72d4a94b13e0cdb0ead334cdd687c8ba2cd0ee12
 ---
  Android.bp | 3 +++
  Android.mk | 1 +

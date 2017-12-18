@@ -839,13 +839,6 @@ symlinks := \
     $(shell ln -s /hwvendor/etc/wifi $(PRODUCT_OUT)/system/etc/wifi 2> /dev/null) \
     $(shell ln -s /hwvendor/etc/gnss $(PRODUCT_OUT)/system/etc/gnss 2> /dev/null) \
     $(shell ln -s /hwvendor/bin/gatekeeperd $(PRODUCT_OUT)/system/bin/gatekeeperd 2> /dev/null) \
-    $(shell ln -s /hwvendor/bin/keystore $(PRODUCT_OUT)/system/bin/keystore 2> /dev/null) \
-    $(shell ln -s /hwvendor/lib64/libkeymaster_messages.so $(PRODUCT_OUT)/system/lib64/libkeymaster_messages.so 2> /dev/null) \
-    $(shell ln -s /hwvendor/lib64/libkeymaster1.so $(PRODUCT_OUT)/system/lib64/libkeymaster1.so 2> /dev/null) \
-    $(shell ln -s /hwvendor/lib64/libkeystore_binder.so $(PRODUCT_OUT)/system/lib64/libkeystore_binder.so 2> /dev/null) \
-    $(shell ln -s /hwvendor/lib64/libkeystore_engine.so $(PRODUCT_OUT)/system/lib64/libkeystore_engine.so 2> /dev/null) \
-    $(shell ln -s /hwvendor/lib64/libsoftkeymaster.so $(PRODUCT_OUT)/system/lib64/libsoftkeymaster.so 2> /dev/null) \
-    $(shell ln -s /hwvendor/lib64/libsoftkeymasterdevice.so $(PRODUCT_OUT)/system/lib64/libsoftkeymasterdevice.so 2> /dev/null) \
     $(shell ln -s /hwvendor/bin/fingerprintd $(PRODUCT_OUT)/system/bin/fingerprintd 2> /dev/null) \
     $(shell ln -s /system/etc/native_packages.bin $(PRODUCT_OUT)/system/etc/native_packages.xml 2> /dev/null)
 

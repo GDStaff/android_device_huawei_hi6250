@@ -75,7 +75,6 @@ PRODUCT_PACKAGES += \
     hwcomposer.hi6250 \
     libcopybit_wrapper \
     lights.hi6250 \
-    sensors.hi6250 \
     android.hardware.sensors@1.0-impl \
     metiotgd \
     emui5_vendor_symlinks \
@@ -97,17 +96,14 @@ PRODUCT_PACKAGES += \
     android.hardware.light@2.0-service \
     android.hardware.light@2.0-impl \
     android.hardware.configstore@1.0-service
-
-# Default OMX service to non-Treble
-PRODUCT_PROPERTY_OVERRIDES += \
-    persist.media.treble_omx=false
-
+    android.hardware.radio@1.0_hal \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/manifest.xml:system/vendor/manifest.xml
 
 # Shim libs
 PRODUCT_PACKAGES += \
-    libshim
+    libshim \
+    libshim_icu
 
 # Wifi
 PRODUCT_PACKAGES += \
@@ -167,5 +163,5 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.config.sync=yes
 
 
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.telephony.ril_class=HuaweiRIL
+#PRODUCT_PROPERTY_OVERRIDES += \
+#    ro.telephony.ril_class=HuaweiRIL

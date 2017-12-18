@@ -1,0 +1,27 @@
+From 5271586f1301eeb63b8e684168efc66d89221a94 Mon Sep 17 00:00:00 2001
+From: Meticulus <theonejohnnyd@gmail.com>
+Date: Sun, 17 Dec 2017 05:04:31 -0600
+Subject: [PATCH] init: reboot recovery not bootloader
+
+---
+ init/util.cpp | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/init/util.cpp b/init/util.cpp
+index 4e3537b..1c0646e 100644
+--- a/init/util.cpp
++++ b/init/util.cpp
+@@ -413,8 +413,8 @@ bool expand_props(const std::string& src, std::string* dst) {
+ }
+ 
+ void panic() {
+-    LOG(ERROR) << "panic: rebooting to bootloader";
+-    DoReboot(ANDROID_RB_RESTART2, "reboot", "bootloader", false);
++    LOG(ERROR) << "panic: rebooting to recovery";
++    DoReboot(ANDROID_RB_RESTART2, "reboot", "recovery", false);
+ }
+ 
+ std::ostream& operator<<(std::ostream& os, const Timer& t) {
+-- 
+2.7.4
+

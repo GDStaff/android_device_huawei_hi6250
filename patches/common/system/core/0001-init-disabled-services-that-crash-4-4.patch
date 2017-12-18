@@ -1,0 +1,27 @@
+From 5fea884ca23383ff391ff82c04bbc85d1614892b Mon Sep 17 00:00:00 2001
+From: Meticulus <theonejohnnyd@gmail.com>
+Date: Sun, 17 Dec 2017 08:19:26 -0600
+Subject: [PATCH] init: disabled services that crash 4/4.
+
+-Keep calm and don't panic!
+---
+ init/service.cpp | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/init/service.cpp b/init/service.cpp
+index 00599bb..7733d6a 100644
+--- a/init/service.cpp
++++ b/init/service.cpp
+@@ -304,7 +304,8 @@ void Service::Reap() {
+         if (now < time_crashed_ + 4min) {
+             if (++crash_count_ > 4) {
+                 LOG(ERROR) << "critical process '" << name_ << "' exited 4 times in 4 minutes";
+-                panic();
++                //panic();
++		flags_ |= SVC_DISABLED;
+             }
+         } else {
+             time_crashed_ = now;
+-- 
+2.7.4
+
