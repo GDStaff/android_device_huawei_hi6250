@@ -1,33 +1,39 @@
-From 103292bf70cc43bf245ecb52ccff6b818ba4798e Mon Sep 17 00:00:00 2001
+From 22c3cd80cb3cce0a28cb3db4318ddd275ac9afb6 Mon Sep 17 00:00:00 2001
 From: Meticulus <theonejohnnyd@gmail.com>
-Date: Sun, 17 Dec 2017 05:11:50 -0600
+Date: Mon, 18 Dec 2017 09:12:07 -0600
 Subject: [PATCH] "0001-sepolicy-patch _______________________________
 
-*Previous From d1cd27a9a3d7a837dc4486935b4bf577aec35226 Mon Sep 17 00:00:00 2001
+*Previous From 103292bf70cc43bf245ecb52ccff6b818ba4798e Mon Sep 17 00:00:00 2001
 *Previous From: Meticulus <theonejohnnyd@gmail.com>
-*Previous Date: Tue, 12 Dec 2017 05:29:48 -0600
+*Previous Date: Sun, 17 Dec 2017 05:11:50 -0600
 *Previous Subject: [PATCH] "0001-sepolicy-patch _______________________________
 *
-**Previous From c29de7d512886795240f794124598d597f07dd12 Mon Sep 17 00:00:00 2001
+**Previous From d1cd27a9a3d7a837dc4486935b4bf577aec35226 Mon Sep 17 00:00:00 2001
 **Previous From: Meticulus <theonejohnnyd@gmail.com>
-**Previous Date: Fri, 1 Dec 2017 04:47:53 -0600
+**Previous Date: Tue, 12 Dec 2017 05:29:48 -0600
 **Previous Subject: [PATCH] "0001-sepolicy-patch _______________________________
 **
-***Previous From b469cd826322cec0d92188c9790ca3dec2c3e557 Mon Sep 17 00:00:00 2001
+***Previous From c29de7d512886795240f794124598d597f07dd12 Mon Sep 17 00:00:00 2001
 ***Previous From: Meticulus <theonejohnnyd@gmail.com>
-***Previous Date: Sat, 8 Apr 2017 15:52:17 -0500
-***Previous Subject: [PATCH] 0001-sepolicy-patch
+***Previous Date: Fri, 1 Dec 2017 04:47:53 -0600
+***Previous Subject: [PATCH] "0001-sepolicy-patch _______________________________
 ***
-***Change-Id: I62d72022d19714ac8a719d22bc651a3348dabe94"
-**
-**Change-Id: Id916b91b48d9a6de5a7141a64a47941d99488dca""
+****Previous From b469cd826322cec0d92188c9790ca3dec2c3e557 Mon Sep 17 00:00:00 2001
+****Previous From: Meticulus <theonejohnnyd@gmail.com>
+****Previous Date: Sat, 8 Apr 2017 15:52:17 -0500
+****Previous Subject: [PATCH] 0001-sepolicy-patch
+****
+****Change-Id: I62d72022d19714ac8a719d22bc651a3348dabe94"
+***
+***Change-Id: Id916b91b48d9a6de5a7141a64a47941d99488dca"""
 ---
  private/app.te    |  2 +-
  private/domain.te |  1 +
  private/logd.te   | 12 ++++++------
- public/domain.te  | 20 ++++++++++----------
+ public/domain.te  | 24 ++++++++++++------------
  public/init.te    |  2 +-
- 5 files changed, 19 insertions(+), 18 deletions(-)
+ public/kernel.te  |  2 +-
+ 6 files changed, 22 insertions(+), 21 deletions(-)
 
 diff --git a/private/app.te b/private/app.te
 index b5aef1c..ff01426 100644
@@ -78,9 +84,27 @@ index 4338e40..c338da2 100644
  # protect the event-log-tags file
  neverallow {
 diff --git a/public/domain.te b/public/domain.te
-index add74be..a9d2651 100644
+index add74be..f8a8fd9 100644
 --- a/public/domain.te
 +++ b/public/domain.te
+@@ -224,7 +224,7 @@ allow { domain -domain } vndservice_manager_type:service_manager { add find };
+ ###
+ 
+ # All socket ioctls must be restricted to a whitelist.
+-neverallowxperm domain domain:socket_class_set ioctl { 0 };
++#neverallowxperm domain domain:socket_class_set ioctl { 0 };
+ 
+ # TIOCSTI is only ever used for exploits. Block it.
+ # b/33073072, b/7530569
+@@ -330,7 +330,7 @@ neverallow { domain -kernel -init -recovery } block_device:blk_file { open read
+ # Do not allow renaming of block files or character files
+ # Ability to do so can lead to possible use in an exploit chain
+ # e.g. https://googleprojectzero.blogspot.com/2016/12/chrome-os-exploit-one-byte-overflow-and.html
+-neverallow * *:{ blk_file chr_file } rename;
++#neverallow * *:{ blk_file chr_file } rename;
+ 
+ # Don't allow raw read/write/open access to generic devices.
+ # Rather force a relabel to a more specific type.
 @@ -426,7 +426,7 @@ neverallow { domain -recovery } contextmount_type:dir_file_class_set
  # system_app_service rather than the generic type.
  # New service_types are defined in {,hw,vnd}service.te and new mappings
@@ -135,6 +159,16 @@ index 6d43ef4..29dad9a 100644
  
  # Init never adds or uses services via service_manager.
  neverallow init service_manager_type:service_manager { add find };
+diff --git a/public/kernel.te b/public/kernel.te
+index 9537c0d..5807c16 100644
+--- a/public/kernel.te
++++ b/public/kernel.te
+@@ -100,4 +100,4 @@ neverallow kernel *:file { entrypoint execute_no_trans };
+ # the kernel should not be accessing files owned by other users.
+ # Instead of adding dac_{read_search,override}, fix the unix permissions
+ # on files being accessed.
+-neverallow kernel self:capability { dac_override dac_read_search };
++#neverallow kernel self:capability { dac_override dac_read_search };
 -- 
 2.7.4
 
