@@ -95,8 +95,9 @@ PRODUCT_PACKAGES += \
     android.hardware.bluetooth@1.0-impl \
     android.hardware.light@2.0-service \
     android.hardware.light@2.0-impl \
-    android.hardware.configstore@1.0-service
-    android.hardware.radio@1.0_hal \
+    android.hardware.configstore@1.0-service \
+    android.hardware.radio@1.0_hal
+
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/manifest.xml:system/vendor/manifest.xml
 
