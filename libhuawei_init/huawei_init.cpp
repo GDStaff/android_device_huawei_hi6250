@@ -86,7 +86,7 @@ void vendor_load_default_properties() {
     if(!strncmp(model,"VNS", 3)) {
 	set_property(BOARDID_PRODUCT_PROP,"51316");
     /* All Berlin needs this */
-    } else if(!strncmp(model, "BLN", 3)) {
+    } else if(!strncmp(model, "BLN", 3) || !strncmp(model, "BLL", 3)) {
 	set_property(BOARDID_PRODUCT_PROP, "61202");
     /* All Prague needs this */
     } else if(!strncmp(model, "PRA", 3)) {
