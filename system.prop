@@ -83,3 +83,8 @@ persist.sys.stock_power_HAL=false
 persist.sys.strictmode.disable=true
 persist.media.treble_omx=false
 persist.sys.sdcardfs=force_off
+
+#
+# Bluetooth: BLE Switch
+#
+persist.sys.noble=true
