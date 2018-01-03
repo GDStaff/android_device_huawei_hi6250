@@ -110,6 +110,8 @@ void vendor_load_default_properties() {
     /* Dallas? */
     } else if(!strncmp(model, "DAL", 3)) {
 	set_property(BOARDID_PRODUCT_PROP, "6198");
+    } else if(!strncmp(model, "BND", 3)) {
+	set_property(BOARDID_PRODUCT_PROP, "4753");
     }
     /* if a match is not found the values in the build.prop will be used.
      * ro.boardid.product will not be set so the camera will not work.

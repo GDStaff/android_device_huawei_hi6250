@@ -166,6 +166,19 @@ etclinks := \
     cfg_berlin_tl00a_hisi.ini \
     cfg_berlin_tl00_hisi.ini \
     cfg_berlin_tl10_hisi.ini \
+    cfg_bnd_al10_hisi.ini \
+    cfg_bnd_al20_hisi.ini \
+    cfg_bnd_al30_hisi.ini \
+    cfg_bnd_al40_hisi.ini \
+    cfg_bnd_dl00_hisi.ini \
+    cfg_bnd_l21_hisi.ini \
+    cfg_bnd_l21l_hisi.ini \
+    cfg_bnd_l22_hisi.ini \
+    cfg_bnd_l23l_hisi.ini \
+    cfg_bnd_l24_hisi.ini \
+    cfg_bnd_tl00a_hisi.ini \
+    cfg_bnd_tl00_hisi.ini \
+    cfg_bnd_tl10_hisi.ini \
     cfg_nemo_al10_hisi.ini \
     cfg_nemo_al30_hisi.ini \
     cfg_nemo_al60_hisi.ini \
