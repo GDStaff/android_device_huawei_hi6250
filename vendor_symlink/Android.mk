@@ -548,8 +548,7 @@ liblinks := \
     libwmv8.so \
     libwmv9.so \
     libxmodemgpsrpc.so \
-    egl \
-    hwcam \
+    hwcam
 
 lib64links := \
     libAntiTheftService.so \
@@ -762,7 +761,6 @@ lib64links := \
     libwifi_wapi_hisi.so \
     libwpa_client_hisi.so \
     libxmodemgpsrpc.so \
-    egl \
     hwcam
 
 hw := \
@@ -786,8 +784,7 @@ hw := \
     sensorcaps.default.so \
     sensorhub.default.so \
     sound_trigger.primary.default.so \
-    vibrator.default.so \
-    vulkan.hi6250.so
+    vibrator.default.so
 
 hw64 := \
     activity_reconition.default.so \
@@ -811,8 +808,7 @@ hw64 := \
     sensorcaps.default.so \
     sensorhub.default.so \
     sound_trigger.primary.default.so \
-    vibrator.default.so \
-    vulkan.hi6250.so
+    vibrator.default.so
 
 symlinks := \
     $(shell rm -rf $(PRODUCT_OUT)/system/vendor/lib64/hw 2> /dev/null) \
@@ -839,6 +835,8 @@ symlinks := \
     $(shell ln -s /hwvendor/bin/$(link) $(PRODUCT_OUT)/system/vendor/bin/$(link) 2> /dev/null)) \
     $(shell mkdir -p $(PRODUCT_OUT)/system/bin) \
     $(shell mkdir -p $(PRODUCT_OUT)/system/etc) \
+    $(shell ln -s ../egl/libGLES_mali.so $(PRODUCT_OUT)/system/vendor/lib64/hw/vulkan.hi6250.so 2> /dev/null) \
+    $(shell ln -s ../egl/libGLES_mali.so $(PRODUCT_OUT)/system/vendor/lib/hw/vulkan.hi6250.so 2> /dev/null) \
     $(shell ln -s /hwvendor/lib64/hw/gps.hisi.default.so $(PRODUCT_OUT)/system/vendor/lib64/hw/gps.hisi.so 2> /dev/null) \
     $(shell ln -s /hwvendor/lib64/hw/copybit.hi6250.so $(PRODUCT_OUT)/system/vendor/lib64/hw/copybit.real.so 2> /dev/null) \
     $(shell ln -s /hwvendor/lib/hw/copybit.hi6250.so $(PRODUCT_OUT)/system/vendor/lib/hw/copybit.real.so 2> /dev/null) \
