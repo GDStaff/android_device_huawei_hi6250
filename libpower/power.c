@@ -32,6 +32,7 @@
 
 #include "venus.h"
 #include "warsaw.h"
+#include "berlin.h"
 
 //#define DEBUG
 
@@ -50,6 +51,7 @@ extern int load_stock_power(char *path, hw_module_t **pHmi);
 
 static char stock_p_path[255] = "/system/lib64/hw/power.default.so";
 
+static int master_boost = 0;
 static int stock_power = 0;
 static int low_power = 0;
 static struct power_profile power_save;
@@ -106,14 +108,22 @@ static void power_init(struct power_module *module)
         power_save = warsaw_power_save;
         balanced = warsaw_balanced;
         performance = warsaw_performance;
+	ALOGI("Using profiles: warsaw");
+    } else if(!strncmp(model, "BLN", 3) || !strncmp(model, "BLL",3)) {
+        power_save = berlin_power_save;
+        balanced = berlin_balanced;
+        performance = berlin_performance;
+	ALOGI("Using profiles: berlin");
     } else {
         power_save = venus_power_save;
         balanced = venus_balanced;
         performance = venus_performance;
+	ALOGI("Using profiles: venus");
     }
     if(!init) {
 	sel_profile = &performance;
 	profile = &performance;
+	master_boost = 0;
 	init = 1;
     }
 
@@ -141,6 +151,9 @@ static void power_set_interactive(struct power_module *module, int on) {
     if (low_power)
 	return;
 
+    if(!master_boost)
+	return;
+
     if (!on) {
 	profile = &power_save;
 	power_init(module);
@@ -152,6 +165,9 @@ static void power_set_interactive(struct power_module *module, int on) {
 
 static void power_hint_cpu_boost(int dur) {
     char sdur[255];
+
+    if(!master_boost)
+	return;
 
     if(!(* profile).cpu0_should_boost)
 	return;
@@ -165,6 +181,8 @@ static void power_hint_cpu_boost(int dur) {
 }
 
 static void power_hint_interactive(int on) {
+    if(!master_boost)
+	return;
     if(on && (* profile).gpu_should_boost) {
 	write_string(GPU_ANIM_BOOST_PATH,"1\n");
 	power_hint_cpu_boost(on);
@@ -225,18 +243,21 @@ static void power_hint_set_profile(struct power_module *module, int p) {
 	    profile = &power_save;
 	    sel_profile = &power_save;
 	    power_init(module);
+	    master_boost = 1;
 	    ALOGI("Set power save profile.");
 	    break;
 	case 1:
 	    profile = &balanced;
 	    sel_profile = &balanced;
 	    power_init(module);
+	    master_boost = 1;
 	    ALOGI("Set balanced profile.");
 	    break;
 	case 2:
 	    profile = &performance;
 	    sel_profile = &performance;
 	    power_init(module);
+	    master_boost = 0;
 	    ALOGI("Set performance profile.");
 	    break;
         default:
