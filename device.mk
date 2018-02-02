@@ -96,7 +96,7 @@ PRODUCT_PACKAGES += \
     android.hardware.light@2.0-service \
     android.hardware.light@2.0-impl \
     android.hardware.configstore@1.0-service \
-    android.hardware.radio@1.0_hal
+    android.hardware.radio@1.0
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/manifest.xml:system/vendor/manifest.xml
@@ -109,7 +109,8 @@ PRODUCT_PACKAGES += \
 # Wifi
 PRODUCT_PACKAGES += \
     android.hardware.wifi@1.0-service \
-    hostapd_cli
+    hostapd_cli \
+    wifcond
 
 # NFC
 PRODUCT_PACKAGES += \

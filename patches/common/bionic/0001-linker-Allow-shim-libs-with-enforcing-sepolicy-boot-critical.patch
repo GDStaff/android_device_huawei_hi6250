@@ -1,90 +1,97 @@
-From 8cb046011aa87da4a7d9080455cc3d5f2ce59f71 Mon Sep 17 00:00:00 2001
+From 863d4b59aa2daf9402a16424790acc58307791ef Mon Sep 17 00:00:00 2001
 From: Meticulus <theonejohnnyd@gmail.com>
-Date: Mon, 18 Dec 2017 08:37:44 -0600
+Date: Tue, 19 Dec 2017 08:46:49 -0600
 Subject: [PATCH] 
  "0001-linker-Allow-shim-libs-with-enforcing-sepolicy-boot-critical
  _______________________________
 
-*Previous From 3fd182f9b2c56ea0547546391cae2b3e0f2cf7e4 Mon Sep 17 00:00:00 2001
+*Previous From 8cb046011aa87da4a7d9080455cc3d5f2ce59f71 Mon Sep 17 00:00:00 2001
 *Previous From: Meticulus <theonejohnnyd@gmail.com>
-*Previous Date: Mon, 18 Dec 2017 08:18:40 -0600
+*Previous Date: Mon, 18 Dec 2017 08:37:44 -0600
 *Previous Subject: [PATCH]
 *"0001-linker-Allow-shim-libs-with-enforcing-sepolicy-boot-critical
 *_______________________________
 *
-**Previous From d5c9198af68110ecdcb24c26a4884eb69e77018f Mon Sep 17 00:00:00 2001
+**Previous From 3fd182f9b2c56ea0547546391cae2b3e0f2cf7e4 Mon Sep 17 00:00:00 2001
 **Previous From: Meticulus <theonejohnnyd@gmail.com>
-**Previous Date: Sun, 17 Dec 2017 15:07:04 -0600
+**Previous Date: Mon, 18 Dec 2017 08:18:40 -0600
 **Previous Subject: [PATCH]
 **"0001-linker-Allow-shim-libs-with-enforcing-sepolicy-boot-critical
 **_______________________________
 **
-***Previous From 0ae26a6ee90ab53a717487034c2b93151aab61d3 Mon Sep 17 00:00:00 2001
+***Previous From d5c9198af68110ecdcb24c26a4884eb69e77018f Mon Sep 17 00:00:00 2001
 ***Previous From: Meticulus <theonejohnnyd@gmail.com>
-***Previous Date: Sun, 17 Dec 2017 15:02:07 -0600
+***Previous Date: Sun, 17 Dec 2017 15:07:04 -0600
 ***Previous Subject: [PATCH]
 ***"0001-linker-Allow-shim-libs-with-enforcing-sepolicy-boot-critical
 ***_______________________________
 ***
-****Previous From b2ee57fed0116a031d7827c369af62f1214651d1 Mon Sep 17 00:00:00 2001
+****Previous From 0ae26a6ee90ab53a717487034c2b93151aab61d3 Mon Sep 17 00:00:00 2001
 ****Previous From: Meticulus <theonejohnnyd@gmail.com>
-****Previous Date: Sun, 17 Dec 2017 14:57:58 -0600
+****Previous Date: Sun, 17 Dec 2017 15:02:07 -0600
 ****Previous Subject: [PATCH]
 ****"0001-linker-Allow-shim-libs-with-enforcing-sepolicy-boot-critical
 ****_______________________________
 ****
-*****Previous From 0d2c7f53d3b81a4b576e188cd493350eff6d7e62 Mon Sep 17 00:00:00 2001
+*****Previous From b2ee57fed0116a031d7827c369af62f1214651d1 Mon Sep 17 00:00:00 2001
 *****Previous From: Meticulus <theonejohnnyd@gmail.com>
-*****Previous Date: Sun, 17 Dec 2017 14:54:48 -0600
+*****Previous Date: Sun, 17 Dec 2017 14:57:58 -0600
 *****Previous Subject: [PATCH]
 *****"0001-linker-Allow-shim-libs-with-enforcing-sepolicy-boot-critical
 *****_______________________________
 *****
-******Previous From bfe8ba6c3098647cbbb3c3f6e0c0303ea63bfc49 Mon Sep 17 00:00:00 2001
+******Previous From 0d2c7f53d3b81a4b576e188cd493350eff6d7e62 Mon Sep 17 00:00:00 2001
 ******Previous From: Meticulus <theonejohnnyd@gmail.com>
-******Previous Date: Sun, 17 Dec 2017 14:41:29 -0600
+******Previous Date: Sun, 17 Dec 2017 14:54:48 -0600
 ******Previous Subject: [PATCH]
 ******"0001-linker-Allow-shim-libs-with-enforcing-sepolicy-boot-critical
 ******_______________________________
 ******
-*******Previous From b71f9a872af5e24e80d8fe4367ffe7170e2d474a Mon Sep 17 00:00:00 2001
+*******Previous From bfe8ba6c3098647cbbb3c3f6e0c0303ea63bfc49 Mon Sep 17 00:00:00 2001
 *******Previous From: Meticulus <theonejohnnyd@gmail.com>
-*******Previous Date: Sat, 16 Dec 2017 15:59:25 -0600
+*******Previous Date: Sun, 17 Dec 2017 14:41:29 -0600
 *******Previous Subject: [PATCH]
 *******"0001-linker-Allow-shim-libs-with-enforcing-sepolicy-boot-critical
 *******_______________________________
 *******
-********Previous From b46b35e2b863f853a933c365d20d4889d3383492 Mon Sep 17 00:00:00 2001
+********Previous From b71f9a872af5e24e80d8fe4367ffe7170e2d474a Mon Sep 17 00:00:00 2001
 ********Previous From: Meticulus <theonejohnnyd@gmail.com>
-********Previous Date: Tue, 12 Dec 2017 05:41:34 -0600
+********Previous Date: Sat, 16 Dec 2017 15:59:25 -0600
 ********Previous Subject: [PATCH]
 ********"0001-linker-Allow-shim-libs-with-enforcing-sepolicy-boot-critical
 ********_______________________________
 ********
-*********Previous From c3dd6d4148b3710b8b472f5b18c81680c4bd29c8 Mon Sep 17 00:00:00 2001
+*********Previous From b46b35e2b863f853a933c365d20d4889d3383492 Mon Sep 17 00:00:00 2001
 *********Previous From: Meticulus <theonejohnnyd@gmail.com>
-*********Previous Date: Mon, 13 Nov 2017 11:04:12 -0600
+*********Previous Date: Tue, 12 Dec 2017 05:41:34 -0600
 *********Previous Subject: [PATCH]
 *********"0001-linker-Allow-shim-libs-with-enforcing-sepolicy-boot-critical
 *********_______________________________
 *********
-**********Previous From 14b890bcf49207871cfc6b1a73a1304f39fc92fb Mon Sep 17 00:00:00 2001
+**********Previous From c3dd6d4148b3710b8b472f5b18c81680c4bd29c8 Mon Sep 17 00:00:00 2001
 **********Previous From: Meticulus <theonejohnnyd@gmail.com>
-**********Previous Date: Fri, 10 Nov 2017 03:38:01 -0600
+**********Previous Date: Mon, 13 Nov 2017 11:04:12 -0600
 **********Previous Subject: [PATCH]
 **********"0001-linker-Allow-shim-libs-with-enforcing-sepolicy-boot-critical
 **********_______________________________
 **********
-***********Previous From a883e096f5e679976a71ff5e16f39b3a16239939 Mon Sep 17 00:00:00 2001
+***********Previous From 14b890bcf49207871cfc6b1a73a1304f39fc92fb Mon Sep 17 00:00:00 2001
 ***********Previous From: Meticulus <theonejohnnyd@gmail.com>
-***********Previous Date: Sat, 24 Dec 2016 23:49:04 -0600
-***********Previous Subject: [PATCH] 0001-linker-Allow-shim-libs-with-enforcing-sepolicy
+***********Previous Date: Fri, 10 Nov 2017 03:38:01 -0600
+***********Previous Subject: [PATCH]
+***********"0001-linker-Allow-shim-libs-with-enforcing-sepolicy-boot-critical
+***********_______________________________
 ***********
-***********Change-Id: I09ecbdfe092879e0227f29b989d0a2eda0c59909"
+************Previous From a883e096f5e679976a71ff5e16f39b3a16239939 Mon Sep 17 00:00:00 2001
+************Previous From: Meticulus <theonejohnnyd@gmail.com>
+************Previous Date: Sat, 24 Dec 2016 23:49:04 -0600
+************Previous Subject: [PATCH] 0001-linker-Allow-shim-libs-with-enforcing-sepolicy
+************
+************Change-Id: I09ecbdfe092879e0227f29b989d0a2eda0c59909"
+***********
+***********Change-Id: I19bce9795e1d7e88119f9c16bc5213192080513f"
 **********
-**********Change-Id: I19bce9795e1d7e88119f9c16bc5213192080513f"
-*********
-*********Change-Id: Ie1b4f393df88a6d3b6ee83050ab6ef316c00b1e3"""""""""
+**********Change-Id: Ie1b4f393df88a6d3b6ee83050ab6ef316c00b1e3""""""""""
 ---
  linker/linker.cpp      |  8 ++++----
  linker/linker_main.cpp |  5 ++++-
@@ -152,7 +159,7 @@ index ac73920..24395fe 100644
    // the executable could be unlinked by this point and it should
 diff --git a/linker/shims.h b/linker/shims.h
 new file mode 100644
-index 0000000..1b5b49e
+index 0000000..d4f0df8
 --- /dev/null
 +++ b/linker/shims.h
 @@ -0,0 +1,47 @@
@@ -197,7 +204,7 @@ index 0000000..1b5b49e
 +#define VENUS_SHIMS "/hwvendor/lib64/hwcam/hwcam.hi6250.m.VENUS.so|libshim_libgui.so:/hwvendor/lib64/hwcam/hwcam.hi6250.m.VENUS.so|libshim_libui.so:/hwvendor/lib64/hwcam/hwcam.hi6250.m.VENUS.so|libshim.so"
 +#define WARSAW_SHIMS "/hwvendor/lib64/hwcam/hwcam.hi6250.m.WARSAW.so|libshim_libui.so:/hwvendor/lib64/hwcam/hwcam.hi6250.m.WARSAW.so|libshim.so"
 +
-+#define COMMON_SHIMS "/hwvendor/lib/hw/audio.primary.hisi.so|libshim.so:/hwvendor/lib64/libcamera_algo.so|libshim_libui.so:/hwvendor/lib64/hw/fingerprint.hi6250.so|libshim.so"
++#define COMMON_SHIMS "/hwvendor/lib/hw/audio.primary.hisi.so|libshim.so:/hwvendor/lib64/libcamera_algo.so|libshim_libui.so:/hwvendor/lib64/hw/fingerprint.hi6250.so|libshim.so:/hwvendor/lib64/libbalong-ril.so|libshim_libril.so"
 +
 +#define OREO_SHIMS "/hwvendor/lib/hw/audio.primary.hisi.so|libshim_icu.so"
 +
