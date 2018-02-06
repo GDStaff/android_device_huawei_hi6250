@@ -31,7 +31,7 @@ allow hi110x_daemon self:capability { sys_nice fsetid chown fowner };
 allow hi110x_daemon kernel:process { setsched };
 allow hi110x_daemon sysfs:file { setattr rw_file_perms };
 allow hi110x_daemon con_device:chr_file { setattr rw_file_perms };
-allow hi110x_daemon log_device:chr_file { setattr rw_file_perms };
+#allow hi110x_daemon log_device:chr_file { setattr rw_file_perms };
 allow hi110x_daemon self:capability { dac_override };
 allow hi110x_daemon system_data_file:dir { rw_dir_perms create setattr };
 allow hi110x_daemon wifi_data_file:dir { search getattr setattr };

@@ -1,1 +1,33 @@
-../../../omni/system/core/0001-init-no-security-failure-on-mmap-boot-critical.patch
+From ac333b4a91c4b0fffe2eea986898d349d1e7a4c1 Mon Sep 17 00:00:00 2001
+From: Meticulus <theonejohnnyd@gmail.com>
+Date: Tue, 12 Dec 2017 05:02:20 -0600
+Subject: [PATCH] "0001-init-no-security-failure-on-mmap-boot-critical
+ _______________________________
+
+*Previous From 0fbca19706d4ea818bc97a893a528a8897b767b0 Mon Sep 17 00:00:00 2001
+*Previous From: Meticulus <theonejohnnyd@gmail.com>
+*Previous Date: Sun, 26 Mar 2017 09:22:43 -0500
+*Previous Subject: [PATCH] init: no security failure on mmap boot-critical
+*
+*Change-Id: I7a7f2df912b004ad7e76aa1099709167ec75d16a"
+---
+ init/init.cpp | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/init/init.cpp b/init/init.cpp
+index bb6355a..6332976 100644
+--- a/init/init.cpp
++++ b/init/init.cpp
+@@ -398,7 +398,8 @@ static int set_mmap_rnd_bits_action(const std::vector<std::string>& args)
+ 
+     if (ret == -1) {
+         LOG(ERROR) << "Unable to set adequate mmap entropy value!";
+-        security_failure();
++        //security_failure();
++	ret = 0;
+     }
+     return ret;
+ }
+-- 
+2.7.4
+

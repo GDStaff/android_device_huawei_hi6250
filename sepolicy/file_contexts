@@ -176,12 +176,12 @@
 /data/hwlogdir(/.*)?		u:object_r:hisi_log:s0
 
 # Log Devices
-/dev/chrAppBt			u:object_r:log_device:s0
-/dev/chrAppGnss			u:object_r:log_device:s0
-/dev/chrAppWifi			u:object_r:log_device:s0
-/dev/chrKmsgPlat		u:object_r:log_device:s0
-/dev/chrKmsgWifi		u:object_r:log_device:s0
-/dev/hwlog_jank			u:object_r:log_device:s0
+#/dev/chrAppBt			u:object_r:log_device:s0
+#/dev/chrAppGnss			u:object_r:log_device:s0
+#/dev/chrAppWifi			u:object_r:log_device:s0
+#/dev/chrKmsgPlat		u:object_r:log_device:s0
+#/dev/chrKmsgWifi		u:object_r:log_device:s0
+#/dev/hwlog_jank			u:object_r:log_device:s0
 
 # media devices
 /dev/v4l-subdev6		u:object_r:video_device:s0
