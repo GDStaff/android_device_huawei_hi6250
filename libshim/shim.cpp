@@ -19,8 +19,12 @@
  */
 
 #define LOG_TAG "libshim"
-#include <libexif/exif-entry.h>
 
+#include <utils/String8.h>
+
+#include <libexif/exif-entry.h>
+#include <hwui/Extensions.h>
+#include <hwui/ProgramCache.h>
 
 extern "C" {
 
@@ -37,5 +41,76 @@ extern void exif_entry_gps_initialize(ExifEntry * e, ExifTag tag)
 
 /* fingerprint.hi6250.so */
 extern int __android_logPower_print() {return 0;};
+
+/*extern android::uirenderer::Extensions* _ZN7android10uirenderer10ExtensionsC1Ev() {
+    return new android::uirenderer::Extensions();
+}*/
+
+extern android::uirenderer::ProgramCache* _ZN7android10uirenderer12ProgramCacheD1Ev(android::uirenderer::Extensions* exts) {
+    return new android::uirenderer::ProgramCache(* exts);
+}
+
+extern int _ZN7android10uirenderer12ProgramCacheC1ERNS0_10ExtensionsE() {return 0;};
+
+//extern int _ZN7android10uirenderer12ProgramCache14generateShaderERKNS0_18ProgramDescriptionERNS_7String8ES6_(const android::uirenderer::ProgramDescription& description, android::String8& shader) {
+extern int _ZN7android10uirenderer12ProgramCache14generateShaderERKNS0_18ProgramDescriptionERNS_7String8ES6_() {
+   return 0;
+}
+
+extern int _ZN7android5Fence5mergeEPKcRKNS_2spIS0_EES6_() {
+   return 0;
+}
+
+extern int _ZN7android13GraphicBufferC1EjjijmNSt3__112basic_stringIcNS1_11char_traitsIcEENS1_9allocatorIcEEEE() {
+   return 0;
+}
+
+extern int _ZN7android13GraphicBufferC1EjjijNSt3__112basic_stringIcNS1_11char_traitsIcEENS1_9allocatorIcEEEE() {
+   return 0;
+}
+
+extern int _ZN7android13GraphicBuffer9lockAsyncEmmRKNS_4RectEPPvi() {
+  return 0;
+}
+
+extern int _Z35eglQueryStringImplementationANDROIDPvi() {
+   return 0;
+}
+
+extern int _ZNK7android7Surface23getLastDequeueStartTimeEv() {
+  return 0;
+}
+
+extern int _ZN7android20DisplayEventReceiverC1ENS_16ISurfaceComposer11VsyncSourceE() {
+   return 0;
+}
+
+extern int _ZN7android11BufferQueue17createBufferQueueEPNS_2spINS_22IGraphicBufferProducerEEEPNS1_INS_22IGraphicBufferConsumerEEEb() {
+   return 0;
+}
+
+extern int _ZNK7android10GLConsumer16getCurrentBufferEPi() {
+   return 0;
+}
+
+extern int _ZN7android10ColorSpaceC1ERKNSt3__112basic_stringIcNS1_11char_traitsIcEENS1_9allocatorIcEEEERKNS_7details6TMat33IfEENS0_18TransferParametersENS1_8functionIFffEEE() {
+  return 0;
+}
+
+extern int _ZN7android10ColorSpace4sRGBEv() {
+  return 0;
+}
+
+extern int _ZN7android19ColorSpaceConnectorC1ERKNS_10ColorSpaceES3_() {
+  return 0;
+}
+
+extern int _ZTTN7android8hardware8graphics11bufferqueue4V1_05utils24H2BGraphicBufferProducerE() {
+  return 0;
+}
+
+extern int _ZTVN7android8hardware8graphics11bufferqueue4V1_05utils24H2BGraphicBufferProducerE() {
+  return 0;
+}
 
 }

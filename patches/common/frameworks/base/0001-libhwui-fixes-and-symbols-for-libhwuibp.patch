@@ -1,24 +1,45 @@
-From 624bb7cadb895f1e6377a6c33953e93239bdb1eb Mon Sep 17 00:00:00 2001
+From e42118636aa4ea41ffe5c28cbfbb7c114ce85ed2 Mon Sep 17 00:00:00 2001
 From: Meticulus <theonejohnnyd@gmail.com>
-Date: Tue, 12 Dec 2017 05:49:11 -0600
+Date: Tue, 6 Feb 2018 09:03:32 -0600
 Subject: [PATCH] "0001-libhwui-fixes-and-symbols-for-libhwuibp
  _______________________________
 
-*Previous From 258d77921d91b6786706d7ec326c6d9146b4d902 Mon Sep 17 00:00:00 2001
+*Previous From 624bb7cadb895f1e6377a6c33953e93239bdb1eb Mon Sep 17 00:00:00 2001
 *Previous From: Meticulus <theonejohnnyd@gmail.com>
-*Previous Date: Tue, 14 Nov 2017 04:59:06 -0600
-*Previous Subject: [PATCH] libhwui: fixes and symbols for libhwuibp
+*Previous Date: Tue, 12 Dec 2017 05:49:11 -0600
+*Previous Subject: [PATCH] "0001-libhwui-fixes-and-symbols-for-libhwuibp
+*_______________________________
 *
-*-define out unused code and add missing symbol referenced
-*by libhwuibp
-*
-*Change-Id: I5237e41f7155349967d7fc22f769dbce2d9b150e"
----
- libs/hwui/ProgramCache.cpp | 4 ++++
- 1 file changed, 4 insertions(+)
+**Previous From 258d77921d91b6786706d7ec326c6d9146b4d902 Mon Sep 17 00:00:00 2001
+**Previous From: Meticulus <theonejohnnyd@gmail.com>
+**Previous Date: Tue, 14 Nov 2017 04:59:06 -0600
+**Previous Subject: [PATCH] libhwui: fixes and symbols for libhwuibp
+**
+**-define out unused code and add missing symbol referenced
+**by libhwuibp
+**
+**Change-Id: I5237e41f7155349967d7fc22f769dbce2d9b150e""
 
+Change-Id: Ifc023d1ae81f47b8c4bc088dd579f90c9c9560b7
+---
+ libs/hwui/Android.bp       | 1 -
+ libs/hwui/ProgramCache.cpp | 4 ++++
+ 2 files changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/libs/hwui/Android.bp b/libs/hwui/Android.bp
+index 770a57a..0d0b3ca 100644
+--- a/libs/hwui/Android.bp
++++ b/libs/hwui/Android.bp
+@@ -16,7 +16,6 @@ cc_defaults {
+         "-Wno-unused-parameter",
+         "-Wunreachable-code",
+         "-Werror",
+-        "-fvisibility=hidden",
+ 
+         // GCC false-positives on this warning, and since we -Werror that's
+         // a problem
 diff --git a/libs/hwui/ProgramCache.cpp b/libs/hwui/ProgramCache.cpp
-index 8cc0aa7..526ef52 100644
+index b767046..b401554 100644
 --- a/libs/hwui/ProgramCache.cpp
 +++ b/libs/hwui/ProgramCache.cpp
 @@ -905,3 +905,7 @@ void ProgramCache::printLongString(const String8& shader) const {
