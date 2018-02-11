@@ -768,7 +768,6 @@ hw := \
     gralloc.hi6250.so \
     hw_ioflowmeter.default.so \
     keystore.default.so \
-    keystore.hi6250.so \
     local_time.default.so \
     memtrack.hi6250.so \
     sensorcaps.default.so \
@@ -792,7 +791,6 @@ hw64 := \
     gralloc.hi6250.so \
     hw_ioflowmeter.default.so \
     keystore.default.so \
-    keystore.hi6250.so \
     local_time.default.so \
     memtrack.hi6250.so \
     sensorcaps.default.so \
