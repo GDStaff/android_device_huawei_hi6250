@@ -75,7 +75,9 @@ PRODUCT_PACKAGES += \
     hwcomposer.hi6250 \
     libcopybit_wrapper \
     lights.hi6250 \
+    android.hardware.sensors@1.0-service \
     android.hardware.sensors@1.0-impl \
+    sensors.hi6250 \
     metiotgd \
     emui5_vendor_symlinks \
     android.hardware.graphics.allocator@2.0-impl \

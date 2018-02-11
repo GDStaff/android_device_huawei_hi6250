@@ -1,0 +1,77 @@
+From f742b1f21b0d8d5ada3c8ec4987b9257a9a9fb8f Mon Sep 17 00:00:00 2001
+From: Meticulus <theonejohnnyd@gmail.com>
+Date: Thu, 8 Feb 2018 07:48:26 -0600
+Subject: [PATCH] "0001-hw-interface-sensors-compat
+ _______________________________
+
+*Previous From 98a0e7f603c413c7724dea1ec83b19c2a79d2cac Mon Sep 17 00:00:00 2001
+*Previous From: Meticulus <theonejohnnyd@gmail.com>
+*Previous Date: Thu, 8 Feb 2018 07:24:45 -0600
+*Previous Subject: [PATCH] hw interface: sensors compat
+*
+*Change-Id: I9b67956c8ae9a9278c762f1ce6c2e26bd81d328e"
+
+Change-Id: I511dddba574f1c48ead6f7dc4774b20a7108903b
+---
+ sensors/1.0/default/Sensors.cpp | 21 ++++++++++++++++++---
+ 1 file changed, 18 insertions(+), 3 deletions(-)
+
+diff --git a/sensors/1.0/default/Sensors.cpp b/sensors/1.0/default/Sensors.cpp
+index 1100dd6..c22ac72 100644
+--- a/sensors/1.0/default/Sensors.cpp
++++ b/sensors/1.0/default/Sensors.cpp
+@@ -95,7 +95,7 @@ Sensors::Sensors()
+ 
+     // Require all the old HAL APIs to be present except for injection, which
+     // is considered optional.
+-    CHECK_GE(getHalDeviceVersion(), SENSORS_DEVICE_API_VERSION_1_3);
++    /*CHECK_GE(getHalDeviceVersion(), SENSORS_DEVICE_API_VERSION_1_3);
+ 
+     if (getHalDeviceVersion() == SENSORS_DEVICE_API_VERSION_1_4) {
+         if (mSensorDevice->inject_sensor_data == nullptr) {
+@@ -104,7 +104,7 @@ Sensors::Sensors()
+         if (mSensorModule->set_operation_mode == nullptr) {
+             LOG(ERROR) << "HAL specifies version 1.4, but does not implement set_operation_mode()";
+         }
+-    }
++    }*/
+ 
+     mInitCheck = OK;
+ }
+@@ -235,6 +235,17 @@ Return<Result> Sensors::batch(
+         int32_t sensor_handle,
+         int64_t sampling_period_ns,
+         int64_t max_report_latency_ns) {
++
++        LOG(ERROR) << "batch not implemented "
++                   << sensor_handle
++                   << " "
++		   << sampling_period_ns
++                   << " "
++		   << max_report_latency_ns
++                   << " ";
++
++	return Result::OK;
++#if 0
+     return ResultFromStatus(
+             mSensorDevice->batch(
+                 mSensorDevice,
+@@ -242,10 +253,14 @@ Return<Result> Sensors::batch(
+                 0, /*flags*/
+                 sampling_period_ns,
+                 max_report_latency_ns));
++#endif
+ }
+ 
+ Return<Result> Sensors::flush(int32_t sensor_handle) {
+-    return ResultFromStatus(mSensorDevice->flush(mSensorDevice, sensor_handle));
++        LOG(ERROR) << "flush not implemented "
++                   << sensor_handle
++                   << " ";
++    return Result::OK;
+ }
+ 
+ Return<Result> Sensors::injectSensorData(const Event& event) {
+-- 
+2.7.4
+
