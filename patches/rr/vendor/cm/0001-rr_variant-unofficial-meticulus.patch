@@ -67,7 +67,7 @@ index 1461b29..ac920c4 100755
  echo -e ${blu}" 〉 1- Official "${txtrst}${red}"    ︱ Only for the official builds by the maintainers"${txtrst}
  echo -e "";
 -echo -e ${blu}" 〉 2- Unofficial "${txtrst}${red}"  ︱ For the unofficial builds"${txtrst}
-+echo -e ${blu}" 〉 2- Meticulus "${txtrst}${red}"  ︱ For the meticulus builds"${txtrst}
++echo -e ${blu}" 〉 2- CodeOfHonor "${txtrst}${red}"  ︱ For the CodeOfHonor builds"${txtrst}
  echo -e "";
  echo -e ${blu}" 〉 3- Nightly "${txtrst}${red}"     ︱ Only for the official daily builds by the maintainers"${txtrst}
  echo -e "";
@@ -86,8 +86,8 @@ index 1461b29..ac920c4 100755
  echo -e "";
 -echo -e ${blu}" ▪ Building unofficial variant "${txtrst}
 -export RR_BUILDTYPE=Unofficial
-+echo -e ${blu}" ▪ Building Meticulus variant "${txtrst}
-+export RR_BUILDTYPE=Meticulus
++echo -e ${blu}" ▪ Building CodeOfHonor variant "${txtrst}
++export RR_BUILDTYPE=CodeOfHonor
  echo -e "";
  echo -e "";
  $normal
