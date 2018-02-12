@@ -88,8 +88,8 @@
     <!-- Flag specifying whether VoLTE is available on device -->
     <bool name="config_device_volte_available">true</bool>
     
-    <!-- Flag specifying whether VoLTE availability is based on provisioning -->
-    <bool name="config_carrier_volte_provisioned">true</bool>
+    <!-- Flag specifying whether VoLTE availability is based on provisioning 
+     bool name="config_carrier_volte_provisioned">true</bool -->
 
     <!-- The RadioAccessFamilies supported by the device.
          Empty is viewed as "all".  Only used on devices which
