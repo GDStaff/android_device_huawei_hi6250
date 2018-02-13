@@ -14,12 +14,12 @@
 # limitations under the License.
 #
 
-ifeq ($(I_AM_METICULUS), true)
+ifeq ($(I_AM_CODEOFHONOR), true)
 # Use my custom build ninja that prints to screen sequentially
 # so you can see whats going on.
 # Resolve depenancy issue: sudo apt-get install libc++-dev
-$(shell echo "Using Meticulus's Ninja" >&2)
-$(shell cp -f $(LOCAL_PATH)/prebuilt/ninja prebuilts/build-tools/linux-x86/bin/ninja)
+$(shell echo "Using CodeOfHonor's Ninja" >&2)
+$(shell cp -f $(LOCAL_PATH)/prebuilt/ninja prebuilts/ninja/linux-x86/ninja)
 
 # Meticulus recovery init rc
 PRODUCT_COPY_FILES += \
