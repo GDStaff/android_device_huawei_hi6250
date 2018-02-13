@@ -91,6 +91,7 @@ def FullOTA_InstallBegin(info):
   info.script.AppendExtra('ui_print("         Petya230        : [Hate Hassan! <3]                 ");');
   info.script.AppendExtra('ui_print("         xD3SH           : [Tester]                          ");');
   info.script.AppendExtra('ui_print("         Tw1st3d83       : [Tester]                          ");');
+  info.script.AppendExtra('ui_print("         Haky 86         : [Tester]                          ");');
   info.script.AppendExtra('ui_print("                                                             ");');
   info.script.AppendExtra('ui_print("Additional Credits:                                          ");');
   info.script.AppendExtra('ui_print("         Xepeleato of OpenKirin                              ");');
