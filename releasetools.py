@@ -84,17 +84,18 @@ def FullOTA_InstallBegin(info):
   info.script.AppendExtra('ui_print("                                                             ");');
   info.script.AppendExtra('ui_print("                https://codeofhonor.tech                     ");');
   info.script.AppendExtra('ui_print("                          THE TEAM:                          ");');
+  info.script.AppendExtra('ui_print("         felix-development: [Honor 6X Maintainer: Germany]   ");');
+  info.script.AppendExtra('ui_print("         Haky 86          : [Tester]                         ");');
+  info.script.AppendExtra('ui_print("         HassanMirza01    : [All Rounder (Pakistan)]         ");');
+  info.script.AppendExtra('ui_print("         LRX22G           : [Graphics Master]                ");');
+  info.script.AppendExtra('ui_print("         Meticulus        : [IMPEACH TRUMP!]                 ");');
+  info.script.AppendExtra('ui_print("         Petya230         : [Hate Hassan! <3]                ");');
+  info.script.AppendExtra('ui_print("         xD3SH            : [Tester]                         ");');
+  info.script.AppendExtra('ui_print("         Tw1st3d83        : [Tester]                         ");');
   info.script.AppendExtra('ui_print("                                                             ");');
-  info.script.AppendExtra('ui_print("         HassanMirza01   : [All Rounder (Pakistan)]          ");');
-  info.script.AppendExtra('ui_print("         LRX22G          : [Graphics Master]                 ");');
-  info.script.AppendExtra('ui_print("         Meticulus       : [IMPEACH TRUMP!]                  ");');
-  info.script.AppendExtra('ui_print("         Petya230        : [Hate Hassan! <3]                 ");');
-  info.script.AppendExtra('ui_print("         xD3SH           : [Tester]                          ");');
-  info.script.AppendExtra('ui_print("         Tw1st3d83       : [Tester]                          ");');
-  info.script.AppendExtra('ui_print("         Haky 86         : [Tester]                          ");');
   info.script.AppendExtra('ui_print("                                                             ");');
-  info.script.AppendExtra('ui_print("Additional Credits:                                          ");');
-  info.script.AppendExtra('ui_print("         Xepeleato of OpenKirin                              ");');
+  info.script.AppendExtra('ui_print("                       Additional Credits:                   ");');
+  info.script.AppendExtra('ui_print("                      XePeleato [OpenKirin]                  ");');
                                                              
 # CoH Team Members: Please insert yours and any other credits here! Alphabetical order pls ;)
 
