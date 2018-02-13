@@ -85,6 +85,7 @@ def FullOTA_InstallBegin(info):
   info.script.AppendExtra('ui_print("         https://codeofhonor.tech                            ");');
   info.script.AppendExtra('ui_print("                                                             ");');
   info.script.AppendExtra('ui_print("THE TEAM:                                                    ");');
+  info.script.AppendExtra('ui_print("         LRX22G   : [Graphics Master]                        ");');
   info.script.AppendExtra('ui_print("         Meticulus: [IMPEACH TRUMP!]                         ");');
   info.script.AppendExtra('ui_print("                                                             ");');
   info.script.AppendExtra('ui_print("Additional Credits:                                          ");');

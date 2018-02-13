@@ -21,23 +21,23 @@ ifeq ($(I_AM_CODEOFHONOR), true)
 $(shell echo "Using CodeOfHonor's Ninja" >&2)
 $(shell cp -f $(LOCAL_PATH)/prebuilt/ninja prebuilts/ninja/linux-x86/ninja)
 
-# Meticulus recovery init rc
+# CodeOfHonor recovery init rc
 PRODUCT_COPY_FILES += \
         $(LOCAL_PATH)/recovery/init.recovery.meticulus.rc:root/init.recovery.meticulus.rc
 
-# Meticulus recovery checks
+# CodeOfHonor recovery checks
 PRODUCT_COPY_FILES += \
 	$(LOCAL_PATH)/recovery/stock-check.sh:install/bin/stock-check.sh \
 	$(LOCAL_PATH)/recovery/finalize.sh:install/bin/finalize.sh \
 	$(LOCAL_PATH)/recovery/data-formatter.sh:install/bin/data-formatter.sh
 
 
-# Meticulus Settings Integration
+# CodeOfHonor Settings Integration
 PRODUCT_PACKAGES += \
     CodinalteParts \
     volumeinput
 
-# Meticulus Releasetools
+# CodeOfHonor Releasetools
 TARGET_RELEASETOOLS_EXTENSIONS := device/huawei/hi6250
 else
 $(shell cd prebuilts/build-tools && git checkout linux-x86/bin/ninja)
