@@ -87,6 +87,7 @@ def FullOTA_InstallBegin(info):
   info.script.AppendExtra('ui_print("THE TEAM:                                                    ");');
   info.script.AppendExtra('ui_print("         LRX22G   : [Graphics Master]                        ");');
   info.script.AppendExtra('ui_print("         Meticulus: [IMPEACH TRUMP!]                         ");');
+  info.script.AppendExtra('ui_print("         Petya230 : [Hate Hassan! <3]                        ");');
   info.script.AppendExtra('ui_print("                                                             ");');
   info.script.AppendExtra('ui_print("Additional Credits:                                          ");');
   info.script.AppendExtra('ui_print("         Xepeleato of OpenKirin                              ");');
