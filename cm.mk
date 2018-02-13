@@ -20,8 +20,8 @@ $(call inherit-product-if-exists, vendor/cm/config/common_full_phone.mk)
 # Inherit device configuration
 $(call inherit-product, device/huawei/hi6250/device.mk)
 
-# Inherit Meticulus's customizations
-$(call inherit-product, device/huawei/hi6250/meticulus.mk)
+# Inherit CodeOfHonor's customizations
+$(call inherit-product, device/huawei/hi6250/CoH.mk)
 
 # Device identifier
 PRODUCT_DEVICE := hi6250
