@@ -91,4 +91,7 @@ def FullOTA_InstallBegin(info):
 def FullOTA_InstallEnd(info):
 #  info.script.AppendExtra('package_extract_dir("override", "/system");')
   info.script.AppendExtra('assert(run_program("/tmp/install/bin/finalize.sh") == 0 || abort("finalize failed but installation should be OK."););')
-
+# Temporarily remove bluetooth.default.so to stop persistent crash.
+  info.script.AppendExtra('mount("ext4", "EMMC", "/dev/block/platform/hi_mci.0/by-name/system", "/system", "");')
+  info.script.AppendExtra('assert(run_program("/sbin/rm", "/system/lib64/hw/bluetooth.default.so") == 0 || abort("Could not delete bluetooth.default.so"););')
+  info.script.AppendExtra('unmount("/system");')
