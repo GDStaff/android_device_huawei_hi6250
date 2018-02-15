@@ -77,7 +77,7 @@ def FullOTA_InstallBegin(info):
   info.script.AppendExtra('ui_print("         HassanMirza01    : [All Rounder (Pakistan)]");');
   info.script.AppendExtra('ui_print("         LRX22G           : [Graphics Master]       ");');
   info.script.AppendExtra('ui_print("         Meticulus        : [IMPEACH TRUMP!]        ");');
-  info.script.AppendExtra('ui_print("         Petya230         : [Meeh!]                  ");');
+  info.script.AppendExtra('ui_print("         Petya230         : [Meeh!]                 ");');
   info.script.AppendExtra('ui_print("         r33int (Enzo)    : [Tester, Sysadmin]      ");');
   info.script.AppendExtra('ui_print("         xD3SH            : [Tester]                ");');
   info.script.AppendExtra('ui_print("         ToeiRei          : [AI Nerd Girl]          ");');
