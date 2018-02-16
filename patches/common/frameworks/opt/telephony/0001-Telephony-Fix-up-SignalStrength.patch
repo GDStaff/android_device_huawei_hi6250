@@ -1,0 +1,169 @@
+From 3a9220f247a5842feb07f88af6303a890001a9a2 Mon Sep 17 00:00:00 2001
+From: Meticulus <theonejohnnyd@gmail.com>
+Date: Fri, 16 Feb 2018 09:44:42 -0600
+Subject: [PATCH] Telephony - Fix up SignalStrength
+
+-Used to do this via a "custom" sub classed RIL but
+no just patching it in.
+
+Change-Id: I815abfa07af9b56ad12ab10fcf6ecdafce500903
+---
+ src/java/com/android/internal/telephony/RIL.java | 142 +++++++++++++++++++++--
+ 1 file changed, 130 insertions(+), 12 deletions(-)
+
+diff --git a/src/java/com/android/internal/telephony/RIL.java b/src/java/com/android/internal/telephony/RIL.java
+index 226ee8e..4519f2a 100644
+--- a/src/java/com/android/internal/telephony/RIL.java
++++ b/src/java/com/android/internal/telephony/RIL.java
+@@ -5094,18 +5094,136 @@ public final class RIL extends BaseCommands implements CommandsInterface {
+ 
+     static SignalStrength convertHalSignalStrength(
+             android.hardware.radio.V1_0.SignalStrength signalStrength) {
+-        return new SignalStrength(signalStrength.gw.signalStrength,
+-                signalStrength.gw.bitErrorRate,
+-                signalStrength.cdma.dbm,
+-                signalStrength.cdma.ecio,
+-                signalStrength.evdo.dbm,
+-                signalStrength.evdo.ecio,
+-                signalStrength.evdo.signalNoiseRatio,
+-                signalStrength.lte.signalStrength,
+-                signalStrength.lte.rsrp,
+-                signalStrength.lte.rsrq,
+-                signalStrength.lte.rssnr,
+-                signalStrength.lte.cqi,
++	    Rlog.e("Meticulus", "convertHalSignalStrength called"); 
++        int gsmSignalStrength = signalStrength.gw.signalStrength; // Valid values are (0-31, 99) as defined in TS 27.007 8.5
++        int gsmBitErrorRate = signalStrength.gw.bitErrorRate; // bit error rate (0-7, 99) as defined in TS 27.007 8.5
++        int mWcdmaRscp = 0; // added by huawei
++        int mWcdmaEcio = 0; // added by huawei
++        int cdmaDbm = signalStrength.cdma.dbm;
++        int cdmaEcio = signalStrength.cdma.ecio;
++        int evdoDbm = signalStrength.evdo.dbm; // -75 to -105, 99
++        int evdoEcio = signalStrength.evdo.ecio;
++        int evdoSnr = signalStrength.evdo.signalNoiseRatio; // Valid values are 0-8.  8 is the highest signal to noise ratio
++        int lteSignalStrength = signalStrength.lte.signalStrength; // 0 to 12, 63
++        int lteRsrp = signalStrength.lte.rsrp; // -85 to -140, -44
++        int lteRsrq = signalStrength.lte.rsrq; // -3 to -20
++        int lteRssnr = signalStrength.lte.rssnr; // 130 to -30, -200
++        int lteCqi = signalStrength.lte.cqi;
++        int mGsm = 0;
++        int mRat = 0; // added by huawei       
++
++        Rlog.d(RILJ_LOG_TAG, "---------- HEX ----------");
++        Rlog.d(RILJ_LOG_TAG, "gsmSignalStrength:" + String.format("%x", gsmSignalStrength));
++        Rlog.d(RILJ_LOG_TAG, "gsmBitErrorRate:" + String.format("%x", gsmBitErrorRate));
++        Rlog.d(RILJ_LOG_TAG, "mWcdmaRscp:" + String.format("%x", mWcdmaRscp));
++        Rlog.d(RILJ_LOG_TAG, "mWcdmaEcio:" + String.format("%x", mWcdmaEcio));
++        Rlog.d(RILJ_LOG_TAG, "cdmaDbm:" + String.format("%x", cdmaDbm));
++        Rlog.d(RILJ_LOG_TAG, "cdmaEcio:" + String.format("%x", cdmaEcio));
++        Rlog.d(RILJ_LOG_TAG, "evdoDbm:" + String.format("%x", evdoDbm));
++        Rlog.d(RILJ_LOG_TAG, "evdoEcio:" + String.format("%x", evdoEcio));
++        Rlog.d(RILJ_LOG_TAG, "evdoSnr:" + String.format("%x", evdoSnr));
++        Rlog.d(RILJ_LOG_TAG, "lteSignalStrength:" + String.format("%x", lteSignalStrength));
++        Rlog.d(RILJ_LOG_TAG, "lteRsrp:" + String.format("%x", lteRsrp));
++        Rlog.d(RILJ_LOG_TAG, "lteRsrq:" + String.format("%x", lteRsrq));
++        Rlog.d(RILJ_LOG_TAG, "lteRssnr:" + String.format("%x", lteRssnr));
++        Rlog.d(RILJ_LOG_TAG, "lteCqi:" + String.format("%x", lteCqi));
++        Rlog.d(RILJ_LOG_TAG, "mGsm:" + String.format("%x", mGsm));
++        Rlog.d(RILJ_LOG_TAG, "mRat:" + String.format("%x", mRat));
++
++        if (lteRsrp != 0) // LTE
++        {
++            if (lteRsrp > -20) lteSignalStrength = 64; // None or Unknown
++            else if (lteRsrp >= -97) lteSignalStrength = 63; // Great
++            else if (lteRsrp >= -105) lteSignalStrength = 11; // Good
++            else if (lteRsrp >= -113) lteSignalStrength = 7; // Moderate
++            else if (lteRsrp >= -120) lteSignalStrength = 4; // Poor
++            else if (lteRsrp >= -140) lteSignalStrength = 64; // None or Unknown
++        }
++        else if (gsmSignalStrength == 0 && lteRsrp == 0) // 3G
++        {  
++            lteRsrp = (mWcdmaRscp & 0xFF) - 256;
++            lteRsrq = (mWcdmaEcio & 0xFF) - 256;
++
++            if (lteRsrp > -20) { // None or Unknown
++                lteSignalStrength = 64;
++                lteRssnr = -200;
++            } else if (lteRsrp >= -85) { // Great
++                lteSignalStrength = 63;
++                lteRssnr = 300;
++            } else if (lteRsrp >= -95) { // Good
++                lteSignalStrength = 11;
++                lteRssnr = 129;
++            } else if (lteRsrp >= -105) { // Moderate
++                lteSignalStrength = 7;
++                lteRssnr = 44;
++            } else if (lteRsrp >= -115) { // Poor
++                lteSignalStrength = 4;
++                lteRssnr = 9;
++            } else if (lteRsrp >= -140) { // None or Unknown
++                lteSignalStrength = 64;
++                lteRssnr = -200;
++            }
++        }
++        else if (mWcdmaRscp == 0 && lteRsrp == 0) // 2G
++        {         
++            lteRsrp = (gsmSignalStrength & 0xFF) - 256;
++
++            if (lteRsrp > -20) { // None or Unknown
++                lteSignalStrength = 64;
++                lteRsrq = -21;
++                lteRssnr = -200;
++            } else if (lteRsrp >= -85) { // Great
++                lteSignalStrength = 63;
++                lteRsrq = -3;
++                lteRssnr = 300;
++            } else if (lteRsrp >= -95) { // Good
++                lteSignalStrength = 11;
++                lteRsrq = -7;
++                lteRssnr = 129;
++            } else if (lteRsrp >= -105) { // Moderate
++                lteSignalStrength = 7;
++                lteRsrq = -12;
++                lteRssnr = 44;
++            } else if (lteRsrp >= -115) { // Poor
++                lteSignalStrength = 4;
++                lteRsrq = -17;
++                lteRssnr = 9;
++            } else if (lteRsrp >= -140) { // None or Unknown
++                lteSignalStrength = 64;
++                lteRsrq = -21;
++                lteRssnr = -200;
++            }
++        }
++/*
++        gsmSignalStrength = 0;
++        gsmBitErrorRate = 0;
++        cdmaDbm = -1;
++        cdmaEcio = -1;
++        evdoDbm = -1;
++        evdoEcio = -1;
++        evdoSnr = -1;
++*/
++        Rlog.d(RILJ_LOG_TAG, "---------- MOD ----------");
++        Rlog.d(RILJ_LOG_TAG, "lteSignalStrength:" + lteSignalStrength);
++        Rlog.d(RILJ_LOG_TAG, "lteRsrp:" + lteRsrp);
++        Rlog.d(RILJ_LOG_TAG, "lteRsrq:" + lteRsrq);
++        Rlog.d(RILJ_LOG_TAG, "lteRssnr:" + lteRssnr);
++        Rlog.d(RILJ_LOG_TAG, "lteCqi:" + lteCqi);
++        Rlog.d(RILJ_LOG_TAG, "-------------------------");
++
++
++        return new SignalStrength(gsmSignalStrength,
++                gsmSignalStrength,
++                cdmaDbm,
++                cdmaEcio,
++                evdoDbm,
++                evdoEcio,
++                evdoSnr,
++                lteSignalStrength,
++                lteRsrp,
++                lteRsrq,
++                lteRssnr,
++                lteCqi,
+                 signalStrength.tdScdma.rscp,
+                 false /* gsmFlag - don't care; will be changed by SST */);
+     }
+-- 
+2.7.4
+
