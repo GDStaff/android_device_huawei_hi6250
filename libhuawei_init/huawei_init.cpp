@@ -258,9 +258,18 @@ static void check_single_sim() {
 	set_property("persist.dsds.enabled", "false");
 	set_property("ro.config.client_number", "1");
 	set_property("ro.config.modem_number", "1");
+	set_property("rild.libpath1", "");
+	set_property("rild.libargs1", "");
     } else {
 	set_property("persist.dsds.enabled", dsdsorig);	
     }
+
+    /* Meticulus:
+     * We need to start rild after these properties are set.
+     * To ensure that state of affairs, we use this prop to
+     * start the ril-daemon.
+     */
+    set_property("sys.start_ril", "1");
 
 }
 
