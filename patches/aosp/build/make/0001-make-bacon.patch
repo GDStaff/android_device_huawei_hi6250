@@ -16,7 +16,7 @@ index d804c37..0de4de0 100644
  	   $(BUILT_TARGET_FILES_PACKAGE) $@
  
 -.PHONY: otapackage
-+AOSP_VERSION := $(TARGET_PRODUCT)-$(PLATFORM_VERSION)-$(BUILD_ID)-$(shell date -u +%Y%m%d)-$(USER)
++AOSP_VERSION := $(TARGET_PRODUCT)-$(PLATFORM_VERSION)-$(BUILD_ID)-$(shell date -u +%Y%m%d)-CodeOfHonor
 +AOSP_TARGET_PACKAGE := $(PRODUCT_OUT)/$(AOSP_VERSION).zip
 +
 +.PHONY: otapackage bacon

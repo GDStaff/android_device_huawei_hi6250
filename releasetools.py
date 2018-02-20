@@ -67,24 +67,30 @@ def FullOTA_Assertions(info):
 
 
 def FullOTA_InstallBegin(info):
-  info.script.AppendExtra('ui_print("                 Join our community at:             ");');
-  info.script.AppendExtra('ui_print("                https://codeofhonor.tech            ");');
-  info.script.AppendExtra('ui_print("                                                    ");');
-  info.script.AppendExtra('ui_print("                      THE TEAM:                     ");');
-  info.script.AppendExtra('ui_print("         felix-development: [Honor 6X Maintainer]   ");');
-  info.script.AppendExtra('ui_print("         Haky 86          : [Tester]                ");');
-  info.script.AppendExtra('ui_print("         HassanMirza01    : [All Rounder (Pakistan)]");');
-  info.script.AppendExtra('ui_print("         LRX22G           : [Graphics Master]       ");');
-  info.script.AppendExtra('ui_print("         Meticulus        : [IMPEACH TRUMP!]        ");');
-  info.script.AppendExtra('ui_print("         Petya230         : [Hate Hassan! <3]       ");');
-  info.script.AppendExtra('ui_print("         r33int (Enzo)    : [Tester, Sysadmin]      ");');
-  info.script.AppendExtra('ui_print("         xD3SH            : [Tester]                ");');
-  info.script.AppendExtra('ui_print("         ToeiRei          : [AI Nerd Girl]          ");');
-  info.script.AppendExtra('ui_print("         Tw1st3d83        : [Tester]                ");');
   info.script.AppendExtra('ui_print("                                                    ");');
   info.script.AppendExtra('ui_print("                                                    ");');
-  info.script.AppendExtra('ui_print("                  Additional Credits:               ");');
-  info.script.AppendExtra('ui_print("                  XePeleato [OpenKirin]             ");');
+  info.script.AppendExtra('ui_print("               Join our community at:               ");');
+  info.script.AppendExtra('ui_print("              https://codeofhonor.tech              ");');
+  info.script.AppendExtra('ui_print("                                                    ");');
+  info.script.AppendExtra('ui_print("   THE TEAM:                                        ");');
+  info.script.AppendExtra('ui_print("                                                    ");');
+  info.script.AppendExtra('ui_print("   felix-development : [Honor 6X Maintainer]        ");');
+  info.script.AppendExtra('ui_print("   Haky 86           : [Tester]                     ");');
+  info.script.AppendExtra('ui_print("   HassanMirza01     : [All Rounder (Pakistan)]     ");');
+  info.script.AppendExtra('ui_print("   LRX22G            : [Graphics Master]            ");');
+  info.script.AppendExtra('ui_print("   Meticulus         : [IMPEACH TRUMP!]             ");');
+  info.script.AppendExtra('ui_print("   Petya230          : [Hate Hassan! <3]            ");');
+  info.script.AppendExtra('ui_print("   r33int (Enzo)     : [Tester, Sysadmin]           ");');
+  info.script.AppendExtra('ui_print("   xD3SH             : [Tester]                     ");');
+  info.script.AppendExtra('ui_print("   ToeiRei           : [AI Nerd Girl]               ");');
+  info.script.AppendExtra('ui_print("   Tw1st3d83         : [Tester]                     ");');
+  info.script.AppendExtra('ui_print("                                                    ");');
+  info.script.AppendExtra('ui_print("                                                    ");');
+  info.script.AppendExtra('ui_print("   ADDITIONAL CREDITS:                              ");');
+  info.script.AppendExtra('ui_print("                                                    ");');
+  info.script.AppendExtra('ui_print("   XePeleato         : [OpenKirin]                  ");');
+  info.script.AppendExtra('ui_print("                                                    ");');
+  info.script.AppendExtra('ui_print("                                                    ");');
                                                              
 # CoH Team Members: Please insert yours and any other credits here! Alphabetical order pls ;)
 
