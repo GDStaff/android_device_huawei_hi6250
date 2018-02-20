@@ -106,8 +106,6 @@ on data_ready
 on data_not_ready
     write /proc/data-ready 0
 
-
-
 service ril-daemon /system/bin/rild
     class core
     socket rild stream 660 root radio
@@ -131,7 +129,7 @@ service ril-daemon1 /system/bin/rild -c 1
     user root
     group radio cache inet misc audio sdcard_r sdcard_rw log
 
-on property:sys.userdata_is_ready=1
+on property:sys.start_ril=1
     start ril-daemon
 
 on property:rild.rild1_ready_to_start=true
