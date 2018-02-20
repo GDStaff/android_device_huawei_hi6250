@@ -1,0 +1,40 @@
+From c9f8637bd30a4589aad52fbe982bb0227447dabb Mon Sep 17 00:00:00 2001
+From: Meticulus <theonejohnnyd@gmail.com>
+Date: Sat, 3 Feb 2018 08:27:08 -0600
+Subject: [PATCH] "0001-don-t-build-obsolete _______________________________
+
+*Previous From b9e3bd601221c039c0436467924fbeb8d1b65c03 Mon Sep 17 00:00:00 2001
+*Previous From: Meticulus <theonejohnnyd@gmail.com>
+*Previous Date: Sat, 13 May 2017 10:05:15 -0500
+*Previous Subject: [PATCH] don't build obsolete
+*
+*Change-Id: Ia4502d07a171dd546fec0021c57587a51fd63b98"
+
+Change-Id: I1871e7ac22b96e5a43abb29c29d9b4cf0b37a962
+---
+ target/product/core.mk | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/target/product/core.mk b/target/product/core.mk
+index a2b0f1c..4bc300d 100644
+--- a/target/product/core.mk
++++ b/target/product/core.mk
+@@ -24,7 +24,6 @@ PRODUCT_PACKAGES += \
+     BasicDreams \
+     BlockedNumberProvider \
+     BookmarkProvider \
+-    Browser2 \
+     BuiltInPrintService \
+     Calendar \
+     CalendarProvider \
+@@ -51,7 +50,6 @@ PRODUCT_PACKAGES += \
+     PrintSpooler \
+     PrintRecommendationService \
+     ProxyHandler \
+-    QuickSearchBox \
+     Settings \
+     SharedStorageBackup \
+     StorageManager \
+-- 
+2.7.4
+

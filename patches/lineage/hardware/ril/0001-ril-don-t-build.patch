@@ -1,0 +1,56 @@
+From 164cfcc5b065a769f5c81f2bfc20bc0cfb0931e7 Mon Sep 17 00:00:00 2001
+From: Meticulus <theonejohnnyd@gmail.com>
+Date: Tue, 12 Dec 2017 06:26:57 -0600
+Subject: [PATCH] "0001-ril-don-t-build _______________________________
+
+*Previous From 0b534daf6d99b87482ced08357b17e202a2918ff Mon Sep 17 00:00:00 2001
+*Previous From: Meticulus <theonejohnnyd@gmail.com>
+*Previous Date: Thu, 4 May 2017 10:45:46 -0500
+*Previous Subject: [PATCH] 0001-ril-don-t-build
+*"
+---
+ reference-ril/Android.mk | 5 +++++
+ rild/Android.mk          | 4 +++-
+ 2 files changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/reference-ril/Android.mk b/reference-ril/Android.mk
+index d9908c1..7b8f67f 100644
+--- a/reference-ril/Android.mk
++++ b/reference-ril/Android.mk
+@@ -2,6 +2,9 @@
+ 
+ # XXX using libutils for simulator build only...
+ #
++
++ifneq ($(BOARD_PROVIDES_LIBREFERENCE_RIL), true)
++
+ LOCAL_PATH:= $(call my-dir)
+ include $(CLEAR_VARS)
+ 
+@@ -45,3 +48,5 @@ else
+   LOCAL_MODULE:= reference-ril
+   include $(BUILD_EXECUTABLE)
+ endif
++
++endif
+diff --git a/rild/Android.mk b/rild/Android.mk
+index 4f5802b..15a6422 100644
+--- a/rild/Android.mk
++++ b/rild/Android.mk
+@@ -1,5 +1,7 @@
+ # Copyright 2006 The Android Open Source Project
+ 
++ifneq ($(BOARD_PROVIDES_RILD), true)
++
+ LOCAL_PATH:= $(call my-dir)
+ include $(CLEAR_VARS)
+ 
+@@ -29,4 +31,4 @@ LOCAL_MODULE:= rild
+ LOCAL_INIT_RC := rild.rc
+ 
+ include $(BUILD_EXECUTABLE)
+-
++endif
+-- 
+2.7.4
+
