@@ -22,6 +22,9 @@ $(call inherit-product, device/huawei/hi6250/cm.mk)
 
 PRODUCT_NAME := lineage_hi6250
 
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/kernel:kernel
+
 ifeq ($(AUTOPATCH),true)
     $(shell cd device/huawei/hi6250/patches 2>&1 > /dev/null && ./patch.sh lineage >&2)
 else
