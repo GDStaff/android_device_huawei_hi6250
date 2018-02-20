@@ -1,4 +1,4 @@
-# init for Meticulus Development's Extras
+# init for Code Of Honor Development's Extras
 
 service meticulus_otg /sbin/metiotgd
     class late_start
