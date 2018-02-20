@@ -1,0 +1,26 @@
+From 883f75736c52a4d39add78d5db25325413d50e33 Mon Sep 17 00:00:00 2001
+From: HassanMirza01 <hassanmirza01@hotmail.com>
+Date: Tue, 20 Feb 2018 11:28:30 -0500
+Subject: [PATCH] los: Fixed bt for Oreo
+
+Change-Id: Ib1267a05d7248295a7e777dd128ff6dcdbbc77cc
+---
+ hci/src/hci_layer.cc | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/hci/src/hci_layer.cc b/hci/src/hci_layer.cc
+index 3641645..07cfd8e 100644
+--- a/hci/src/hci_layer.cc
++++ b/hci/src/hci_layer.cc
+@@ -313,6 +313,8 @@ static void transmit_command(BT_HDR* command,
+ 
+   uint8_t* stream = command->data + command->offset;
+   STREAM_TO_UINT16(wait_entry->opcode, stream);
++  if(wait_entry->opcode == 0x40f)
++  return;
+   wait_entry->complete_callback = complete_callback;
+   wait_entry->status_callback = status_callback;
+   wait_entry->command = command;
+-- 
+2.14.1
+
