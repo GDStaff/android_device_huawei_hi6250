@@ -38,22 +38,12 @@ checkerror() {
 }
 
 printheader() {
-mecho '        CCCCCCCCCCCCC                 HHHHHHHHH     HHHHHHHHH'
-mecho '     CCC::::::::::::C                 H:::::::H     H:::::::H'
-mecho '   CC:::::::::::::::C                 H:::::::H     H:::::::H'
-mecho '  C:::::CCCCCCCC::::C                 HH::::::H     H::::::HH'
-mecho ' C:::::C       CCCCCC   ooooooooooo     H:::::H     H:::::H  '
-mecho 'C:::::C               oo:::::::::::oo   H:::::H     H:::::H  '
-mecho 'C:::::C              o:::::::::::::::o  H::::::HHHHH::::::H  '
-mecho 'C:::::C              o:::::ooooo:::::o  H:::::::::::::::::H  '
-mecho 'C:::::C              o::::o     o::::o  H:::::::::::::::::H  '
-mecho 'C:::::C              o::::o     o::::o  H::::::HHHHH::::::H  '
-mecho 'C:::::C              o::::o     o::::o  H:::::H     H:::::H  '
-mecho ' C:::::C       CCCCCCo::::o     o::::o  H:::::H     H:::::H  '
-mecho '  C:::::CCCCCCCC::::Co:::::ooooo:::::oHH::::::H     H::::::HH'
-mecho '   CC:::::::::::::::Co:::::::::::::::oH:::::::H     H:::::::H'
-mecho '     CCC::::::::::::C oo:::::::::::oo H:::::::H     H:::::::H'
-mecho '        CCCCCCCCCCCCC   ooooooooooo   HHHHHHHHH     HHHHHHHHH'
+mecho '                ██████╗ ██████╗ ██╗  ██╗            '
+mecho '               ██╔════╝██╔═══██╗██║  ██║            '
+mecho '               ██║     ██║   ██║███████║            '
+mecho '               ██║     ██║   ██║██╔══██║            '
+mecho '               ╚██████╗╚██████╔╝██║  ██║            '
+mecho '                ╚═════╝ ╚═════╝ ╚═╝  ╚═╝            '
 }
 
 clearscreen() {
