@@ -40,5 +40,5 @@ PRODUCT_PACKAGES += \
 # CodeOfHonor Releasetools
 TARGET_RELEASETOOLS_EXTENSIONS := device/huawei/hi6250
 else
-$(shell cd prebuilts/build-tools && git checkout linux-x86/bin/ninja)
+$(shell cd $(LOCAL_PATH)/prebuilt/ninja && git checkout linux-x86/bin/ninja)
 endif
