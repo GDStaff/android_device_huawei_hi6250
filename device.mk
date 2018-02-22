@@ -73,7 +73,6 @@ PRODUCT_PACKAGES += \
     hwcomposer.hi6250 \
     libcopybit_wrapper \
     lights.hi6250 \
-    sensors.hi6250 \
     metiotgd \
     emui5_vendor_symlinks
 
