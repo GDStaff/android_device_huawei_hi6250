@@ -121,8 +121,8 @@ HEALTHD_FORCE_BACKLIGHT_CONTROL := true
 # Recovery
 TARGET_RECOVERY_FSTAB := device/huawei/hi6250/rootdir/fstab.hi6250
 
-# cmhw
-BOARD_HARDWARE_CLASS := device/huawei/hi6250/cmhw/
+# lineagehw
+BOARD_HARDWARE_CLASS := device/huawei/hi6250/lineagehw/
 
 # SELinux
 BOARD_SEPOLICY_DIRS += $(TOP)/device/huawei/hi6250/sepolicy
