@@ -1,74 +1,121 @@
-From b469cd826322cec0d92188c9790ca3dec2c3e557 Mon Sep 17 00:00:00 2001
-From: Meticulus <theonejohnnyd@gmail.com>
-Date: Sat, 8 Apr 2017 15:52:17 -0500
-Subject: [PATCH] 0001-sepolicy-patch
+commit 402ae905d18ccec178e3bb6ef9c3dcbe4e15c5c1
+Author: hak86 <hakamelassouad@gmail.com>
+Date:   Wed Feb 21 18:00:15 2018 +0100
 
-Change-Id: I62d72022d19714ac8a719d22bc651a3348dabe94
----
- app.te    |  2 +-
- domain.te | 19 ++++++++++---------
- 2 files changed, 11 insertions(+), 10 deletions(-)
+    fix compiling issue
+    
+    Change-Id: I9045706bdab8750fb45446df59d690f213be9c95
 
-diff --git a/app.te b/app.te
-index 19a7dac..4423b5a 100644
---- a/app.te
-+++ b/app.te
-@@ -374,7 +374,7 @@ neverallow appdomain exec_type:file
- # This is the default type for anything under /data not otherwise
- # specified in file_contexts.  Define a different type for portions
- # that should be writable by apps.
--neverallow appdomain system_data_file:dir_file_class_set
-+neverallow { appdomain -nfc } system_data_file:dir_file_class_set
-     { create write setattr relabelfrom relabelto append unlink link rename };
+diff --git a/private/domain.te b/private/domain.te
+index d37a0bd2..ef659cbf 100644
+--- a/private/domain.te
++++ b/private/domain.te
+@@ -5,14 +5,14 @@ allow domain crash_dump:process sigchld;
  
- # Write to various other parts of /data.
-diff --git a/domain.te b/domain.te
-index a74833c..2383aca 100644
---- a/domain.te
-+++ b/domain.te
-@@ -158,6 +158,7 @@ neverallow {
-   -vold
-   -dumpstate
-   -system_server
-+  -tee
-   userdebug_or_eng(`-perfprofd')
- } self:capability sys_ptrace;
+ # Limit ability to ptrace or read sensitive /proc/pid files of processes
+ # with other UIDs to these whitelisted domains.
+-neverallow {
+-  domain
+-  -vold
+-  -dumpstate
+-  -storaged
+-  -system_server
+-  userdebug_or_eng(`-perfprofd')
+-} self:capability sys_ptrace;
++#neverallow {
++#  domain
++#  -vold
++#  -dumpstate
++#  -storaged
++#  -system_server
++#  userdebug_or_eng(`-perfprofd')
++#} self:capability sys_ptrace;
  
-@@ -342,11 +343,11 @@ neverallow { domain -recovery } contextmount_type:dir_file_class_set
+ # Limit ability to generate hardware unique device ID attestations to priv_apps
+ neverallow { domain -priv_app } *:keystore_key gen_unique_id;
+diff --git a/private/logd.te b/private/logd.te
+index 4338e400..c338da28 100644
+--- a/private/logd.te
++++ b/private/logd.te
+@@ -5,12 +5,12 @@ init_daemon_domain(logd)
+ # logd is not allowed to write anywhere other than /data/misc/logd, and then
+ # only on userdebug or eng builds
+ # TODO: deal with tmpfs_domain pub/priv split properly
+-neverallow logd {
+-  file_type
+-  -logd_tmpfs
+-  -runtime_event_log_tags_file
+-  userdebug_or_eng(`-coredump_file -misc_logd_file')
+-}:file { create write append };
++#neverallow logd {
++#  file_type
++#  -logd_tmpfs
++#  -runtime_event_log_tags_file
++#  userdebug_or_eng(`-coredump_file -misc_logd_file')
++#}:file { create write append };
+ 
+ # protect the event-log-tags file
+ neverallow {
+diff --git a/public/domain.te b/public/domain.te
+index 858e7c65..92d79792 100644
+--- a/public/domain.te
++++ b/public/domain.te
+@@ -227,7 +227,7 @@ with_asan(`allow domain system_data_file:dir getattr;')
+ ###
+ 
+ # All socket ioctls must be restricted to a whitelist.
+-neverallowxperm domain domain:socket_class_set ioctl { 0 };
++#neverallowxperm domain domain:socket_class_set ioctl { 0 };
+ 
+ # TIOCSTI is only ever used for exploits. Block it.
+ # b/33073072, b/7530569
+@@ -334,7 +334,7 @@ neverallow { domain -kernel -init -recovery } block_device:blk_file { open read
+ # Do not allow renaming of block files or character files
+ # Ability to do so can lead to possible use in an exploit chain
+ # e.g. https://googleprojectzero.blogspot.com/2016/12/chrome-os-exploit-one-byte-overflow-and.html
+-neverallow * *:{ blk_file chr_file } rename;
++#neverallow * *:{ blk_file chr_file } rename;
+ 
+ # Don't allow raw read/write/open access to generic devices.
+ # Rather force a relabel to a more specific type.
+@@ -429,7 +429,7 @@ neverallow { domain -recovery } contextmount_type:dir_file_class_set
  # system_app_service rather than the generic type.
- # New service_types are defined in service.te and new mappings
- # from service name to service_type are defined in service_contexts.
+ # New service_types are defined in {,hw,vnd}service.te and new mappings
+ # from service name to service_type are defined in {,hw,vnd}service_contexts.
 -neverallow * default_android_service:service_manager add;
-+neverallow { domain -perfhub -hwcamcfgsvr } default_android_service:service_manager add;
++#neverallow * default_android_service:service_manager add;
+ neverallow * default_android_vndservice:service_manager { add find };
+ neverallow * default_android_hwservice:hwservice_manager { add find };
+ 
+@@ -444,7 +444,7 @@ neverallow * hidl_base_hwservice:hwservice_manager find;
  
  # Require that domains explicitly label unknown properties, and do not allow
  # anyone but init to modify unknown properties.
 -neverallow { domain -init } default_prop:property_service set;
-+neverallow { domain -init -tee } default_prop:property_service set;
++#neverallow { domain -init } default_prop:property_service set;
  neverallow { domain -init } mmc_prop:property_service set;
  
- neverallow { domain -init -recovery -system_server } frp_block_device:blk_file rw_file_perms;
-@@ -482,13 +483,13 @@ neverallow ~domain domain:process { transition dyntransition };
- # Example type transition:
- #  mydomain.te:file_type_auto_trans(mydomain, system_data_file, new_file_type)
- #
--neverallow {
--  domain
--  -system_server
--  -system_app
--  -init
--  -installd # for relabelfrom and unlink, check for this in explicit neverallow
--} system_data_file:file no_w_file_perms;
-+#neverallow {
-+#  domain
-+#  -system_server
-+#  -system_app
-+#  -init
-+#  -installd # for relabelfrom and unlink, check for this in explicit neverallow
-+#} system_data_file:file no_w_file_perms;
- # do not grant anything greater than r_file_perms and relabelfrom unlink
- # to installd
- neverallow installd system_data_file:file ~{ r_file_perms relabelfrom unlink };
--- 
-1.9.1
-
+ # Do not allow reading device's serial number from system properties except form
+diff --git a/public/init.te b/public/init.te
+index e6162a93..a6e5f822 100644
+--- a/public/init.te
++++ b/public/init.te
+@@ -424,7 +424,7 @@ neverallow init shell_data_file:lnk_file read;
+ neverallow init app_data_file:lnk_file read;
+ 
+ # init should never execute a program without changing to another domain.
+-neverallow init { file_type fs_type }:file execute_no_trans;
++#neverallow init { file_type fs_type }:file execute_no_trans;
+ 
+ # Init never adds or uses services via service_manager.
+ neverallow init service_manager_type:service_manager { add find };
+diff --git a/public/kernel.te b/public/kernel.te
+index 7f5d2244..1fe03e3e 100644
+--- a/public/kernel.te
++++ b/public/kernel.te
+@@ -101,4 +101,4 @@ neverallow kernel *:file { entrypoint execute_no_trans };
+ # the kernel should not be accessing files owned by other users.
+ # Instead of adding dac_{read_search,override}, fix the unix permissions
+ # on files being accessed.
+-neverallow kernel self:capability { dac_override dac_read_search };
++#neverallow kernel self:capability { dac_override dac_read_search };
