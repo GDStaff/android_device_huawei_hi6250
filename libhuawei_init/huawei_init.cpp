@@ -105,6 +105,7 @@ void vendor_load_default_properties() {
     } else if(!strncmp(model, "PRA", 3)) {
 	set_property(BOARDID_PRODUCT_PROP, "61285");
 	set_property("media.settings.xml", "/etc/media_profiles_was.xml");
+	write_int("/sys/module/snd_soc_hi6555c/parameters/hs_3_pole_max_voltage", 15);
     /* All Warsaw needs this */
     } else if(!strncmp(model, "WAS", 3)) {
 	set_property(BOARDID_PRODUCT_PROP, "61457");
