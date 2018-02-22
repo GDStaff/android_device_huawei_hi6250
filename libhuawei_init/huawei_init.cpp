@@ -70,6 +70,19 @@ static char * read_string(char * path) {
     return strdup(var);
 }
 
+static void write_int(char const *path, int value) {
+    int fd;
+    fd = open(path, O_RDWR);
+    if (fd >= 0) {
+	char buffer[20];
+	int bytes = sprintf(buffer, "%d\n", value);
+	int amt = write(fd, buffer, bytes);
+	close(fd);
+    } else { 
+        klog_write(0, "write_int failed to open %s\n", path);
+    }
+}
+
 static int read_int(char * path) {
      return atoi(read_string(path));
 }
@@ -99,6 +112,7 @@ void vendor_load_default_properties() {
     /* All Honor 5c/Honor 7 lite needs this */
     } else if(!strncmp(model, "NEM", 3) || !strncmp(model, "NMO", 3)) {
 	set_property(BOARDID_PRODUCT_PROP, "4873");
+	write_int("/sys/module/snd_soc_hi6555c/parameters/hs_3_pole_max_voltage", 15);
     /* Dallas? */
     } else if(!strncmp(model, "DAL", 3)) {
 	set_property(BOARDID_PRODUCT_PROP, "6198");
