@@ -1,0 +1,108 @@
+commit 4018f39381a854fb4b898c1811ebdee03c8ff08d
+Author: hak86 <hakamelassouad@gmail.com>
+Date:   Wed Feb 21 23:50:20 2018 +0100
+
+    fix shims for oreo
+    
+    Change-Id: Ie271bace6acf006042766bbbba1d33add4514a21
+
+diff --git a/linker/linker.cpp b/linker/linker.cpp
+index a9afb1875..282c29c2c 100644
+--- a/linker/linker.cpp
++++ b/linker/linker.cpp
+@@ -88,11 +88,13 @@ static const char* const kLdConfigFilePath = "/system/etc/ld.config.txt";
+ #if defined(__LP64__)
+ static const char* const kSystemLibDir     = "/system/lib64";
+ static const char* const kVendorLibDir     = "/vendor/lib64";
++static const char* const kHwVendorLibDir   = "/hwvendor/lib64";
+ static const char* const kAsanSystemLibDir = "/data/asan/system/lib64";
+ static const char* const kAsanVendorLibDir = "/data/asan/vendor/lib64";
+ #else
+ static const char* const kSystemLibDir     = "/system/lib";
+ static const char* const kVendorLibDir     = "/vendor/lib";
++static const char* const kHwVendorLibDir   = "/hwvendor/lib";
+ static const char* const kAsanSystemLibDir = "/data/asan/system/lib";
+ static const char* const kAsanVendorLibDir = "/data/asan/vendor/lib";
+ #endif
+@@ -102,6 +104,7 @@ static const char* const kAsanLibDirPrefix = "/data/asan";
+ static const char* const kDefaultLdPaths[] = {
+   kSystemLibDir,
+   kVendorLibDir,
++  kHwVendorLibDir,
+   nullptr
+ };
+ 
+diff --git a/linker/linker_main.cpp b/linker/linker_main.cpp
+index 61a06695c..d2659ec55 100644
+--- a/linker/linker_main.cpp
++++ b/linker/linker_main.cpp
+@@ -49,6 +49,8 @@
+ 
+ #include <vector>
+ 
++#include "shims.h"
++
+ extern void __libc_init_globals(KernelArgumentBlock&);
+ extern void __libc_init_AT_SECURE(KernelArgumentBlock&);
+ 
+@@ -335,7 +337,7 @@ static ElfW(Addr) __linker_init_post_relocation(KernelArgumentBlock& args) {
+   parse_LD_LIBRARY_PATH(ldpath_env);
+   parse_LD_PRELOAD(ldpreload_env);
+ 
+-#ifdef LD_SHIM_LIBS
++#ifdef TARGET_LD_SHIM_LIBS
+   // Read from TARGET_LD_SHIM_LIBS
+   parse_LD_SHIM_LIBS(LD_SHIM_LIBS);
+ #endif
+diff --git a/linker/shims.h b/linker/shims.h
+new file mode 100644
+index 000000000..e3cc54389
+--- /dev/null
++++ b/linker/shims.h
+@@ -0,0 +1,46 @@
++/*
++ * Copyright (C) 2017 Jonathan Dennis [Meticulus]
++ * All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ *  * Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ *  * Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in
++ *    the documentation and/or other materials provided with the
++ *    distribution.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
++ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
++ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
++ * FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
++ * COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
++ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
++ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS
++ * OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED
++ * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
++ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
++ * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
++ * SUCH DAMAGE.
++ */
++
++#ifndef __SHIMS_H
++#define __SHIMS_H
++
++#define COLON ":"
++
++#define BERLIN_SHIMS "/hwvendor/lib64/hwcam/hwcam.hi6250.m.BERLIN.so|libshim_libgui.so:/hwvendor/lib64/hwcam/hwcam.hi6250.m.BERLIN.so|libshim_libui.so:/hwvendor/lib64/hwcam/hwcam.hi6250.m.BERLIN.so|libshim.so"
++#define DALLAS_SHIMS "/hwvendor/lib64/hwcam/hwcam.hi6250.m.DALLAS.so|libshim_libgui.so:/hwvendor/lib64/hwcam/hwcam.hi6250.m.DALLAS.so|libshim_libui.so:/hwvendor/lib64/hwcam/hwcam.hi6250.m.DALLAS.so|libshim.so"
++#define NEMO_SHIMS "/hwvendor/lib64/hwcam/hwcam.hi6250.m.NEMO.so|libshim_libgui.so:/hwvendor/lib64/hwcam/hwcam.hi6250.m.NEMO.so|libshim_libui.so:/hwvendor/lib64/hwcam/hwcam.hi6250.m.NEMO.so|libshim.so"
++#define PRAGUE_SHIMS "/hwvendor/lib64/hwcam/hwcam.hi6250.m.PRAGUE.so|libshim_libgui.so:/hwvendor/lib64/hwcam/hwcam.hi6250.m.PRAGUE.so|libshim_libui.so:/hwvendor/lib64/hwcam/hwcam.hi6250.m.PRAGUE.so|libshim.so"
++#define VENUS_SHIMS "/hwvendor/lib64/hwcam/hwcam.hi6250.m.VENUS.so|libshim_libgui.so:/hwvendor/lib64/hwcam/hwcam.hi6250.m.VENUS.so|libshim_libui.so:/hwvendor/lib64/hwcam/hwcam.hi6250.m.VENUS.so|libshim.so"
++#define WARSAW_SHIMS "/hwvendor/lib64/hwcam/hwcam.hi6250.m.WARSAW.so|libshim_libui.so:/hwvendor/lib64/hwcam/hwcam.hi6250.m.WARSAW.so|libshim.so"
++
++#define COMMON_SHIMS "/hwvendor/lib/hw/audio.primary.hisi.so|libshim.so:/hwvendor/lib64/libcamera_algo.so|libshim_libui.so:/hwvendor/lib64/hw/fingerprint.hi6250.so|libshim.so:/hwvendor/lib64/libbalong-ril.so|libshim_libril.so"
++
++#define OREO_SHIMS "/hwvendor/lib/hw/audio.primary.hisi.so|libshim_icu.so:/hwvendor/lib64/libhwuibp.so|libshim.so"
++
++#define TARGET_LD_SHIM_LIBS COMMON_SHIMS COLON BERLIN_SHIMS COLON DALLAS_SHIMS COLON NEMO_SHIMS COLON PRAGUE_SHIMS COLON VENUS_SHIMS COLON WARSAW_SHIMS COLON OREO_SHIMS
++#endif
