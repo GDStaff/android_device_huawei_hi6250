@@ -98,6 +98,8 @@ void vendor_load_default_properties() {
     /* All P9-Lite needs this */
     if(!strncmp(model,"VNS", 3)) {
 	set_property(BOARDID_PRODUCT_PROP,"51316");
+    } else if (!strncmp(model, "BLL", 3)) {
+	write_int("/sys/module/snd_soc_hi6555c/parameters/hs_3_pole_max_voltage", 15);
     /* All Berlin needs this */
     } else if(!strncmp(model, "BLN", 3) || !strncmp(model, "BLL", 3)) {
 	set_property(BOARDID_PRODUCT_PROP, "61202");
