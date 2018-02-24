@@ -1,0 +1,34 @@
+commit c79c6708e4bf3444bb5d6249d9d5c26653e4d1cf
+Author: hak86 <hakamelassouad@gmail.com>
+Date:   Sat Feb 24 12:24:13 2018 +0100
+
+    fix symlinked device tree for oreo
+
+diff --git a/core/envsetup.mk b/core/envsetup.mk
+index d9842e37f..0c83a0e85 100644
+--- a/core/envsetup.mk
++++ b/core/envsetup.mk
+@@ -216,8 +216,8 @@ SDK_HOST_ARCH := x86
+ board_config_mk := \
+ 	$(strip $(sort $(wildcard \
+ 		$(SRC_TARGET_DIR)/board/$(TARGET_DEVICE)/BoardConfig.mk \
+-		$(shell test -d device && find -L device -maxdepth 4 -path '*/$(TARGET_DEVICE)/BoardConfig.mk') \
+-		$(shell test -d vendor && find -L vendor -maxdepth 4 -path '*/$(TARGET_DEVICE)/BoardConfig.mk') \
++		$(shell test -d device && find -L device -follow -maxdepth 4 -path '*/$(TARGET_DEVICE)/BoardConfig.mk') \
++		$(shell test -d vendor && find -L vendor -follow -maxdepth 4 -path '*/$(TARGET_DEVICE)/BoardConfig.mk') \
+ 	)))
+ ifeq ($(board_config_mk),)
+   $(error No config file found for TARGET_DEVICE $(TARGET_DEVICE))
+diff --git a/core/product_config.mk b/core/product_config.mk
+index 2bd9a7ec0..e709cb9cf 100644
+--- a/core/product_config.mk
++++ b/core/product_config.mk
+@@ -170,7 +170,7 @@ include $(BUILD_SYSTEM)/device.mk
+ 
+ # A Lineage build needs only the Lineage product makefiles.
+ ifneq ($(LINEAGE_BUILD),)
+-  all_product_configs := $(shell find device -path "*/$(LINEAGE_BUILD)/lineage.mk")
++  all_product_configs := $(shell find -L device -path "*/$(LINEAGE_BUILD)/lineage.mk")
+ else
+   ifneq ($(strip $(TARGET_BUILD_APPS)),)
+   # An unbundled app build needs only the core product makefiles.
