@@ -69,6 +69,12 @@ PRODUCT_PACKAGES += \
     audio.usb.default \
     audio.r_submix.default \
 
+# Bluetooth
+PRODUCT_PACKAGES += \
+	android.hardware.bluetooth@1.0-impl \
+	android.hardware.bluetooth@1.0-service \
+	libbt-vendor
+
 # Hardware
 PRODUCT_PACKAGES += \
     power.hi6250 \
@@ -91,7 +97,6 @@ PRODUCT_PACKAGES += \
     android.hardware.vibrator@1.0-impl \
     android.hardware.power@1.0-impl \
     android.hardware.keymaster@3.0-impl \
-    android.hardware.bluetooth@1.0-impl \
     android.hardware.light@2.0-service \
     android.hardware.light@2.0-impl \
     android.hardware.configstore@1.0-service \
