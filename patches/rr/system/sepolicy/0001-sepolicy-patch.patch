@@ -1,67 +1,125 @@
-From b60cd8cc340768870a36d728c597d13cca07a290 Mon Sep 17 00:00:00 2001
+From b056660221b5b3ba92db79f6d767e3e405eb9e94 Mon Sep 17 00:00:00 2001
 From: Meticulus <theonejohnnyd@gmail.com>
-Date: Mon, 20 Nov 2017 16:18:21 -0600
+Date: Wed, 28 Feb 2018 09:13:41 -0600
 Subject: [PATCH] "0001-sepolicy-patch _______________________________
 
-*Previous From 969ca1349dc6f0bba2c8ec460b16fae3ff40277c Mon Sep 17 00:00:00 2001
+*Previous From 22c3cd80cb3cce0a28cb3db4318ddd275ac9afb6 Mon Sep 17 00:00:00 2001
 *Previous From: Meticulus <theonejohnnyd@gmail.com>
-*Previous Date: Mon, 20 Nov 2017 16:11:28 -0600
+*Previous Date: Mon, 18 Dec 2017 09:12:07 -0600
 *Previous Subject: [PATCH] "0001-sepolicy-patch _______________________________
 *
-**Previous From 6a99fa248ca73a1f4153ac63df7fb3818f7e3c82 Mon Sep 17 00:00:00 2001
+**Previous From 103292bf70cc43bf245ecb52ccff6b818ba4798e Mon Sep 17 00:00:00 2001
 **Previous From: Meticulus <theonejohnnyd@gmail.com>
-**Previous Date: Mon, 20 Nov 2017 10:52:30 -0600
+**Previous Date: Sun, 17 Dec 2017 05:11:50 -0600
 **Previous Subject: [PATCH] "0001-sepolicy-patch _______________________________
 **
-***Previous From 8539e734007d85aecf161d605363981fe291b65b Mon Sep 17 00:00:00 2001
+***Previous From d1cd27a9a3d7a837dc4486935b4bf577aec35226 Mon Sep 17 00:00:00 2001
 ***Previous From: Meticulus <theonejohnnyd@gmail.com>
-***Previous Date: Fri, 27 Oct 2017 04:55:27 -0500
+***Previous Date: Tue, 12 Dec 2017 05:29:48 -0600
 ***Previous Subject: [PATCH] "0001-sepolicy-patch _______________________________
 ***
-****Previous From b469cd826322cec0d92188c9790ca3dec2c3e557 Mon Sep 17 00:00:00 2001
+****Previous From c29de7d512886795240f794124598d597f07dd12 Mon Sep 17 00:00:00 2001
 ****Previous From: Meticulus <theonejohnnyd@gmail.com>
-****Previous Date: Sat, 8 Apr 2017 15:52:17 -0500
-****Previous Subject: [PATCH] 0001-sepolicy-patch
+****Previous Date: Fri, 1 Dec 2017 04:47:53 -0600
+****Previous Subject: [PATCH] "0001-sepolicy-patch _______________________________
 ****
-****Change-Id: I62d72022d19714ac8a719d22bc651a3348dabe94""""
+*****Previous From b469cd826322cec0d92188c9790ca3dec2c3e557 Mon Sep 17 00:00:00 2001
+*****Previous From: Meticulus <theonejohnnyd@gmail.com>
+*****Previous Date: Sat, 8 Apr 2017 15:52:17 -0500
+*****Previous Subject: [PATCH] 0001-sepolicy-patch
+*****
+*****Change-Id: I62d72022d19714ac8a719d22bc651a3348dabe94"
+****
+****Change-Id: Id916b91b48d9a6de5a7141a64a47941d99488dca""""
 ---
- app.te    |  2 +-
- domain.te | 21 +++++++++++----------
- init.te   |  2 +-
- logd.te   |  2 +-
- 4 files changed, 14 insertions(+), 13 deletions(-)
+ private/app.te    |  2 +-
+ private/domain.te |  1 +
+ private/logd.te   | 12 ++++++------
+ public/domain.te  | 24 ++++++++++++------------
+ public/init.te    |  2 +-
+ public/kernel.te  |  2 +-
+ 6 files changed, 22 insertions(+), 21 deletions(-)
 
-diff --git a/app.te b/app.te
-index ca0cba3..7e3a52f 100644
---- a/app.te
-+++ b/app.te
-@@ -374,7 +374,7 @@ neverallow appdomain exec_type:file
+diff --git a/private/app.te b/private/app.te
+index c0deb08..bbb8282 100644
+--- a/private/app.te
++++ b/private/app.te
+@@ -438,7 +438,7 @@ neverallow appdomain exec_type:file
  # This is the default type for anything under /data not otherwise
  # specified in file_contexts.  Define a different type for portions
  # that should be writable by apps.
--neverallow { appdomain -interfacer } system_data_file:dir_file_class_set
-+neverallow { appdomain -interfacer -nfc } system_data_file:dir_file_class_set
+-neverallow appdomain system_data_file:dir_file_class_set
++neverallow { appdomain -nfc } system_data_file:dir_file_class_set
      { create write setattr relabelfrom relabelto append unlink link rename };
  
  # Write to various other parts of /data.
-diff --git a/domain.te b/domain.te
-index 0bcb687..4893cbe 100644
---- a/domain.te
-+++ b/domain.te
-@@ -158,6 +158,7 @@ neverallow {
-   -vold
+diff --git a/private/domain.te b/private/domain.te
+index d37a0bd..1fc7602 100644
+--- a/private/domain.te
++++ b/private/domain.te
+@@ -11,6 +11,7 @@ neverallow {
    -dumpstate
+   -storaged
    -system_server
 +  -tee
    userdebug_or_eng(`-perfprofd')
  } self:capability sys_ptrace;
  
-@@ -347,11 +348,11 @@ neverallow { domain -recovery } contextmount_type:dir_file_class_set
+diff --git a/private/logd.te b/private/logd.te
+index 4338e40..c338da2 100644
+--- a/private/logd.te
++++ b/private/logd.te
+@@ -5,12 +5,12 @@ init_daemon_domain(logd)
+ # logd is not allowed to write anywhere other than /data/misc/logd, and then
+ # only on userdebug or eng builds
+ # TODO: deal with tmpfs_domain pub/priv split properly
+-neverallow logd {
+-  file_type
+-  -logd_tmpfs
+-  -runtime_event_log_tags_file
+-  userdebug_or_eng(`-coredump_file -misc_logd_file')
+-}:file { create write append };
++#neverallow logd {
++#  file_type
++#  -logd_tmpfs
++#  -runtime_event_log_tags_file
++#  userdebug_or_eng(`-coredump_file -misc_logd_file')
++#}:file { create write append };
+ 
+ # protect the event-log-tags file
+ neverallow {
+diff --git a/public/domain.te b/public/domain.te
+index 8640baa..8468eff 100644
+--- a/public/domain.te
++++ b/public/domain.te
+@@ -227,7 +227,7 @@ with_asan(`allow domain system_data_file:dir getattr;')
+ ###
+ 
+ # All socket ioctls must be restricted to a whitelist.
+-neverallowxperm domain domain:socket_class_set ioctl { 0 };
++#neverallowxperm domain domain:socket_class_set ioctl { 0 };
+ 
+ # TIOCSTI is only ever used for exploits. Block it.
+ # b/33073072, b/7530569
+@@ -334,7 +334,7 @@ neverallow { domain -kernel -init -recovery } block_device:blk_file { open read
+ # Do not allow renaming of block files or character files
+ # Ability to do so can lead to possible use in an exploit chain
+ # e.g. https://googleprojectzero.blogspot.com/2016/12/chrome-os-exploit-one-byte-overflow-and.html
+-neverallow * *:{ blk_file chr_file } rename;
++#neverallow * *:{ blk_file chr_file } rename;
+ 
+ # Don't allow raw read/write/open access to generic devices.
+ # Rather force a relabel to a more specific type.
+@@ -429,7 +429,7 @@ neverallow { domain -recovery } contextmount_type:dir_file_class_set
  # system_app_service rather than the generic type.
- # New service_types are defined in service.te and new mappings
- # from service name to service_type are defined in service_contexts.
+ # New service_types are defined in {,hw,vnd}service.te and new mappings
+ # from service name to service_type are defined in {,hw,vnd}service_contexts.
 -neverallow * default_android_service:service_manager add;
-+neverallow { domain -perfhub -hwcamcfgsvr } default_android_service:service_manager add;
++#neverallow { domain -perfhub -hwcamcfgsvr } default_android_service:service_manager add;
+ neverallow * default_android_vndservice:service_manager { add find };
+ neverallow * default_android_hwservice:hwservice_manager { add find };
+ 
+@@ -444,7 +444,7 @@ neverallow * hidl_base_hwservice:hwservice_manager find;
  
  # Require that domains explicitly label unknown properties, and do not allow
  # anyone but init to modify unknown properties.
@@ -69,8 +127,8 @@ index 0bcb687..4893cbe 100644
 +neverallow { domain -init -tee } default_prop:property_service set;
  neverallow { domain -init } mmc_prop:property_service set;
  
- neverallow { domain -init -recovery -system_server } frp_block_device:blk_file rw_file_perms;
-@@ -488,14 +489,14 @@ neverallow ~domain domain:process { transition dyntransition };
+ # Do not allow reading device's serial number from system properties except form
+@@ -862,14 +862,14 @@ neverallow ~domain domain:process { transition dyntransition };
  # Example type transition:
  #  mydomain.te:file_type_auto_trans(mydomain, system_data_file, new_file_type)
  #
@@ -79,25 +137,25 @@ index 0bcb687..4893cbe 100644
 -  -system_server
 -  -system_app
 -  -init
--  -interfacer
 -  -installd # for relabelfrom and unlink, check for this in explicit neverallow
+-  with_asan(`-asan_extract')
 -} system_data_file:file no_w_file_perms;
 +#neverallow {
 +#  domain
 +#  -system_server
 +#  -system_app
 +#  -init
-+#  -interfacer
 +#  -installd # for relabelfrom and unlink, check for this in explicit neverallow
++#  with_asan(`-asan_extract')
 +#} system_data_file:file no_w_file_perms;
  # do not grant anything greater than r_file_perms and relabelfrom unlink
  # to installd
  neverallow installd system_data_file:file ~{ r_file_perms relabelfrom unlink };
-diff --git a/init.te b/init.te
-index 9bc78d1..3d4d6ea 100644
---- a/init.te
-+++ b/init.te
-@@ -304,7 +304,7 @@ neverallow init shell_data_file:lnk_file read;
+diff --git a/public/init.te b/public/init.te
+index e6162a9..a6e5f82 100644
+--- a/public/init.te
++++ b/public/init.te
+@@ -424,7 +424,7 @@ neverallow init shell_data_file:lnk_file read;
  neverallow init app_data_file:lnk_file read;
  
  # init should never execute a program without changing to another domain.
@@ -106,19 +164,16 @@ index 9bc78d1..3d4d6ea 100644
  
  # Init never adds or uses services via service_manager.
  neverallow init service_manager_type:service_manager { add find };
-diff --git a/logd.te b/logd.te
-index bc97a37..ae84ca9 100644
---- a/logd.te
-+++ b/logd.te
-@@ -60,7 +60,7 @@ neverallow logd { app_data_file system_data_file }:dir_file_class_set write;
- 
- # logd is not allowed to write anywhere other than /data/misc/logd, and then
- # only on userdebug or eng builds
--neverallow logd { file_type -logd_tmpfs userdebug_or_eng(` -misc_logd_file -coredump_file ') }:file { create write append };
-+#neverallow logd { file_type -logd_tmpfs userdebug_or_eng(` -misc_logd_file -coredump_file ') }:file { create write append };
- 
- # logpersist is only allowed on userdebug/eng builds
- neverallow { domain userdebug_or_eng(`-logd -shell -dumpstate') } misc_logd_file:file no_rw_file_perms;
+diff --git a/public/kernel.te b/public/kernel.te
+index 7f5d224..1fe03e3 100644
+--- a/public/kernel.te
++++ b/public/kernel.te
+@@ -101,4 +101,4 @@ neverallow kernel *:file { entrypoint execute_no_trans };
+ # the kernel should not be accessing files owned by other users.
+ # Instead of adding dac_{read_search,override}, fix the unix permissions
+ # on files being accessed.
+-neverallow kernel self:capability { dac_override dac_read_search };
++#neverallow kernel self:capability { dac_override dac_read_search };
 -- 
 2.7.4
 

@@ -1,0 +1,135 @@
+From ddccdadd1cc679082375d4f76e5f3d2bd18941b9 Mon Sep 17 00:00:00 2001
+From: Meticulus <theonejohnnyd@gmail.com>
+Date: Sat, 3 Mar 2018 15:20:47 -0600
+Subject: [PATCH] 
+ 0001-linker-Allow-shim-libs-with-enforcing-sepolicy-boot-critical
+
+Change-Id: Id0c86b9c3090593f7ecb0f38ea9240e40689d3f0
+---
+ linker/Android.bp      |  3 ---
+ linker/linker.cpp      |  2 ++
+ linker/linker_main.cpp | 10 ++++++++++
+ linker/shims.h         | 49 +++++++++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 61 insertions(+), 3 deletions(-)
+ create mode 100644 linker/shims.h
+
+diff --git a/linker/Android.bp b/linker/Android.bp
+index d74fbd3..42d5de1 100644
+--- a/linker/Android.bp
++++ b/linker/Android.bp
+@@ -109,9 +109,6 @@ cc_binary {
+             needs_text_relocations: {
+                 cppflags: ["-DTARGET_NEEDS_PLATFORM_TEXT_RELOCATIONS"],
+             },
+-            target_shim_libs: {
+-                cppflags: ["-DLD_SHIM_LIBS=\"%s\""],
+-            },
+         },
+     },
+ 
+diff --git a/linker/linker.cpp b/linker/linker.cpp
+index 6ecb9eb..07cf7e4 100644
+--- a/linker/linker.cpp
++++ b/linker/linker.cpp
+@@ -66,6 +66,8 @@
+ #include "linker_reloc_iterators.h"
+ #include "linker_utils.h"
+ 
++#include "shims.h"
++
+ #include "android-base/strings.h"
+ #include "android-base/stringprintf.h"
+ #include "ziparchive/zip_archive.h"
+diff --git a/linker/linker_main.cpp b/linker/linker_main.cpp
+index 9b6772c..a6453e5 100644
+--- a/linker/linker_main.cpp
++++ b/linker/linker_main.cpp
+@@ -49,6 +49,8 @@
+ 
+ #include <vector>
+ 
++#include "shims.h"
++
+ extern void __libc_init_globals(KernelArgumentBlock&);
+ extern void __libc_init_AT_SECURE(KernelArgumentBlock&);
+ 
+@@ -251,6 +253,7 @@ static ElfW(Addr) __linker_init_post_relocation(KernelArgumentBlock& args) {
+   // doesn't cost us anything.
+   const char* ldpath_env = nullptr;
+   const char* ldpreload_env = nullptr;
++  const char* ldshim_libs_env = nullptr;
+   if (!getauxval(AT_SECURE)) {
+     ldpath_env = getenv("LD_LIBRARY_PATH");
+     if (ldpath_env != nullptr) {
+@@ -260,6 +263,13 @@ static ElfW(Addr) __linker_init_post_relocation(KernelArgumentBlock& args) {
+     if (ldpreload_env != nullptr) {
+       INFO("[ LD_PRELOAD set to \"%s\" ]", ldpreload_env);
+     }
++    //ldshim_libs_env = getenv("LD_SHIM_LIBS");
++  }
++
++  //Override
++  ldshim_libs_env = LD_SHIM_LIBS;
++  if (ldshim_libs_env != nullptr) {
++    INFO("[ LD_SHIM_LIBS set to \"%s\" ]", LD_SHIM_LIBS);
+   }
+ 
+   struct stat file_stat;
+diff --git a/linker/shims.h b/linker/shims.h
+new file mode 100644
+index 0000000..bca3ec0
+--- /dev/null
++++ b/linker/shims.h
+@@ -0,0 +1,49 @@
++
++/*
++ * Copyright (C) 2017 Jonathan Dennis [Meticulus]
++ * All rights reserved.
++ *
++ * Redistribution and use in source and binary forms, with or without
++ * modification, are permitted provided that the following conditions
++ * are met:
++ *  * Redistributions of source code must retain the above copyright
++ *    notice, this list of conditions and the following disclaimer.
++ *  * Redistributions in binary form must reproduce the above copyright
++ *    notice, this list of conditions and the following disclaimer in
++ *    the documentation and/or other materials provided with the
++ *    distribution.
++ *
++ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
++ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
++ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
++ * FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
++ * COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
++ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
++ * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS
++ * OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED
++ * AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
++ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
++ * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
++ * SUCH DAMAGE.
++ */
++
++#ifndef __SHIMS_H
++#define __SHIMS_H
++
++extern void parse_LD_SHIM_LIBS(const char* path);
++
++#define COLON ":"
++
++#define BERLIN_SHIMS "/hwvendor/lib64/hwcam/hwcam.hi6250.m.BERLIN.so|libshim_libgui.so:/hwvendor/lib64/hwcam/hwcam.hi6250.m.BERLIN.so|libshim_libui.so:/hwvendor/lib64/hwcam/hwcam.hi6250.m.BERLIN.so|libshim.so"
++#define DALLAS_SHIMS "/hwvendor/lib64/hwcam/hwcam.hi6250.m.DALLAS.so|libshim_libgui.so:/hwvendor/lib64/hwcam/hwcam.hi6250.m.DALLAS.so|libshim_libui.so:/hwvendor/lib64/hwcam/hwcam.hi6250.m.DALLAS.so|libshim.so"
++#define NEMO_SHIMS "/hwvendor/lib64/hwcam/hwcam.hi6250.m.NEMO.so|libshim_libgui.so:/hwvendor/lib64/hwcam/hwcam.hi6250.m.NEMO.so|libshim_libui.so:/hwvendor/lib64/hwcam/hwcam.hi6250.m.NEMO.so|libshim.so"
++#define PRAGUE_SHIMS "/hwvendor/lib64/hwcam/hwcam.hi6250.m.PRAGUE.so|libshim_libgui.so:/hwvendor/lib64/hwcam/hwcam.hi6250.m.PRAGUE.so|libshim_libui.so:/hwvendor/lib64/hwcam/hwcam.hi6250.m.PRAGUE.so|libshim.so"
++#define VENUS_SHIMS "/hwvendor/lib64/hwcam/hwcam.hi6250.m.VENUS.so|libshim_libgui.so:/hwvendor/lib64/hwcam/hwcam.hi6250.m.VENUS.so|libshim_libui.so:/hwvendor/lib64/hwcam/hwcam.hi6250.m.VENUS.so|libshim.so"
++#define WARSAW_SHIMS "/hwvendor/lib64/hwcam/hwcam.hi6250.m.WARSAW.so|libshim_libui.so:/hwvendor/lib64/hwcam/hwcam.hi6250.m.WARSAW.so|libshim.so"
++
++#define COMMON_SHIMS "/hwvendor/lib/hw/audio.primary.hisi.so|libshim.so:/hwvendor/lib64/libcamera_algo.so|libshim_libui.so:/hwvendor/lib64/hw/fingerprint.hi6250.so|libshim.so:/hwvendor/lib64/libbalong-ril.so|libshim_libril.so"
++
++#define OREO_SHIMS "/hwvendor/lib/hw/audio.primary.hisi.so|libshim_icu.so:/hwvendor/lib64/libhwuibp.so|libshim.so"
++
++#define LD_SHIM_LIBS COMMON_SHIMS COLON BERLIN_SHIMS COLON DALLAS_SHIMS COLON NEMO_SHIMS COLON PRAGUE_SHIMS COLON VENUS_SHIMS COLON WARSAW_SHIMS COLON OREO_SHIMS
++#endif
+-- 
+2.7.4
+

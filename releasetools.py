@@ -22,7 +22,8 @@ import sys
 import time
 
 LOCAL_DIR = os.path.dirname(os.path.abspath(__file__))
-TARGET_DIR = os.getenv('OUT')
+TARGET_DIR = os.getenv('TOP')
+OUT_DIR = os.getenv('OUT')
 UTILITIES_DIR = os.path.join(TARGET_DIR, 'symbols')
 ROM = os.getenv ('TARGET_PRODUCT').split("_",1)
 
@@ -47,10 +48,10 @@ def FullOTA_Assertions(info):
 #	print "Warning!: no override blobs found."
 #	time.sleep(2)
 
-  info.output_zip.write(os.path.join(TARGET_DIR, "install/bin/data-formatter.sh"), "install/bin/data-formatter.sh")
-  info.output_zip.write(os.path.join(TARGET_DIR, "install/bin/finalize.sh"), "install/bin/finalize.sh")
-  info.output_zip.write(os.path.join(TARGET_DIR, "install/bin/stock-check.sh"), "install/bin/stock-check.sh")
-  info.output_zip.write(os.path.join(TARGET_DIR, "system/bin/volumeinput"), "install/bin/volumeinput")
+  info.output_zip.write(os.path.join(TARGET_DIR, "device/huawei/hi6250/recovery/data-formatter.sh"), "install/bin/data-formatter.sh")
+  info.output_zip.write(os.path.join(TARGET_DIR, "device/huawei/hi6250/recovery/finalize.sh"), "install/bin/finalize.sh")
+  info.output_zip.write(os.path.join(TARGET_DIR, "device/huawei/hi6250/recovery/stock-check.sh"), "install/bin/stock-check.sh")
+  info.output_zip.write(os.path.join(OUT_DIR, "system/bin/volumeinput"), "install/bin/volumeinput")
 
   info.script.AppendExtra('assert(run_program("/sbin/mkdir", "-p", "/tmp/install/bin") == 0 || abort("Could nott create dir /tmp/install/bin"););')
   info.script.AppendExtra('package_extract_file("install/bin/data-formatter.sh", "/tmp/install/bin/data-formatter.sh");')
@@ -97,3 +98,8 @@ def FullOTA_InstallBegin(info):
 def FullOTA_InstallEnd(info):
 #  info.script.AppendExtra('package_extract_dir("override", "/system");')
   info.script.AppendExtra('assert(run_program("/tmp/install/bin/finalize.sh") == 0 || abort("finalize failed but installation should be OK."););')
+# Temporarily remove bluetooth.default.so to stop persistent crash.
+  info.script.AppendExtra('mount("ext4", "EMMC", "/dev/block/platform/hi_mci.0/by-name/system", "/system", "");')
+  info.script.AppendExtra('assert(run_program("/sbin/rm", "/system/lib64/hw/bluetooth.default.so") == 0 || abort("Could not delete bluetooth.default.so"););')
+  info.script.AppendExtra('unmount("/system");')
+

@@ -10,6 +10,12 @@ on post-fs-data
     chmod 0660 /data/misc/wifi/wpa_supplicant.conf
     chmod 660 /dev/ttyAMA3
     chown system system /dev/ttyAMA3
+    chown system system /dev/ttyAMA4
+    chown bluetooth bluetooth /dev/hwbt
+    chmod 0777 /dev/hwbt
+    chmod 0777 /dev/dsm
+    chmod 0777 /dev/ttyAMA3
+    chmod 0777 /dev/ttyAMA4
 
 service chr_logd /vendor/bin/chr_logd
     class main
@@ -140,4 +146,3 @@ on property:bluetooth.log.file.create=true
 
    setprop bluetooth.log.file.create false
 
-   chown bluetooth net_bt_stack /dev/hwbt

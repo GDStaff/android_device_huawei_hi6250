@@ -27,6 +27,9 @@ $(call inherit-product, vendor/huawei/hi6250/vendor.mk)
 # 64 bit
 $(call inherit-product, build/target/product/core_64_bit.mk)
 
+# Treble
+$(call inherit-product, device/huawei/hi6250/treble.mk)
+
 # Ramdisk
 PRODUCT_COPY_FILES += \
 	$(call find-copy-subdir-files,*,device/huawei/hi6250/rootdir/,root/)
@@ -69,12 +72,6 @@ PRODUCT_PACKAGES += \
     audio.usb.default \
     audio.r_submix.default \
 
-# Bluetooth
-PRODUCT_PACKAGES += \
-	android.hardware.bluetooth@1.0-impl \
-	android.hardware.bluetooth@1.0-service \
-	libbt-vendor
-
 # Hardware
 PRODUCT_PACKAGES += \
     power.hi6250 \
@@ -82,25 +79,7 @@ PRODUCT_PACKAGES += \
     libcopybit_wrapper \
     lights.hi6250 \
     metiotgd \
-    emui5_vendor_symlinks \
-    android.hardware.graphics.allocator@2.0-impl \
-    android.hardware.graphics.allocator@2.0-service \
-    android.hardware.graphics.composer@2.1-impl \
-    android.hardware.graphics.mapper@2.0-impl \
-    android.hardware.renderscript@1.0-impl \
-    android.hardware.audio@2.0-impl \
-    android.hardware.audio@2.0-service \
-    android.hardware.audio.effect@2.0-impl \
-    android.hardware.soundtrigger@2.0-impl \
-    android.hardware.camera.device@3.2-impl \
-    android.hardware.camera.provider@2.4-impl \
-    android.hardware.vibrator@1.0-impl \
-    android.hardware.power@1.0-impl \
-    android.hardware.keymaster@3.0-impl \
-    android.hardware.light@2.0-service \
-    android.hardware.light@2.0-impl \
-    android.hardware.configstore@1.0-service \
-    android.hardware.radio@1.0
+    emui5_vendor_symlinks
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/manifest.xml:system/vendor/manifest.xml
@@ -112,8 +91,6 @@ PRODUCT_PACKAGES += \
 
 # Wifi
 PRODUCT_PACKAGES += \
-    android.hardware.wifi@1.0-service \
-    android.hardware.wifi.supplicant@1.0 \
     hostapd_cli \
     wifcond
 

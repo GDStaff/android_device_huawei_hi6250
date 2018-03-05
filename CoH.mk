@@ -25,13 +25,6 @@ $(shell cp -f $(LOCAL_PATH)/prebuilt/ninja prebuilts/build-tools/linux-x86/bin/n
 PRODUCT_COPY_FILES += \
         $(LOCAL_PATH)/recovery/init.recovery.meticulus.rc:root/init.recovery.meticulus.rc
 
-# CodeOfHonor recovery checks
-PRODUCT_COPY_FILES += \
-	$(LOCAL_PATH)/recovery/stock-check.sh:install/bin/stock-check.sh \
-	$(LOCAL_PATH)/recovery/finalize.sh:install/bin/finalize.sh \
-	$(LOCAL_PATH)/recovery/data-formatter.sh:install/bin/data-formatter.sh
-
-
 # CodeOfHonor Settings Integration
 PRODUCT_PACKAGES += \
     CodinalteParts \

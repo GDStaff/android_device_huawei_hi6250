@@ -1,56 +1,58 @@
-From f5397762c334f8fa4e234963829f905a664c7c48 Mon Sep 17 00:00:00 2001
+From e41de8b223edc0da3df9d53ef9e2aaad4ccc6f30 Mon Sep 17 00:00:00 2001
 From: Meticulus <theonejohnnyd@gmail.com>
-Date: Fri, 1 Dec 2017 16:17:50 -0600
+Date: Wed, 28 Feb 2018 09:00:28 -0600
 Subject: [PATCH] "0001-init-vendor-stubs-boot-critical
  _______________________________
 
-*Previous From 41db2ec4e7477de3ac472470e3ef3f56a65c084e Mon Sep 17 00:00:00 2001
+*Previous From f5397762c334f8fa4e234963829f905a664c7c48 Mon Sep 17 00:00:00 2001
 *Previous From: Meticulus <theonejohnnyd@gmail.com>
-*Previous Date: Sat, 24 Dec 2016 23:43:28 -0600
-*Previous Subject: [PATCH] 0001-init-vendor-stubs
+*Previous Date: Fri, 1 Dec 2017 16:17:50 -0600
+*Previous Subject: [PATCH] "0001-init-vendor-stubs-boot-critical
+*_______________________________
 *
-*Change-Id: I31679a326358efa3962ed18bbc128e379fbe6c46"
+**Previous From 41db2ec4e7477de3ac472470e3ef3f56a65c084e Mon Sep 17 00:00:00 2001
+**Previous From: Meticulus <theonejohnnyd@gmail.com>
+**Previous Date: Sat, 24 Dec 2016 23:43:28 -0600
+**Previous Subject: [PATCH] 0001-init-vendor-stubs
+**
+**Change-Id: I31679a326358efa3962ed18bbc128e379fbe6c46""
 ---
- init/property_service.cpp |  5 +++--
+ init/property_service.cpp |  5 ++++-
  init/vendor_init.cpp      | 12 +++++++++++-
  init/vendor_init.h        |  4 +++-
- 3 files changed, 17 insertions(+), 4 deletions(-)
+ 3 files changed, 18 insertions(+), 3 deletions(-)
 
 diff --git a/init/property_service.cpp b/init/property_service.cpp
-index fc14796..e46bbb5 100644
+index 5f34a16..03c6f12 100644
 --- a/init/property_service.cpp
 +++ b/init/property_service.cpp
-@@ -575,6 +575,7 @@ static void load_persistent_properties() {
+@@ -682,9 +682,12 @@ void property_load_boot_defaults() {
+     load_properties_from_file("/vendor/default.prop", NULL);
  
- void property_load_boot_defaults() {
-     load_properties_from_file(PROP_PATH_RAMDISK_DEFAULT, NULL);
+     update_sys_usb_config();
++
 +    vendor_load_default_properties();
  }
  
  static void load_override_properties() {
-@@ -595,6 +596,7 @@ void load_persist_props(void) {
-     load_override_properties();
-     /* Read persistent properties after all default values have been loaded. */
-     load_persistent_properties();
 +    vendor_load_persist_properties();
- }
+     if (ALLOW_LOCAL_PROP_OVERRIDE) {
+         load_properties_from_file("/data/local.prop", NULL);
+     }
+@@ -740,7 +743,7 @@ void load_system_props() {
+     load_properties_from_file("/factory/factory.prop", "ro.*");
  
- void load_recovery_id_prop() {
-@@ -643,8 +645,7 @@ void load_system_props() {
-     /* update with vendor-specific property runtime
-      * overrides
-      */
+     // Update with vendor-specific property runtime overrides
 -    vendor_load_properties();
--
 +    vendor_load_system_properties();
+ 
      load_recovery_id_prop();
  }
- 
 diff --git a/init/vendor_init.cpp b/init/vendor_init.cpp
-index 41a263b..8099a91 100644
+index d3fd5ff..a30c2f1 100644
 --- a/init/vendor_init.cpp
 +++ b/init/vendor_init.cpp
-@@ -33,7 +33,17 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+@@ -32,6 +32,16 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  /* init vendor override stubs */
  
  __attribute__ ((weak))
@@ -68,12 +70,11 @@ index 41a263b..8099a91 100644
 +void vendor_load_persist_properties()
  {
  }
- 
 diff --git a/init/vendor_init.h b/init/vendor_init.h
-index 9491bc4..8a70124 100644
+index 9afb449..f86c65f 100644
 --- a/init/vendor_init.h
 +++ b/init/vendor_init.h
-@@ -31,6 +31,8 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+@@ -29,5 +29,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  
  #ifndef __INIT_VENDOR__H__
  #define __INIT_VENDOR__H__
@@ -81,7 +82,6 @@ index 9491bc4..8a70124 100644
 +extern void vendor_load_default_properties(void);
 +extern void vendor_load_system_properties(void);
 +extern void vendor_load_persist_properties(void);
- extern int vendor_handle_control_message(const std::string& msg, const std::string& name);
  #endif /* __INIT_VENDOR__H__ */
 -- 
 2.7.4

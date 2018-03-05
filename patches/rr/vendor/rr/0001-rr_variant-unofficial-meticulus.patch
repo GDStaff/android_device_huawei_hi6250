@@ -1,35 +1,53 @@
-From 0ea095c8b583920efa9f13f499cc26537d50d2c2 Mon Sep 17 00:00:00 2001
+From ab5b8e8d266f033b29914ef3a112ed543f7771f9 Mon Sep 17 00:00:00 2001
 From: Meticulus <theonejohnnyd@gmail.com>
-Date: Mon, 27 Nov 2017 08:17:34 -0600
+Date: Fri, 2 Mar 2018 08:14:43 -0600
 Subject: [PATCH] "0001-rr_variant-unofficial-meticulus
  _______________________________
 
-*Previous From 62827aa279c220ff8eb7dc72f653392906985787 Mon Sep 17 00:00:00 2001
+*Previous From ec540fdba22a60700c5cf157fb1bf74f7f37e507 Mon Sep 17 00:00:00 2001
 *Previous From: Meticulus <theonejohnnyd@gmail.com>
-*Previous Date: Sun, 18 Jun 2017 06:54:24 -0500
-*Previous Subject: [PATCH] rr_variant: unofficial -> meticulus
-*"
+*Previous Date: Wed, 28 Feb 2018 09:18:21 -0600
+*Previous Subject: [PATCH] "0001-rr_variant-unofficial-meticulus
+*_______________________________
+*
+**Previous From 0ea095c8b583920efa9f13f499cc26537d50d2c2 Mon Sep 17 00:00:00 2001
+**Previous From: Meticulus <theonejohnnyd@gmail.com>
+**Previous Date: Mon, 27 Nov 2017 08:17:34 -0600
+**Previous Subject: [PATCH] "0001-rr_variant-unofficial-meticulus
+**_______________________________
+**
+***Previous From 62827aa279c220ff8eb7dc72f653392906985787 Mon Sep 17 00:00:00 2001
+***Previous From: Meticulus <theonejohnnyd@gmail.com>
+***Previous Date: Sun, 18 Jun 2017 06:54:24 -0500
+***Previous Subject: [PATCH] rr_variant: unofficial -> meticulus
+***""
+*
+*Change-Id: I3fc5c0e76abbdb03c7df2711e6de98388d653aa0"
+
+Change-Id: Iaae98563df0c3e7f00a6ee34bd37f195d177480d
 ---
- config/common.mk    | 1 -
+ config/common.mk    | 3 +--
  tools/changelog.sh  | 2 +-
  tools/rr_root.sh    | 6 +++++-
  tools/rr_variant.sh | 8 ++++----
- 4 files changed, 10 insertions(+), 7 deletions(-)
+ 4 files changed, 11 insertions(+), 8 deletions(-)
 
 diff --git a/config/common.mk b/config/common.mk
-index 11e343f..ceedac0 100644
+index 93ab41e..a37e7b4 100644
 --- a/config/common.mk
 +++ b/config/common.mk
-@@ -181,7 +181,6 @@ PRODUCT_PACKAGES += \
- # Custom CM packages
+@@ -165,8 +165,7 @@ PRODUCT_PACKAGES += \
+     WeatherProvider \
+     OmniJaws \
+     OmniStyle \
+-    ResurrectionOTA \
+-    ResurrectionStats
++    ResurrectionOTA
+ 
+ # Berry styles
  PRODUCT_PACKAGES += \
-     ResurrectionOTA \
--    ResurrectionStats \
-     Trebuchet \
-     AudioFX \
-     CMFileManager \
 diff --git a/tools/changelog.sh b/tools/changelog.sh
-index eb7ee48..b6c9739 100755
+index d8212e5..40264fc 100755
 --- a/tools/changelog.sh
 +++ b/tools/changelog.sh
 @@ -51,7 +51,7 @@ echo -e "";
@@ -40,7 +58,7 @@ index eb7ee48..b6c9739 100755
 +days_to_log=0
  fi
  echo >> $Changelog;
- echo " ▼ $source_name Ver 5.8.4 Changelog"    >> $Changelog;
+ echo " ▼ $source_name Ver 6.0.0 Changelog"    >> $Changelog;
 diff --git a/tools/rr_root.sh b/tools/rr_root.sh
 index 4f0503b..cef3cec 100755
 --- a/tools/rr_root.sh
@@ -59,7 +77,7 @@ index 4f0503b..cef3cec 100755
  if [ "$askvariant" == "0" ];
  then
 diff --git a/tools/rr_variant.sh b/tools/rr_variant.sh
-index 1461b29..ac920c4 100755
+index 1461b29..5c2ed15 100755
 --- a/tools/rr_variant.sh
 +++ b/tools/rr_variant.sh
 @@ -26,7 +26,7 @@ echo -e ${ylw}"\n\n ▼ Which build-type do you want to choose?\n"${txtrst}
@@ -67,7 +85,7 @@ index 1461b29..ac920c4 100755
  echo -e ${blu}" 〉 1- Official "${txtrst}${red}"    ︱ Only for the official builds by the maintainers"${txtrst}
  echo -e "";
 -echo -e ${blu}" 〉 2- Unofficial "${txtrst}${red}"  ︱ For the unofficial builds"${txtrst}
-+echo -e ${blu}" 〉 2- Meticulus "${txtrst}${red}"  ︱ For the meticulus builds"${txtrst}
++echo -e ${blu}" 〉 2- CodeOfHonor "${txtrst}${red}"  ︱ For the CoH builds"${txtrst}
  echo -e "";
  echo -e ${blu}" 〉 3- Nightly "${txtrst}${red}"     ︱ Only for the official daily builds by the maintainers"${txtrst}
  echo -e "";
@@ -86,8 +104,8 @@ index 1461b29..ac920c4 100755
  echo -e "";
 -echo -e ${blu}" ▪ Building unofficial variant "${txtrst}
 -export RR_BUILDTYPE=Unofficial
-+echo -e ${blu}" ▪ Building Meticulus variant "${txtrst}
-+export RR_BUILDTYPE=Meticulus
++echo -e ${blu}" ▪ Building CodeOfHonor variant "${txtrst}
++export RR_BUILDTYPE=CodeOfHonor
  echo -e "";
  echo -e "";
  $normal
