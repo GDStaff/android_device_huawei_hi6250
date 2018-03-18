@@ -96,6 +96,7 @@ PRODUCT_PACKAGES += \
 
 # NFC
 PRODUCT_PACKAGES += \
+    NfcNci \
     NQNfcNci \
     libnqnfc-nci \
     com.nxp.nfc.nq \
