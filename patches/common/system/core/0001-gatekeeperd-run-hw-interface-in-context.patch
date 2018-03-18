@@ -1,0 +1,54 @@
+From 37657c79fe508713c5814a00172c78935a8c41b4 Mon Sep 17 00:00:00 2001
+From: Meticulus <theonejohnnyd@gmail.com>
+Date: Sun, 18 Mar 2018 06:52:16 -0500
+Subject: [PATCH] gatekeeperd: run hw interface in context
+
+---
+ gatekeeperd/Android.mk      | 2 +-
+ gatekeeperd/gatekeeperd.cpp | 8 ++++++++
+ 2 files changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/gatekeeperd/Android.mk b/gatekeeperd/Android.mk
+index 28f0b07..7725c81 100644
+--- a/gatekeeperd/Android.mk
++++ b/gatekeeperd/Android.mk
+@@ -17,7 +17,7 @@
+ LOCAL_PATH := $(call my-dir)
+ 
+ include $(CLEAR_VARS)
+-LOCAL_CFLAGS := -Wall -Wextra -Werror -Wunused
++LOCAL_CFLAGS := -Wall -Wextra  -Wunused
+ LOCAL_SRC_FILES := \
+ 	SoftGateKeeperDevice.cpp \
+ 	IGateKeeperService.cpp \
+diff --git a/gatekeeperd/gatekeeperd.cpp b/gatekeeperd/gatekeeperd.cpp
+index 61c8804..7a25b62 100644
+--- a/gatekeeperd/gatekeeperd.cpp
++++ b/gatekeeperd/gatekeeperd.cpp
+@@ -41,6 +41,7 @@
+ 
+ #include <hidl/HidlSupport.h>
+ #include <android/hardware/gatekeeper/1.0/IGatekeeper.h>
++#include <pthread.h>
+ 
+ using android::sp;
+ using android::hardware::gatekeeper::V1_0::IGatekeeper;
+@@ -390,8 +391,15 @@ private:
+ };
+ }// namespace android
+ 
++void *service_thread(void *arg) {
++    system("/vendor/bin/hw/android.hardware.gatekeeper1.0-service");
++    return NULL;
++}
++
+ int main(int argc, char* argv[]) {
+     ALOGI("Starting gatekeeperd...");
++    pthread_t thread_id;
++    pthread_create(&thread_id, NULL, &service_thread, NULL);
+     if (argc < 2) {
+         ALOGE("A directory must be specified!");
+         return 1;
+-- 
+2.7.4
+

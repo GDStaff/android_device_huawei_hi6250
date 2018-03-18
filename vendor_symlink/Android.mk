@@ -70,7 +70,6 @@ binlinks := \
     fsck.f2fs \
     fsck_msdos \
     fwrt_emmc_screen_test \
-    gatekeeperd \
     gnss_control_hisi \
     gnss_engine_hisi \
     gnss_supl20clientd_hisi \
@@ -86,7 +85,6 @@ binlinks := \
     hwnffserver \
     iked \
     isplogcat \
-    keystore \
     limit_current \
     lmkd \
     logcat \
@@ -779,6 +777,7 @@ hw := \
     gralloc.hi6250.so \
     hw_ioflowmeter.default.so \
     keystore.default.so \
+    keystore.hi6250.so \
     local_time.default.so \
     memtrack.hi6250.so \
     sensorcaps.default.so \
@@ -803,6 +802,7 @@ hw64 := \
     gralloc.hi6250.so \
     hw_ioflowmeter.default.so \
     keystore.default.so \
+    keystore.hi6250.so \
     local_time.default.so \
     memtrack.hi6250.so \
     sensorcaps.default.so \
@@ -850,8 +850,6 @@ symlinks := \
     $(shell ln -s /hwvendor/bin/wpa_cli_hisi $(PRODUCT_OUT)/system/bin/wpa_cli 2> /dev/null) \
     $(shell ln -s /hwvendor/etc/wifi $(PRODUCT_OUT)/system/etc/wifi 2> /dev/null) \
     $(shell ln -s /hwvendor/etc/gnss $(PRODUCT_OUT)/system/etc/gnss 2> /dev/null) \
-    $(shell ln -s /hwvendor/bin/gatekeeperd $(PRODUCT_OUT)/system/bin/gatekeeperd 2> /dev/null) \
-    $(shell ln -s /hwvendor/bin/fingerprintd $(PRODUCT_OUT)/system/bin/fingerprintd 2> /dev/null) \
     $(shell ln -s /system/etc/native_packages.bin $(PRODUCT_OUT)/system/etc/native_packages.xml 2> /dev/null)
 
 
