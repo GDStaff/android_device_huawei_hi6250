@@ -1,0 +1,44 @@
+From fd7b118f374b6dfe20c3029472977e45cbacd2ba Mon Sep 17 00:00:00 2001
+From: Meticulus <theonejohnnyd@gmail.com>
+Date: Sun, 18 Mar 2018 08:06:07 -0500
+Subject: [PATCH] Fingerprint: build hw interface as fingerprintd
+
+-and allow older api
+
+Change-Id: I970de6461107618ec2f8413a2d27ce55e2441d9e
+---
+ biometrics/fingerprint/2.1/default/Android.mk                | 5 +----
+ biometrics/fingerprint/2.1/default/BiometricsFingerprint.cpp | 1 -
+ 2 files changed, 1 insertion(+), 5 deletions(-)
+
+diff --git a/biometrics/fingerprint/2.1/default/Android.mk b/biometrics/fingerprint/2.1/default/Android.mk
+index f02db94..5f41189 100644
+--- a/biometrics/fingerprint/2.1/default/Android.mk
++++ b/biometrics/fingerprint/2.1/default/Android.mk
+@@ -1,10 +1,7 @@
+ LOCAL_PATH := $(call my-dir)
+ 
+ include $(CLEAR_VARS)
+-LOCAL_MODULE := android.hardware.biometrics.fingerprint@2.1-service
+-LOCAL_INIT_RC := android.hardware.biometrics.fingerprint@2.1-service.rc
+-LOCAL_PROPRIETARY_MODULE := true
+-LOCAL_MODULE_RELATIVE_PATH := hw
++LOCAL_MODULE := fingerprintd
+ LOCAL_SRC_FILES := \
+     BiometricsFingerprint.cpp \
+     service.cpp \
+diff --git a/biometrics/fingerprint/2.1/default/BiometricsFingerprint.cpp b/biometrics/fingerprint/2.1/default/BiometricsFingerprint.cpp
+index f687959..9a5f181 100644
+--- a/biometrics/fingerprint/2.1/default/BiometricsFingerprint.cpp
++++ b/biometrics/fingerprint/2.1/default/BiometricsFingerprint.cpp
+@@ -242,7 +242,6 @@ fingerprint_device_t* BiometricsFingerprint::openHal() {
+     if (kVersion != device->version) {
+         // enforce version on new devices because of HIDL@2.1 translation layer
+         ALOGE("Wrong fp version. Expected %d, got %d", kVersion, device->version);
+-        return nullptr;
+     }
+ 
+     fingerprint_device_t* fp_device =
+-- 
+2.7.4
+

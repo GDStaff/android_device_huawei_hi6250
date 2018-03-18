@@ -77,6 +77,8 @@ PRODUCT_PACKAGES += \
     android.hardware.gatekeeper@1.0-service \
     android.hardware.gatekeeper@1.0-impl
 
-#Fingerprint
+# Fingerprint
+# target 'android.hardware.biometrics.fingerprint@2.1-service' hase been changed
+# fingerprintd to work with Huawei nougat teec implementation
 PRODUCT_PACKAGES += \
-    android.hardware.biometrics.fingerprint@2.1-service
+    fingerprintd

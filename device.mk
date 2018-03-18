@@ -108,10 +108,6 @@ PRODUCT_PACKAGES += \
     libp61-jcop-kit \
     nfc_nci.nqx.default
 
-# Fingerprint
-PRODUCT_PACKAGES += \
-    fingerprintd
-
 # Prebuilt
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/prebuilt/data_enc_resize:system/bin/data_enc_resize
