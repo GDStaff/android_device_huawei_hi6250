@@ -208,6 +208,7 @@ on property:sys.boot_completed=1
     write /sys/kernel/set_hmp_thresholds/enable 1
 
 	rm /data/hisi_logs/reboot_times.log
+    start fingerprintd
 
 on charger
     mount_all /fstab.${ro.hardware}
@@ -654,3 +655,4 @@ service fingerprintd /system/bin/fingerprintd
     class late_start
     user system
     group input
+    disabled
