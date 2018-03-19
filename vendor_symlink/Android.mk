@@ -79,7 +79,6 @@ binlinks := \
     hiscoutmanager \
     hivwserver \
     hostapd \
-    hostapd_hisi \
     hw_cdmamodem_service \
     hwnff \
     hwnffserver \

@@ -108,8 +108,8 @@ service wpa_supplicant /vendor/bin/hw/wpa_supplicant -d \
 #    oneshot
 #    seclabel u:r:metiotg:s0
 
-service hostapd_bin /vendor/bin/hostapd_hisi -d /data/misc/wifi/hostapd_hisi.conf
-		socket wpa_wlan0 dgram 660 wifi wifi
+service hostapd /vendor/bin/hostapd_hisi -d /data/misc/wifi/hostapd_hisi.conf
+    socket wpa_wlan0 dgram 660 wifi wifi
     class main
     disabled
     oneshot

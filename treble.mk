@@ -62,6 +62,10 @@ PRODUCT_PACKAGES += \
     android.hardware.wifi@1.0-service \
     android.hardware.wifi.supplicant@1.0
 
+# Tether
+PRODUCT_PACKAGES += \
+    android.hardware.tetheroffload.config@1.0
+
 #gnss
 PRODUCT_PACKAGES += \
     android.hardware.gnss@1.0-impl \
@@ -82,3 +86,7 @@ PRODUCT_PACKAGES += \
 # fingerprintd to work with Huawei nougat teec implementation
 PRODUCT_PACKAGES += \
     fingerprintd
+
+# USB
+PRODUCT_PACKAGES += \
+    android.hardware.usb@1.0-service
