@@ -66,7 +66,7 @@ WARNING: There may be times, towards the end when it seem like, the download is 
 
 The local manifest is different for every device. It contains those repos that are device specific, where as the ROM code you just "repo sync'd" is code that is general to any device.
 
-NOTE: Meticulus Development also builds some extra features and functions into its builds and we include the source for those builds in this tree as well.
+NOTE: Code of Honor Development also builds some extra features and functions into its builds and we include the source for those builds in this tree as well.
 
 Execute the following commands:
 
@@ -88,7 +88,7 @@ Copy the following into hi6250.xml, save and close.
 </manifest>
 ```
 
-Alternatively, if you would like to include Meticulus Development's "extras" then copy the following into hi6250.xml, save and close.
+Alternatively, if you would like to include Code Of Honor Development's "extras" then copy the following into hi6250.xml, save and close.
 ```bash
 <?xml version="1.0" encoding="UTF-8"?>
 <manifest>
@@ -114,12 +114,12 @@ NOTE: Yes we are syncing again and No, it shouldn't take quite as long. Every ti
 
 ### Step 4: Building
 
-#### Are you Meticulus? (optional)
+#### Are you Code Of Honor? (optional)
 If you want to include Meticulus Development extras
 
 Terminal:
 ```bash
-export I_AM_METICULUS=true
+export I_AM_CODEOFHONOR=true
 ```
 
 #### Turn off Ninja (optional)
