@@ -1,0 +1,88 @@
+From fa29f4e375678d81ca79512ca25b643f10c48106 Mon Sep 17 00:00:00 2001
+From: Meticulus <theonejohnnyd@gmail.com>
+Date: Wed, 21 Mar 2018 11:21:21 -0500
+Subject: [PATCH] busybox- fix static
+
+---
+ android/android.c   | 6 ------
+ include/grp_.h      | 4 ++--
+ libbb/platform.c    | 4 ++--
+ libpwdgrp/pwd_grp.c | 3 ++-
+ 4 files changed, 6 insertions(+), 11 deletions(-)
+
+diff --git a/android/android.c b/android/android.c
+index 98a143c..d2ed31c 100644
+--- a/android/android.c
++++ b/android/android.c
+@@ -87,10 +87,4 @@ char *hasmntopt(const struct mntent *mnt, const char *opt)
+ 	return o;
+ }
+ 
+-/* declared in grp.h, but not necessary */
+-#if !ENABLE_USE_BB_PWD_GRP
+-
+-void setgrent() {}
+-void endgrent() {}
+-#endif
+ 
+diff --git a/include/grp_.h b/include/grp_.h
+index e5075e5..e97eeca 100644
+--- a/include/grp_.h
++++ b/include/grp_.h
+@@ -30,8 +30,8 @@ PUSH_AND_SET_FUNCTION_VISIBILITY_TO_HIDDEN
+  * so that function calls are directed to bb_internal_XXX replacements
+  */
+ #undef endgrent
+-#define setgrent     bb_internal_setgrent
+-#define endgrent     bb_internal_endgrent
++//#define setgrent     bb_internal_setgrent
++//#define endgrent     bb_internal_endgrent
+ #define getgrent     bb_internal_getgrent
+ #define fgetgrent    bb_internal_fgetgrent
+ #define putgrent     bb_internal_putgrent
+diff --git a/libbb/platform.c b/libbb/platform.c
+index 5fcd448..5b22a5d 100644
+--- a/libbb/platform.c
++++ b/libbb/platform.c
+@@ -43,7 +43,7 @@ int FAST_FUNC vasprintf(char **string_ptr, const char *format, va_list p)
+ 	return r;
+ }
+ #endif
+-
++#if 0
+ #ifndef HAVE_DPRINTF
+ /* dprintf is now part of POSIX.1, but was only added in 2008 */
+ int dprintf(int fd, const char *format, ...)
+@@ -62,7 +62,7 @@ int dprintf(int fd, const char *format, ...)
+ 	return r;
+ }
+ #endif
+-
++#endif
+ #ifndef HAVE_MEMRCHR
+ /* Copyright (C) 2005 Free Software Foundation, Inc.
+  * memrchr() is a GNU function that might not be available everywhere.
+diff --git a/libpwdgrp/pwd_grp.c b/libpwdgrp/pwd_grp.c
+index c806a12..0768ec8 100644
+--- a/libpwdgrp/pwd_grp.c
++++ b/libpwdgrp/pwd_grp.c
+@@ -431,6 +431,7 @@ int getpwent_r(struct passwd *__restrict resultbuf,
+ }
+ 
+ static FILE *grf /*= NULL*/;
++#if 0
+ void setgrent(void)
+ {
+ 	LOCK;
+@@ -449,7 +450,7 @@ void endgrent(void)
+ 	}
+ 	UNLOCK;
+ }
+-
++#endif
+ int getgrent_r(struct group *__restrict resultbuf,
+ 			char *__restrict buffer, size_t buflen,
+ 			struct group **__restrict result)
+-- 
+2.7.4
+
