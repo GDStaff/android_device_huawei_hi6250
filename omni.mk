@@ -32,6 +32,17 @@ PRODUCT_PACKAGES += \
     messaging \
     charger_res_images
 
+ifeq ($(BUILD_STOCK_RECOVERY),true)
+ADDITIONAL_BUILD_PROPERTIES += \
+    ro.secure=0 \
+    ro.adb.secure=0 \
+    ro.debuggable=1 \
+    sys.usb.configfs=1 \
+    sys.usb.controller=hisi-usb-otg \
+    sys.usb.config=adb \
+    persist.sys.usb.config=adb
+endif
+
 ifeq ($(AUTOPATCH),true)
     $(shell cd device/huawei/hi6250/patches 2>&1 > /dev/null && ./patch.sh omni >&2)
 else
