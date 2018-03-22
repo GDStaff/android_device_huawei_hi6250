@@ -16,14 +16,14 @@
 
 # TWRP Recovery defines
 DEVICE_RESOLUTION := 1080x1920
-TW_THEME := portrait_mdpi
+TW_THEME := portrait_hdpi
 TW_CUSTOM_BATTERY_PATH := "/sys/devices/platform/battery/power_supply/Battery" 
 TARGET_USERIMAGES_USE_EXT4 := true
 RECOVERY_SDCARD_ON_DATA := true
 TW_INTERNAL_STORAGE_PATH := "/data/media"
-TW_INTERNAL_STORAGE_MOUNT_POINT := "/emmc"
-TW_EXTERNAL_STORAGE_PATH := "/sdcard"
-TW_EXTERNAL_STORAGE_MOUNT_POINT := "/sdcard"
+TW_INTERNAL_STORAGE_MOUNT_POINT := "/sdcard"
+TW_EXTERNAL_STORAGE_PATH := "/external_sd"
+TW_EXTERNAL_STORAGE_MOUNT_POINT := "/external_sd"
 TW_BRIGHTNESS_PATH := "/sys/class/leds/lcd_backlight0/brightness"
 TW_MAX_BRIGHTNESS := 255
 TW_INCLUDE_CRYPTO := true
@@ -45,3 +45,6 @@ PRODUCT_COPY_FILES += \
 	$(LOCAL_PATH)/recovery/fstabSwitcher:recovery/root/sbin/fstabSwitcher \
 	$(LOCAL_PATH)/recovery/fstab.hi6250.stock:recovery/root/fstab.hi6250.stock
 
+# adbd (Make sure this gets built?)
+PRODUCT_PACKAGES += \
+    adbd
