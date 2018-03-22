@@ -1,36 +1,36 @@
-From 4faf88d09fb5630596998553b8b60842dd2ad4bb Mon Sep 17 00:00:00 2001
+From 643df70b890f861b8c6c56c9ade926991efeb59f Mon Sep 17 00:00:00 2001
 From: Meticulus <theonejohnnyd@gmail.com>
-Date: Sat, 2 Dec 2017 07:47:48 -0600
-Subject: [PATCH] libf2fs: Bypass 'in use' checks
+Date: Tue, 20 Mar 2018 13:00:41 -0500
+Subject: [PATCH] "0001-libf2fs-Bypass-in-use-checks
+ _______________________________
 
--See comments in patch.
+*Previous From 4faf88d09fb5630596998553b8b60842dd2ad4bb Mon Sep 17 00:00:00 2001
+*Previous From: Meticulus <theonejohnnyd@gmail.com>
+*Previous Date: Sat, 2 Dec 2017 07:47:48 -0600
+*Previous Subject: [PATCH] libf2fs: Bypass 'in use' checks
+*
+*-See comments in patch.
+*
+*Change-Id: If86a7646de8b4b8bc56d184e41ca6e76c41d36df"
 
-Change-Id: If86a7646de8b4b8bc56d184e41ca6e76c41d36df
+Change-Id: I9f6240b4a588489f9ec980579b877a851e001b18
 ---
- lib/libf2fs.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ lib/libf2fs.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/lib/libf2fs.c b/lib/libf2fs.c
-index a7763ba..04c86b0 100644
+index 31836db..d25cf28 100644
 --- a/lib/libf2fs.c
 +++ b/lib/libf2fs.c
-@@ -576,6 +576,15 @@ int f2fs_dev_is_umounted(struct f2fs_configuration *c)
- 		return -1;
- 	}
- #endif
-+#if 0
-+        /* Meticulus:
-+	 * For some reason, when on stock, after unmounting
-+	 * emmc and data. This is reported as still 'in use'.
-+         * I guess because the device mapper dev is still
-+         * there (/dev/dm-0). So even though no read/write
-+         * operation can happen. It is still, 'in use'.
-+         * This bypasses that check. Tested works.
-+	 */
- 
- 	/*
+@@ -644,6 +644,7 @@ int f2fs_dev_is_umounted(char *path)
  	 * If f2fs is umounted with -l, the process can still use
-@@ -591,6 +600,7 @@ int f2fs_dev_is_umounted(struct f2fs_configuration *c)
+ 	 * the file system. In this case, we should not format.
+ 	 */
++#if 0
+ 	if (stat(path, &st_buf) == 0 && S_ISBLK(st_buf.st_mode)) {
+ 		int fd = open(path, O_RDONLY | O_EXCL);
+ 
+@@ -654,6 +655,7 @@ int f2fs_dev_is_umounted(char *path)
  			return -1;
  		}
  	}

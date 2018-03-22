@@ -1,26 +1,34 @@
-From 88fbab18b1ada4a9a0de8b8dac931a1daf2c3fc0 Mon Sep 17 00:00:00 2001
+From 0a559e87b8d18b2694499980927576b260b989ce Mon Sep 17 00:00:00 2001
 From: Meticulus <theonejohnnyd@gmail.com>
-Date: Thu, 23 Nov 2017 08:25:56 -0600
+Date: Tue, 20 Mar 2018 12:29:55 -0500
 Subject: [PATCH] "0001-whitelist-for-omni-boot-critical
  _______________________________
 
-*Previous From 10f84e91a153488ba3eb830df359dc5719a44ea9 Mon Sep 17 00:00:00 2001
+*Previous From 88fbab18b1ada4a9a0de8b8dac931a1daf2c3fc0 Mon Sep 17 00:00:00 2001
 *Previous From: Meticulus <theonejohnnyd@gmail.com>
-*Previous Date: Sat, 25 Mar 2017 12:07:39 -0500
-*Previous Subject: [PATCH] whitelist for omni
+*Previous Date: Thu, 23 Nov 2017 08:25:56 -0600
+*Previous Subject: [PATCH] "0001-whitelist-for-omni-boot-critical
+*_______________________________
 *
-*Change-Id: Id7a040cc1c80b99215d27943d0be77c0894811e4"
+**Previous From 10f84e91a153488ba3eb830df359dc5719a44ea9 Mon Sep 17 00:00:00 2001
+**Previous From: Meticulus <theonejohnnyd@gmail.com>
+**Previous Date: Sat, 25 Mar 2017 12:07:39 -0500
+**Previous Subject: [PATCH] whitelist for omni
+**
+**Change-Id: Id7a040cc1c80b99215d27943d0be77c0894811e4"
+*
+*Change-Id: Iea70ed2825c16f07e5d66e2919a860e64666bf93"
 
-Change-Id: Iea70ed2825c16f07e5d66e2919a860e64666bf93
+Change-Id: Ie242fcce4bce062aecb782292843e78fd48dff0c
 ---
- core/jni/fd_utils-inl.h | 5 +++++
+ core/jni/fd_utils.cpp | 5 +++++
  1 file changed, 5 insertions(+)
 
-diff --git a/core/jni/fd_utils-inl.h b/core/jni/fd_utils-inl.h
-index c333531..fc5a7f2 100644
---- a/core/jni/fd_utils-inl.h
-+++ b/core/jni/fd_utils-inl.h
-@@ -57,6 +57,11 @@ static const char* kPathWhitelist[] = {
+diff --git a/core/jni/fd_utils.cpp b/core/jni/fd_utils.cpp
+index 956b724..43c75cc 100644
+--- a/core/jni/fd_utils.cpp
++++ b/core/jni/fd_utils.cpp
+@@ -42,6 +42,11 @@ static const char* kPathWhitelist[] = {
    "/dev/urandom",
    "/dev/ion",
    "/dev/dri/renderD129", // Fixes b/31172436
@@ -31,7 +39,7 @@ index c333531..fc5a7f2 100644
 +  "/dev/__properties__",
  };
  
- static const char* kFdPath = "/proc/self/fd";
+ static const char kFdPath[] = "/proc/self/fd";
 -- 
 2.7.4
 

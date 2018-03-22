@@ -1,79 +1,73 @@
-From 01b65cb5a2bb0fb13c21f84148ee40c0f4be70f6 Mon Sep 17 00:00:00 2001
+From 5b319a1deb2d558d4006e30bcbc0fe6175898cdb Mon Sep 17 00:00:00 2001
 From: Meticulus <theonejohnnyd@gmail.com>
-Date: Sat, 25 Mar 2017 08:46:08 -0500
-Subject: [PATCH] init: omni vendor init
+Date: Tue, 20 Mar 2018 12:43:28 -0500
+Subject: [PATCH] "0001-init-omni-vendor-init-boot-critical
+ _______________________________
 
-Change-Id: If811c3393ba0aa957698e8cf8fcb8d5a490311bd
+*Previous From 01b65cb5a2bb0fb13c21f84148ee40c0f4be70f6 Mon Sep 17 00:00:00 2001
+*Previous From: Meticulus <theonejohnnyd@gmail.com>
+*Previous Date: Sat, 25 Mar 2017 08:46:08 -0500
+*Previous Subject: [PATCH] init: omni vendor init
+*
+*Change-Id: If811c3393ba0aa957698e8cf8fcb8d5a490311bd"
+
+Change-Id: If5835002222a4ebfe6875876b5756f5351f27192
 ---
- init/property_service.cpp |  4 +++-
- init/vendor_init.cpp      | 12 +++++++++++-
- init/vendor_init.h        |  4 +++-
- 3 files changed, 17 insertions(+), 3 deletions(-)
+ init/property_service.cpp | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
 
 diff --git a/init/property_service.cpp b/init/property_service.cpp
-index 8a0d69d..82e55c8 100644
+index 14db004..53529f6 100644
 --- a/init/property_service.cpp
 +++ b/init/property_service.cpp
-@@ -458,6 +458,7 @@ static void load_persistent_properties() {
+@@ -66,7 +66,9 @@ namespace android {
+ namespace init {
  
- void property_load_boot_defaults() {
-     load_properties_from_file(PROP_PATH_RAMDISK_DEFAULT, NULL);
-+    vendor_load_default_properties();
- }
- 
- static void load_override_properties() {
-@@ -481,7 +482,7 @@ void load_persist_props(void) {
- 
-     /* vendor-specific properties
-      */
--    vendor_load_properties();
-+    vendor_load_persist_properties();
- }
- 
- void load_recovery_id_prop() {
-@@ -527,6 +528,7 @@ void load_system_props() {
-     load_properties_from_file(PROP_PATH_VENDOR_BUILD, NULL);
-     load_properties_from_file(PROP_PATH_FACTORY, "ro.*");
-     load_recovery_id_prop();
-+    vendor_load_system_properties();
- }
- 
- void start_property_service() {
-diff --git a/init/vendor_init.cpp b/init/vendor_init.cpp
-index d3fd5ff..a30c2f1 100644
---- a/init/vendor_init.cpp
-+++ b/init/vendor_init.cpp
-@@ -32,6 +32,16 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- /* init vendor override stubs */
- 
- __attribute__ ((weak))
--void vendor_load_properties()
-+void vendor_load_default_properties()
-+{
-+}
-+
-+__attribute__ ((weak))
-+void vendor_load_system_properties()
-+{
-+}
-+
-+__attribute__ ((weak))
-+void vendor_load_persist_properties()
- {
- }
-diff --git a/init/vendor_init.h b/init/vendor_init.h
-index 9afb449..f86c65f 100644
---- a/init/vendor_init.h
-+++ b/init/vendor_init.h
-@@ -29,5 +29,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- 
- #ifndef __INIT_VENDOR__H__
- #define __INIT_VENDOR__H__
+ #ifdef TARGET_INIT_VENDOR_LIB
 -extern void vendor_load_properties(void);
 +extern void vendor_load_default_properties(void);
 +extern void vendor_load_system_properties(void);
 +extern void vendor_load_persist_properties(void);
- #endif /* __INIT_VENDOR__H__ */
+ #endif
+ 
+ static int persistent_properties_loaded = 0;
+@@ -675,6 +677,9 @@ static void update_sys_usb_config() {
+ }
+ 
+ void property_load_boot_defaults() {
++#ifdef TARGET_INIT_VENDOR_LIB
++    vendor_load_default_properties();
++#endif
+     if (!load_properties_from_file("/system/etc/prop.default", NULL)) {
+         // Try recovery path
+         if (!load_properties_from_file("/prop.default", NULL)) {
+@@ -689,6 +694,7 @@ void property_load_boot_defaults() {
+ }
+ 
+ static void load_override_properties() {
++
+     if (ALLOW_LOCAL_PROP_OVERRIDE) {
+         load_properties_from_file("/data/local.prop", NULL);
+     }
+@@ -708,7 +714,7 @@ void load_persist_props(void) {
+ #ifdef TARGET_INIT_VENDOR_LIB
+     /* vendor-specific properties
+      */
+-    vendor_load_properties();
++    vendor_load_persist_properties();
+ #endif
+ 
+ }
+@@ -750,6 +756,9 @@ void load_system_props() {
+     load_properties_from_file("/vendor/build.prop", NULL);
+     load_properties_from_file("/factory/factory.prop", "ro.*");
+     load_recovery_id_prop();
++#ifdef TARGET_INIT_VENDOR_LIB
++    vendor_load_system_properties();
++#endif
+ }
+ 
+ void start_property_service() {
 -- 
-1.9.1
+2.7.4
 
