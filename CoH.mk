@@ -36,3 +36,6 @@ TARGET_RELEASETOOLS_EXTENSIONS := $(LOCAL_PATH)
 else
 $(shell cd prebuilts/build-tools && git checkout linux-x86/bin/ninja)
 endif
+
+PRODUCT_PACKAGES += \
+    hwkeystore
