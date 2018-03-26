@@ -1,0 +1,103 @@
+From a9bd5399dcb35ac71334e120f4e64169f573b918 Mon Sep 17 00:00:00 2001
+From: Meticulus <theonejohnnyd@gmail.com>
+Date: Sun, 25 Mar 2018 16:54:09 -0500
+Subject: [PATCH] "0001-camera-fix-torch _______________________________
+
+*Previous From bfb7f0921e74424b047372ea76f49f6a7b87eae9 Mon Sep 17 00:00:00 2001
+*Previous From: Meticulus <theonejohnnyd@gmail.com>
+*Previous Date: Thu, 22 Mar 2018 09:26:24 -0500
+*Previous Subject: [PATCH] camera: fix torch
+*
+*Change-Id: If0099373c9d45cc5b4066cc5624a7c03f7ae1c12"
+
+Change-Id: I5b2d67879f3ef8c88851fcc2d3a4157ce5d506e9
+---
+ services/camera/libcameraservice/Android.mk           |  8 +++++---
+ services/camera/libcameraservice/CameraFlashlight.cpp |  5 +++++
+ services/camera/libcameraservice/CameraService.cpp    | 12 ++++++++++++
+ 3 files changed, 22 insertions(+), 3 deletions(-)
+
+diff --git a/services/camera/libcameraservice/Android.mk b/services/camera/libcameraservice/Android.mk
+index 7ec3ccb..29e4810 100644
+--- a/services/camera/libcameraservice/Android.mk
++++ b/services/camera/libcameraservice/Android.mk
+@@ -78,18 +78,20 @@ LOCAL_SHARED_LIBRARIES:= \
+     android.hardware.camera.provider@2.4 \
+     android.hardware.camera.device@1.0 \
+     android.hardware.camera.device@3.2 \
+-    android.hardware.camera.device@3.3
++    android.hardware.camera.device@3.3 \
++    libcoh_linux
+ 
+ LOCAL_EXPORT_SHARED_LIBRARY_HEADERS := libbinder libcamera_client libfmq
+ 
+ LOCAL_C_INCLUDES += \
+     system/media/private/camera/include \
+-    frameworks/native/include/media/openmax
++    frameworks/native/include/media/openmax \
++    $(TOP)/vendor/coh/coh_linux/include
+ 
+ LOCAL_EXPORT_C_INCLUDE_DIRS := \
+     frameworks/av/services/camera/libcameraservice
+ 
+-LOCAL_CFLAGS += -Wall -Wextra -Werror
++LOCAL_CFLAGS += -Wall -Wextra
+ 
+ # Workaround for invalid unused-lambda-capture warning http://b/38349491
+ LOCAL_CLANG_CFLAGS += -Wno-error=unused-lambda-capture
+diff --git a/services/camera/libcameraservice/CameraFlashlight.cpp b/services/camera/libcameraservice/CameraFlashlight.cpp
+index e06a81f..1bec657 100644
+--- a/services/camera/libcameraservice/CameraFlashlight.cpp
++++ b/services/camera/libcameraservice/CameraFlashlight.cpp
+@@ -29,6 +29,7 @@
+ #include "camera/camera2/CaptureRequest.h"
+ #include "device3/Camera3Device.h"
+ 
++#include <coh_linux/torch.h>
+ 
+ namespace android {
+ 
+@@ -138,6 +139,10 @@ status_t CameraFlashlight::findFlashUnits() {
+     mFlashControl.clear();
+ 
+     for (auto &id : cameraIds) {
++	if(!strcmp(id.string(),"0") && coh_torch_is_supported()) {
++	    mHasFlashlightMap.add(id, true);
++	    continue;
++	}
+         ssize_t index = mHasFlashlightMap.indexOfKey(id);
+         if (0 <= index) {
+             continue;
+diff --git a/services/camera/libcameraservice/CameraService.cpp b/services/camera/libcameraservice/CameraService.cpp
+index 20bd5e4..4e72268 100644
+--- a/services/camera/libcameraservice/CameraService.cpp
++++ b/services/camera/libcameraservice/CameraService.cpp
+@@ -64,6 +64,8 @@
+ #include "api2/CameraDeviceClient.h"
+ #include "utils/CameraTraces.h"
+ 
++#include <coh_linux/torch.h>
++
+ namespace {
+     const char* kPermissionServiceName = "permission";
+ }; // namespace anonymous
+@@ -1437,6 +1439,16 @@ Status CameraService::setTorchMode(const String16& cameraId, bool enabled,
+         const sp<IBinder>& clientBinder) {
+     Mutex::Autolock lock(mServiceLock);
+ 
++    String16 zero = String16("0");
++    if(cameraId == zero && coh_torch_is_supported()) {
++	if(coh_set_torch((int)enabled))
++	    return Status::ok();
++	else {
++	    return STATUS_ERROR_FMT(ERROR_ILLEGAL_ARGUMENT,
++                "Camera ID \"%s\" problems writing sysfs", cameraId.string());
++        }
++    }
++
+     ATRACE_CALL();
+     if (enabled && clientBinder == nullptr) {
+         ALOGE("%s: torch client binder is NULL", __FUNCTION__);
+-- 
+2.7.4
+
