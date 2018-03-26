@@ -847,7 +847,6 @@ symlinks := \
     $(shell ln -s /hwvendor/lib64/libril.so $(PRODUCT_OUT)/system/vendor/lib64/libril.so 2> /dev/null) \
     $(shell ln -s /hwvendor/bin/hostapd_hisi $(PRODUCT_OUT)/system/bin/hostapd 2> /dev/null) \
     $(shell ln -s /hwvendor/bin/wpa_cli_hisi $(PRODUCT_OUT)/system/bin/wpa_cli 2> /dev/null) \
-    $(shell ln -s /hwvendor/etc/wifi $(PRODUCT_OUT)/system/etc/wifi 2> /dev/null) \
     $(shell ln -s /hwvendor/etc/gnss $(PRODUCT_OUT)/system/etc/gnss 2> /dev/null) \
     $(shell ln -s /system/etc/native_packages.bin $(PRODUCT_OUT)/system/etc/native_packages.xml 2> /dev/null)
 
