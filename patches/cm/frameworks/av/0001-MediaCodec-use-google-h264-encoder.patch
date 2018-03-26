@@ -1,30 +1,38 @@
-From 1552b99fb04085fb259413af4efa900dbf64b090 Mon Sep 17 00:00:00 2001
+From 0aaf4014589137553e09de3da5f9b20556c8ae01 Mon Sep 17 00:00:00 2001
 From: Meticulus <theonejohnnyd@gmail.com>
-Date: Sun, 7 May 2017 06:14:35 -0500
-Subject: [PATCH] 0001-MediaCodec-use-google-h264-encoder
+Date: Fri, 23 Mar 2018 07:23:05 -0500
+Subject: [PATCH] "0001-MediaCodec-use-google-h264-encoder
+ _______________________________
 
-Change-Id: I55b4c62f1ee5db7299284306613ea5d168b2adc2
+*Previous From 1552b99fb04085fb259413af4efa900dbf64b090 Mon Sep 17 00:00:00 2001
+*Previous From: Meticulus <theonejohnnyd@gmail.com>
+*Previous Date: Sun, 7 May 2017 06:14:35 -0500
+*Previous Subject: [PATCH] 0001-MediaCodec-use-google-h264-encoder
+*
+*Change-Id: I55b4c62f1ee5db7299284306613ea5d168b2adc2"
+
+Change-Id: Id440d78decb725978c7d51acea0c44c2051a35cd
 ---
  media/libstagefright/MediaCodec.cpp | 29 +++++++++++++++++++++++++++--
  1 file changed, 27 insertions(+), 2 deletions(-)
 
 diff --git a/media/libstagefright/MediaCodec.cpp b/media/libstagefright/MediaCodec.cpp
-index a8e801f..3a95702 100644
+index 759e42d..ae35650 100644
 --- a/media/libstagefright/MediaCodec.cpp
 +++ b/media/libstagefright/MediaCodec.cpp
-@@ -52,6 +52,9 @@
+@@ -58,6 +58,9 @@
+ #include <utils/Log.h>
  #include <utils/Singleton.h>
- #include <stagefright/AVExtensions.h>
  
 +#include <cutils/properties.h>
 +#include <string.h>
 +
  namespace android {
  
- static int64_t getId(sp<IResourceManagerClient> client) {
-@@ -174,7 +177,22 @@ sp<MediaCodec> MediaCodec::CreateByType(
-         const sp<ALooper> &looper, const AString &mime, bool encoder, status_t *err, pid_t pid) {
-     sp<MediaCodec> codec = new MediaCodec(looper, pid);
+ // key for media statistics
+@@ -416,7 +419,22 @@ sp<MediaCodec> MediaCodec::CreateByType(
+         uid_t uid) {
+     sp<MediaCodec> codec = new MediaCodec(looper, pid, uid);
  
 -    const status_t ret = codec->init(mime, true /* nameIsType */, encoder);
 +    /* Meticulus:
@@ -46,9 +54,9 @@ index a8e801f..3a95702 100644
      if (err != NULL) {
          *err = ret;
      }
-@@ -186,7 +204,14 @@ sp<MediaCodec> MediaCodec::CreateByComponentName(
-         const sp<ALooper> &looper, const AString &name, status_t *err, pid_t pid) {
-     sp<MediaCodec> codec = new MediaCodec(looper, pid);
+@@ -428,7 +446,14 @@ sp<MediaCodec> MediaCodec::CreateByComponentName(
+         const sp<ALooper> &looper, const AString &name, status_t *err, pid_t pid, uid_t uid) {
+     sp<MediaCodec> codec = new MediaCodec(looper, pid, uid);
  
 -    const status_t ret = codec->init(name, false /* nameIsType */, false /* encoder */);
 +    status_t ret = -1;
@@ -63,5 +71,5 @@ index a8e801f..3a95702 100644
          *err = ret;
      }
 -- 
-1.9.1
+2.7.4
 
