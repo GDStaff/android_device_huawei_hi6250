@@ -1,0 +1,82 @@
+From 56f53b502308574c3fe1c59a423f5ad0a0d1c60a Mon Sep 17 00:00:00 2001
+From: Meticulus <theonejohnnyd@gmail.com>
+Date: Mon, 26 Mar 2018 07:45:18 -0500
+Subject: [PATCH] coh libandroid_runtime hooks
+
+Change-Id: Ia20c9b06dae2fe8989a1da8025b6a536f0177e28
+---
+ core/jni/Android.bp                  | 4 ++++
+ core/jni/android_hardware_Camera.cpp | 4 +++-
+ core/jni/fd_utils.cpp                | 5 +++++
+ 3 files changed, 12 insertions(+), 1 deletion(-)
+
+diff --git a/core/jni/Android.bp b/core/jni/Android.bp
+index c629341..6f9a0a7 100644
+--- a/core/jni/Android.bp
++++ b/core/jni/Android.bp
+@@ -210,6 +210,8 @@ cc_library_shared {
+         "libcore/include",
+         "system/media/camera/include",
+         "system/media/private/camera/include",
++        "vendor/coh/coh_android/include",
++        "vendor/coh/coh_hisi/include",
+     ],
+ 
+     static_libs: [
+@@ -273,6 +275,8 @@ cc_library_shared {
+ 
+         "libhwui",
+         "libdl",
++	"libcoh_android_bp",
++	"libcoh_hisi_bp",
+     ],
+ 
+     local_include_dirs: ["android/graphics"],
+diff --git a/core/jni/android_hardware_Camera.cpp b/core/jni/android_hardware_Camera.cpp
+index f7ead4e..a02edda 100644
+--- a/core/jni/android_hardware_Camera.cpp
++++ b/core/jni/android_hardware_Camera.cpp
+@@ -34,6 +34,8 @@
+ #include <camera/Camera.h>
+ #include <binder/IMemory.h>
+ 
++#include <coh_hisi/camera.h>
++
+ using namespace android;
+ 
+ enum {
+@@ -951,7 +953,7 @@ static jstring android_hardware_Camera_getParameters(JNIEnv *env, jobject thiz)
+         jniThrowRuntimeException(env, "getParameters failed (empty parameters)");
+         return 0;
+     }
+-    return env->NewStringUTF(params8.string());
++    return env->NewStringUTF(coh_prep_cam_parameters(params8.string()));
+ }
+ 
+ static void android_hardware_Camera_reconnect(JNIEnv *env, jobject thiz)
+diff --git a/core/jni/fd_utils.cpp b/core/jni/fd_utils.cpp
+index 92a5426..c07b052 100644
+--- a/core/jni/fd_utils.cpp
++++ b/core/jni/fd_utils.cpp
+@@ -31,6 +31,8 @@
+ #include <android-base/stringprintf.h>
+ #include <android-base/strings.h>
+ 
++#include <coh_android/zygote_whitelist.h>
++
+ // Static whitelist of open paths that the zygote is allowed to keep open.
+ static const char* kPathWhitelist[] = {
+   "/dev/null",
+@@ -111,6 +113,9 @@ bool FileDescriptorWhitelist::IsAllowed(const std::string& path) const {
+     return true;
+   }
+ 
++ if(coh_is_zygote_allowed_path(path.c_str()))
++    return true;
++
+   return false;
+ }
+ 
+-- 
+2.7.4
+
