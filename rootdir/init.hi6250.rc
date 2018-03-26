@@ -286,7 +286,7 @@ on boot
         chown system system /sys/devices/platform/fingerprint/fingerprint_chip_info
 
     chown system system /sys/class/leds/torch/brightness
-    chmod 664 /sys/class/leds/torch/brightness
+    chmod 666 /sys/class/leds/torch/brightness
 	restorecon /sys/class/leds/torch/brightness
     chown system system /sys/class/leds/torch/flash_thermal_protect
     chmod 664 /sys/class/leds/torch/flash_thermal_protect
