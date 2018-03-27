@@ -15,7 +15,7 @@
 #
 
 # Common overlay
-DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay/common
+DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay/
 
 # Inherit from those products. Most specific first.
 $(call inherit-product, build/target/product/full_base_telephony.mk)
@@ -49,13 +49,10 @@ PRODUCT_COPY_FILES += \
     frameworks/av/media/libstagefright/data/media_codecs_google_telephony.xml:system/etc/media_codecs_google_telephony.xml \
     frameworks/av/media/libstagefright/data/media_codecs_google_video.xml:system/etc/media_codecs_google_video.xml
 
-ifeq ($(TARGET_PRODUCT), omni_hi6250)
+ifeq ($(TARGET_PRODUCT), pa_hi6250)
     PRODUCT_COPY_FILES += \
 	$(LOCAL_PATH)/configs/etc/omni_media_codecs.xml:system/etc/media_codecs.xml
-else ifeq ($(TARGET_PRODUCT), aosp_hi6250)
-    PRODUCT_COPY_FILES += \
-	$(LOCAL_PATH)/configs/etc/omni_media_codecs.xml:system/etc/media_codecs.xml
-else 
+else
     PRODUCT_COPY_FILES += \
 	$(LOCAL_PATH)/configs/etc/media_codecs.xml:system/etc/media_codecs.xml
 endif
@@ -138,6 +135,39 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.setupwizard.enable_bypass=1 \
     ro.config.sync=yes
 
+# CodeOfHonor recovery init rc
+PRODUCT_COPY_FILES += \
+        $(LOCAL_PATH)/recovery/init.recovery.meticulus.rc:root/init.recovery.meticulus.rc
 
+# CodeOfHonor recovery checks
+PRODUCT_COPY_FILES += \
+	$(LOCAL_PATH)/recovery/stock-check.sh:install/bin/stock-check.sh \
+	$(LOCAL_PATH)/recovery/finalize.sh:install/bin/finalize.sh \
+	$(LOCAL_PATH)/recovery/data-formatter.sh:install/bin/data-formatter.sh
+
+
+# CodeOfHonor Settings Integration
+PRODUCT_PACKAGES += \
+    CodinalteParts \
+    volumeinput
+
+# CodeOfHonor Releasetools
+TARGET_RELEASETOOLS_EXTENSIONS := device/huawei/hi6250
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.telephony.ril_class=HuaweiRIL
+
+PRODUCT_PACKAGES += \
+    Snap \
+    mkyaffs2image \
+    mkuserimg.sh
+
+ADDITIONAL_DEFAULT_PROPERTIES += \
+    ro.zygote=zygote64_32 \
+    ro.secure=0 \
+    ro.adb.secure=0 \
+    sys.usb.configfs=1 \
+    sys.usb.controller=hisi-usb-otg
+
+TARGET_SCREEN_HEIGHT := 1920
+TARGET_SCREEN_WIDTH := 1080
+
