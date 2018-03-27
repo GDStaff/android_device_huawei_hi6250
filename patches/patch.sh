@@ -1,109 +1,391 @@
 #!/bin/bash
-THISDIR=$PWD
-ROM=${1}
-CLEAR=${2}
-TOPDIR="$THISDIR/../../../../"
+# Copyright (C) 2017 dady8889@github | Haky 86
+# Utility made for patching git repositories
 
+# Change/remove the default ROM below
+DEFAULT="aospa"
 
-checkerror() {
-    if [[ ${1} -gt 0 ]]; then
-	if [[ "${3}" == "-fatal" ]]; then
-		echo -e "[$(basename ${0})]: ERROR: ${2}" >&2
-		echo -e "[$(basename ${0})]: \t: #############################################################################" >&2
-		echo -e "[$(basename ${0})]: \t: # ABORT: This ROM may not build or may not boot unless this patch is fixed. #" >&2
-		echo -e "[$(basename ${0})]: \t: #############################################################################" >&2
-		exit 9
-	else
-		echo -e "[$(basename ${0})]: WARNING: ${2}" >&2	
-	fi
-    fi
+function necho() {
+	echo ""
 }
 
 
-if [[ "$ROM" == "" ]]; then
-	cd $TOPDIR
-	if [[ -e vendor/cm ]]; then
-		if [[ $(cat vendor/cm/README.mkdn | grep -c "Resurrection Remix") -gt 0 ]]; then
-			ROM="rr"
-		else
-			ROM="cm"
+function invalidargs() {
+	echo "Try 'patchtool --help' for more information."
+}
+
+function helpcommand() {
+	echo "Usage: patchtool -M [OPTION]"
+	echo "Utility for patching git repositories"
+	echo ""
+	echo "using the relative paths as target git repositories."
+	echo "You can use the bundled git-makepatch for automatic creation of patches."
+	echo ""
+	echo "Available operations:"
+	echo "-p, --patch [ROM]    use 'patch' for every .patch file inside [ROM] directory"
+	echo "-a, --apply [ROM]    use 'git apply' for every .apply file inside [ROM] directory"
+	echo "-c, --clear          revert all applied patches in respective repositories"
+	echo "(if you want to patch *.patch and *.apply at once, use -ap [ROM])"
+	echo ""
+	echo "Optional arguments:"
+	echo "-V, --verbose        print errors, other messages"
+	echo "-D, --dry-run        do not actually make changes, generate random errors if --apply specified"
+}
+
+function finishcommand() {
+	necho
+	if [[ ! $FIXMENUM == 0 ]]; then
+		echo -ne "${BI_MAGENTA}Fix $FIXMENUM patches.${NC} "
+	fi
+	if [[ ! $ALREADYPATCHEDNUM == 0 ]]; then
+		echo -ne "${BI_BLUE}$ALREADYPATCHEDNUM repos already patched.${NC} "
+	fi
+	if [[ ! $ERRORNUM == 0 ]]; then
+		echo -ne "${RED}Found $ERRORNUM errors.${NC} "
+	fi
+	if [[ ! $OKNUM == 0 ]]; then
+		echo -ne "${GREEN}$OKNUM actions were completed.${NC} "
+	fi
+	necho
+}
+
+function checkrom() {
+	local ROM=$1
+
+	if [[ -z $ROM && -z $DEFAULT ]]; then
+		echo -e "${RED}You must specify ROM when patching.${NC}"
+		exit 1
+	elif [[ -z $ROM ]]; then
+		echo -e "${BLUE}No ROM specified, using the default '$DEFAULT'${NC}"
+		INPUTROM=$DEFAULT
+		ROM=$DEFAULT
+	fi
+
+	if [[ ! -e $ROM ]]; then
+		echo -e "${RED}Directory '$ROM' not found.${NC}"
+		exit 1
+	fi
+}
+
+function notifyfixme() {
+	# Check patches listed as 'to fix', and show reminder
+	if [[ $LINE == *".fixme" ]]; then
+		echo -e "${BI_MAGENTA}Hey, you should fix $ROM/$LINE${NC}"
+		FIXMENUM=$(($FIXMENUM+1))
+		continue
+	fi
+}
+
+function clearpatchescommand() {
+	local LINENUM=0
+
+	for LINE in $(echo $(find -L -name *.patch); echo $(find -L -name *.apply))
+	do
+		LINENUM=$(($LINENUM+1))
+		REPO=$(dirname $LINE | cut -d '/' -f3-)
+
+		if [[ $(echo $CLEARED | grep -c "$REPO") -gt 0 ]]; then
+			continue
 		fi
-	elif [[ -e vendor/slim ]]; then
-		ROM="slim"
-	elif [[ -e vendor/omni ]]; then
-		ROM="omni"
-	elif [[ -e vendor/validus ]]; then
-		ROM="validus"
-	else
-		ROM="aosp"
+
+		echo -ne "${BLUE}Clearing repository${NC}"
+
+		cd "$TOPDIR"
+		if [[ ! -e $REPO ]]; then
+			echo -e " -> ${RED}Repository ${YELLOW}$REPO${RED} does not exist. Skipping...${NC}"
+			CLEARED="$CLEARED|$REPO|"
+			cd "$THISDIR"
+			ERRORNUM=$(($ERRORNUM+1))
+			continue
+		fi
+
+		echo -e " -> ${YELLOW}$REPO${NC}"
+
+		cd "$REPO"
+		if [[ $DRYRUN == false ]]; then
+			git add . > /dev/null
+			git stash > /dev/null
+			find -name "*.orig" | while read LINE; do rm "$LINE"; done
+			find -name "*.rej" | while read LINE; do rm "$LINE"; done
+			git clean -f > /dev/null
+			git stash clear > /dev/null
+		fi
+		CLEARED="$CLEARED|$REPO|"
+		cd "$THISDIR"
+		OKNUM=$(($OKNUM+1))
+	done
+	if [[ $LINENUM == 0 ]]; then
+		echo -e "${BLUE}No patches were found in this directory.${NC}"
 	fi
-	echo "ROM not specified. found $ROM"
-	sleep 1
-	cd $THISDIR	
-	
-fi
-if [[ "$CLEAR" == "" ]]; then
-	./clearpatches.sh $ROM
-fi
+}
 
-cd $ROM
-for LINE in $(find -L -name *.patch | sort )
-do
-
-	
-	PATCH=$THISDIR/$ROM/$LINE
-	REPO=$(dirname $LINE)
-	PATCHFATAL=""
-
-        if [[ "$(basename $PATCH)" == *critical* ]];then
-	    PATCHFATAL="-fatal"
-	fi
-        if [[ "$(basename $PATCH)" == *meticulus* ]] && [[ "$I_AM_METICULUS" != true ]]; then
-	    checkerror 1 "Skipping $(basename $PATCH): You are not Meticulus."
-	    continue;
-	fi
-
-	cd $TOPDIR
-	if [[ ! -e $REPO ]]; then
-		checkerror 1  "$REPO does not exist; skipping..."
-		cd $THISDIR
+function checkcritical() {
+	if [[ $GOTERROR == true ]]; then
+		if [[ $CRITICAL == true ]]; then
+			necho
+			echo -e "${BI_RED}Critical error occured: $COLOREDLINE ${BI_RED}is needed for booting/building the ROM!${NC}"
+			echo -e "${BGI_RED}You cannot proceed without this patch, so fix it!${NC}"
+			exit 1
+		fi
 		continue
 	fi
-	cd $REPO
-	echo "Applying patch: $ROM - $LINE"
-	patch -p1 --follow-symlinks --no-backup-if-mismatch  < $PATCH &> /dev/null
-	if [[ $? -gt 0 ]]; then
-		checkerror 1 "PATCH FAILED!!! $PATCH" $PATCHFATAL
-	fi
+}
 
-	cd $THISDIR
-done
+function patchcommand() {
+	local LINENUM=0
+	local ROM=$1
 
-cd $ROM
-for LINE in $(find -L -name *.apply | sort )
-do
-	PATCH=$THISDIR/$ROM/$LINE
-	REPO=$(dirname $LINE)
-	PATCHFATAL=""
+	necho
+	echo -e "${BI_MAGENTA}Entering directory $ROM${NC}"
+	cd "$ROM"
+	for LINE in $(find -L -name '*.patch' -or -name '*.patch.fixme' | cut -c 3- | sort)
+	do
 
-        if [[ "$(basename $PATCH)" == *critical* ]];then
-	    PATCHFATAL="-fatal"
+		notifyfixme
+
+		LINENUM=$(($LINENUM+1))
+		PATCH="$THISDIR/$ROM/$LINE"
+		CRITICAL=false
+		GOTERROR=false
+		COLOREDLINE="${YELLOW}$LINE${NC}"
+
+		if [[ $(echo "$COLOREDLINE" | grep -c "critical") -gt 0 ]]; then
+			COLOREDLINE=$(echo "$COLOREDLINE" | sed -e "s/critical/\x1b[101mcritical\x1b[0m\x1b[93m/g")
+			CRITICAL=true
+		fi
+
+		echo -ne "${BLUE}Applying patch: $COLOREDLINE"
+
+		REPO=$(dirname $LINE)
+
+		echo -ne " -> ${YELLOW}$REPO${NC}"
+		cd "$TOPDIR"
+		if [[ ! -e $REPO ]]; then
+			echo -e " -> ${RED}Repository ${YELLOW}$SHORTREPO${RED} does not exist. Skipping...${NC}"
+			cd "$THISDIR"
+			ERRORNUM=$(($ERRORNUM+1))
+			GOTERROR=true
+			checkcritical
+		fi
+
+		cd "$REPO"
+		if [[ $DRYRUN == false ]]; then
+			RESULT=$(patch '-p1' '--follow-symlinks' '--no-backup-if-mismatch' < $PATCH 2>&1)
+		else
+			RESULT=$(patch '--dry-run' '-p1' '--follow-symlinks' '--no-backup-if-mismatch' < $PATCH 2>&1)
+		fi
+		cd "$THISDIR"
+
+		# Show the patch result
+		if [[ $MESSAGE == true ]]; then
+			echo -e "\n -> ${RESULT}"
+		fi
+
+		if [[ $(echo $RESULT | grep -c "Reversed (or previously applied) patch detected") -gt 0 ]]; then
+			echo -e  " -> ${BI_BLUE}Already patched. Skipping...${NC}"
+			cd "$TOPDIR"/"$REPO"
+			if [[ $DRYRUN == false ]]; then
+				find -name "*.orig" | while read LINE; do rm "$LINE"; done
+				find -name "*.rej" | while read LINE; do rm "$LINE"; done
+			fi
+			cd "$THISDIR"
+			ALREADYPATCHEDNUM=$(($ALREADYPATCHEDNUM+1))
+			continue
+		elif [[ $(echo $RESULT | grep -c "can't find") -gt 0 ]]; then
+			echo -e " -> ${RED}Can't find specified file. Skipping...${NC}"
+			ERRORNUM=$(($ERRORNUM+1))
+			GOTERROR=true
+			checkcritical
+		elif [[ $(echo $RESULT | grep -c FAILED) -gt 0 ]]; then
+			echo -e " -> ${RED}Patch failed. Skipping...${NC}"
+			ERRORNUM=$(($ERRORNUM+1))
+			GOTERROR=true
+			checkcritical
+		elif [[ $(echo $RESULT | grep -c "saving rejects to file") -gt 0 ]]; then
+			echo -e  " -> ${RED}Patch rejected, edit target manually. Skipping...${NC}"
+			ERRORNUM=$(($ERRORNUM+1))
+			GOTERROR=true
+			checkcritical
+		elif [[ $(echo $RESULT | grep -c "garbage\|malformed") -gt 0 ]]; then
+			echo -e  " -> ${RED}Invalid syntax. Skipping...${NC}"
+			ERRORNUM=$(($ERRORNUM+1))
+			GOTERROR=true
+			checkcritical
+		fi
+
+		echo -e  " -> ${GREEN}Done${NC}"
+		OKNUM=$(($OKNUM+1))
+	done
+	if [[ $LINENUM == 0 ]]; then
+		echo -e "${BLUE}No patches were found in '$ROM'${NC}"
+		cd "$THISDIR"
 	fi
-	
-	cd $TOPDIR
-	if [[ ! -e $REPO ]]; then
-		checkerror 1 "$REPO does not exist; skipping..."
-		cd $THISDIR
-		continue
+}
+
+function applycommand() {
+	local LINENUM=0
+	local ROM=$1
+
+	necho
+	echo -e "${BI_MAGENTA}Entering directory $ROM${NC}"
+	cd "$ROM"
+	for LINE in $(find -L -name '*.apply' -or -name '*.apply.fixme' | cut -c 3- | sort)
+	do
+
+		notifyfixme
+
+		LINENUM=$(($LINENUM+1))
+		PATCH="$THISDIR/$ROM/$LINE"
+		CRITICAL=false
+		GOTERROR=false
+		COLOREDLINE="${YELLOW}$LINE${NC}"
+
+		if [[ $(echo "$COLOREDLINE" | grep -c "critical") -gt 0 ]]; then
+			COLOREDLINE=$(echo "$COLOREDLINE" | sed -e "s/critical/\x1b[101mcritical\x1b[0m\x1b[93m/g")
+			CRITICAL=true
+		fi
+
+		echo -ne "${BLUE}Applying patch: $COLOREDLINE"
+
+		REPO=$(dirname $LINE)
+
+		echo -ne " -> ${YELLOW}$REPO${NC}"
+		cd "$TOPDIR"
+		if [[ ! -e $REPO ]]; then
+			echo -e " -> ${RED}Repository ${YELLOW}$REPO${RED} does not exist. Skipping...${NC}"
+			cd "$THISDIR"
+			ERRORNUM=$(($ERRORNUM+1))
+			GOTERROR=true
+            checkcritical
+		fi
+
+		cd "$REPO"
+		if [[ $DRYRUN == false ]]; then
+			RESULT=$(git apply --whitespace=nowarn -v $PATCH 2>&1)
+		else
+			RAND=$(echo $RANDOM % 2 | bc)
+			if [[ $RAND == 0 ]]; then
+				RESULT="success: dry run!"
+			else
+				RESULT="error: dry run!"
+			fi
+		fi
+		cd "$THISDIR"
+
+		# show the patch result
+		if [[ $MESSAGE == true ]]; then
+			echo -e "\n -> ${RESULT}"
+		fi
+
+		if [[ $(echo $RESULT | grep -c "error:") -gt 0 ]]; then
+			echo -e " -> ${RED}Patch failed. Skipping...${NC}"
+			ERRORNUM=$(($ERRORNUM+1))
+			GOTERROR=true
+            checkcritical
+		fi
+
+		echo -e  " -> ${GREEN}Done${NC}"
+		OKNUM=$(($OKNUM+1))
+	done
+	if [[ $LINENUM == 0 ]]; then
+		echo -e "${BLUE}No patches were found in '$ROM'${NC}"
+		cd "$THISDIR"
 	fi
-	cd $REPO
-	echo "Applying patch: $ROM - $LINE"
-        git apply --whitespace=nowarn --reject $PATCH &> /dev/null	
-	checkerror $? "APPLY FAILED!!! $PATCH" $PATCHFATAL
-	cd $THISDIR
-done
-cd $THISDIR
-if [[ "$ROM" != "common" ]];then
-	./patch.sh common false
+}
+
+if [[ ! $# -gt 0 ]]; then
+	invalidargs
+	exit 1
 fi
 
+THISDIR="$PWD"
+TOPDIR="$THISDIR/../../../../"
+CLEARED=""
+
+ERRORNUM=0
+OKNUM=0
+FIXMENUM=0
+ALREADYPATCHEDNUM=0
+
+DRYRUN=false
+
+# TODO: Add non-coloured variant
+NC='\033[0m' # No Color
+RED='\033[0;91m'
+BLUE='\033[0;94m'
+YELLOW='\033[0;93m'
+GREEN='\033[0;92m'
+BI_RED='\033[1;91m'
+BI_MAGENTA='\033[1;95m'
+BI_YELLOW='\033[1;93m'
+BI_BLUE='\033[1;96m'
+BGI_RED='\033[1;101m'
+
+while [[ $# -gt 0 ]]
+do
+	arg="$1"
+	case $arg in
+		-V|--verbose)
+		MESSAGE=true
+		;;
+		-D|--dry-run)
+		echo -e "${BGI_RED}Running dry run${NC}"
+		DRYRUN=true
+		;;
+		-ap|-pa)
+		ACTION=true
+		INPUTROM=$2
+		checkrom $INPUTROM
+		necho
+		echo -e "${BI_YELLOW}Looking for *.patch files...${NC}"
+		patchcommand $INPUTROM
+		necho
+		echo -e "${BI_YELLOW}Looking for *.apply files...${NC}"
+		applycommand $INPUTROM
+		finishcommand
+		shift
+		;;
+		-p|--patch)
+		ACTION=true
+		INPUTROM=$2
+		checkrom $INPUTROM
+		necho
+		echo -e "${BI_YELLOW}Looking for *.patch files...${NC}"
+		patchcommand $INPUTROM
+		finishcommand
+		shift
+		;;
+		-a|--apply)
+		ACTION=true
+		INPUTROM=$2
+		checkrom $INPUTROM
+		necho
+		echo -e "${BI_YELLOW}Looking for *.apply files...${NC}"
+		applycommand $INPUTROM
+		finishcommand
+		shift
+		;;
+		-c|--clear)
+		ACTION=true
+		necho
+		echo -e "${BI_YELLOW}Finding patched repositories...${NC}"
+		clearpatchescommand
+		finishcommand
+		;;
+		-h|--help)
+		ACTION=true
+		helpcommand
+		;;
+		*)
+		echo "patchtool: unrecognized option '$arg'"
+		invalidargs
+		exit 1
+		;;
+	esac
+	shift
+done
+
+if [[ -z $ACTION ]]; then
+	invalidargs
+	exit 1
+fi
