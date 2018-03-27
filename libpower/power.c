@@ -1,23 +1,20 @@
 /*
- * Meticulus hi6250 libpower
- * Copyright (c) 2017 Jonathan Dennis [Meticulus]
- *                               theonejohnnyd@gmail.com
+ * Copyright (C) 2012 The Android Open Source Project
+ * Copyright (C) 2016 Jonathan Jason Dennis [Meticulus]
+ *					theonejohnnyd@gmail.com
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
- 
 #include <errno.h>
 #include <string.h>
 #include <sys/types.h>
@@ -30,9 +27,7 @@
 #include <hardware/hardware.h>
 #include <hardware/power.h>
 
-#include "venus.h"
-#include "warsaw.h"
-#include "berlin.h"
+#include "hi6250.h"
 
 //#define DEBUG
 
@@ -43,31 +38,23 @@
 #endif
 
 #define STOCK_PROP "persist.sys.stock_power_HAL"
-#define BASE "/sys/firmware/devicetree/base/"
-#define PRODUCT_PATH BASE"hisi,product_name"
 
 static hw_module_t *stock_power_module;
 extern int load_stock_power(char *path, hw_module_t **pHmi);
 
-static char stock_p_path[255] = "/system/lib64/hw/power.default.so";
-
-static int master_boost = 0;
 static int stock_power = 0;
 static int low_power = 0;
-static struct power_profile power_save;
-static struct power_profile balanced;
-static struct power_profile performance;
 static struct power_profile * profile = &performance; 
 static struct power_profile * sel_profile = &performance;
-static int init = 0;
-static void write_string(const char * path, const char * value) {
-    int fd = open(path, O_WRONLY);
-	if(fd == -1 ) { ALOGE("Unable to open to %s", path); return;}
 
-	unsigned long bytes_written = write(fd, value, strlen(value));
+static void write_string(char * path, char * value) {
+    int fd = open(path, O_WRONLY);
+	if(!fd) { ALOGE("Unable to open to %s", path); return;}
+
+	ssize_t bytes_written = write(fd, value, strlen(value));
 
 	if (bytes_written < 1 || bytes_written < strlen(value)) {
-		ALOGE("Unable to write to %s : %lu",path, bytes_written);
+		ALOGE("Unable to write to %s : %d",path, bytes_written);
 	}
 
     close(fd);
@@ -76,12 +63,10 @@ static void write_string(const char * path, const char * value) {
 
 static void power_init(struct power_module *module)
 {
-    int fd = -1;
-    char model[255];
     stock_power = property_get_bool(STOCK_PROP,false) ? 1 : 0;
     if(stock_power) {
 	ALOGI("%s is set. Loading Stock Power HAL...", STOCK_PROP);
-	if(load_stock_power(stock_p_path, &stock_power_module)) {
+	if(load_stock_power("/system/lib64/hw/power.default.so", &stock_power_module)) {
 	    ALOGE("%sis set but can't load Stock Power HAL!", STOCK_PROP);
 	    property_set(STOCK_PROP, "false");
 	    stock_power = 0;
@@ -93,81 +78,40 @@ static void power_init(struct power_module *module)
 	return ((power_module_t *)stock_power_module)->init((power_module_t *)stock_power_module);
     }
     ALOGI("init");
-
-    fd = open(PRODUCT_PATH, O_RDONLY);
-    if(fd < 0) {
-        ALOGE("Could not read model! using VNS");
-        sprintf(model,"VNS-L21");
-    } else {
-        if(read(fd,model,255) < 1) {
-            ALOGE("Could not read model! using VNS");
-            sprintf(model,"VNS-L21");
-        }
-    }
-    if(!strncmp(model, "WAS", 3)) {
-        power_save = warsaw_power_save;
-        balanced = warsaw_balanced;
-        performance = warsaw_performance;
-	ALOGI("Using profiles: warsaw");
-    } else if(!strncmp(model, "BLN", 3) || !strncmp(model, "BLL",3)) {
-        power_save = berlin_power_save;
-        balanced = berlin_balanced;
-        performance = berlin_performance;
-	ALOGI("Using profiles: berlin");
-    } else {
-        power_save = venus_power_save;
-        balanced = venus_balanced;
-        performance = venus_performance;
-	ALOGI("Using profiles: venus");
-    }
-    if(!init) {
-	sel_profile = &performance;
-	profile = &performance;
-	master_boost = 0;
-	init = 1;
-    }
-
-    write_string(CPU0_FREQ_MAX_PATH,(*profile).cpu0_freq_max);
+    write_string(CPU0_FREQ_MAX_PATH,(* profile).cpu0_freq_max);
     write_string(CPU0_FREQ_MIN_PATH,(* profile).cpu0_freq_low);
-    write_string(CPU4_FREQ_MAX_PATH,(*profile).cpu4_freq_max);
-    write_string(CPU4_FREQ_MIN_PATH,(* profile).cpu4_freq_low);
     write_string(GPU_FREQ_MIN_PATH,(* profile).gpu_freq_low);
+    usleep(500);
     write_string(GPU_FREQ_MAX_PATH,(* profile).gpu_freq_max);
     write_string(GPU_FREQ_POLL_PATH,"50\n");
     write_string(DDR_FREQ_MIN_PATH,(* profile).ddr_freq_low);
+    usleep(500);
     write_string(DDR_FREQ_MAX_PATH,(* profile).ddr_freq_max);
     write_string(DDR_FREQ_POLL_PATH,"50\n");
-    write_string(GPU_ANIM_BOOST_F_PATH,(*profile).gpu_freq_boost);
-    write_string(GPU_HISPEED_F_PATH,(*profile).gpu_freq_max);
 }
 
 static void power_set_interactive(struct power_module *module, int on) {
-    if(stock_power && stock_power_module && ((power_module_t *)stock_power_module)->setInteractive) {
-        ALOGI("->Stock Power HAL: setInteractive %d", on);
+	if(stock_power && stock_power_module && ((power_module_t *)stock_power_module)->setInteractive) {
+	    ALOGI("->Stock Power HAL: setInteractive %d", on);
 	    return ((power_module_t *)stock_power_module)->setInteractive((power_module_t *)stock_power_module,on);
-    } 
+	} 
 
-    ALOGI("setInteractive %d", on);
-    if (low_power)
-	return;
-
-    if(!master_boost)
-	return;
-
-    if (!on) {
-	profile = &power_save;
-	power_init(module);
-    } else {
-	profile = sel_profile;
-	power_init(module);
-    }
+	ALOGI("setInteractive %d", on);
+	if(on && !low_power) {
+	    write_string(GPU_FREQ_MIN_PATH,(* profile).gpu_freq_low);
+	    write_string(DDR_FREQ_MIN_PATH,(* profile).ddr_freq_low);
+	    write_string(GPU_FREQ_POLL_PATH,"3000\n");
+	    write_string(DDR_FREQ_POLL_PATH,"3000\n");
+	} else {
+	    write_string(GPU_FREQ_MIN_PATH,(* profile).gpu_freq_low);
+	    write_string(DDR_FREQ_MIN_PATH,(* profile).gpu_freq_low);
+	    write_string(GPU_FREQ_POLL_PATH,"12000\n");
+	    write_string(DDR_FREQ_POLL_PATH,"12000\n");
+	}
 }
 
 static void power_hint_cpu_boost(int dur) {
     char sdur[255];
-
-    if(!master_boost)
-	return;
 
     if(!(* profile).cpu0_should_boost)
 	return;
@@ -181,34 +125,30 @@ static void power_hint_cpu_boost(int dur) {
 }
 
 static void power_hint_interactive(int on) {
-    if(!master_boost)
-	return;
-    if(on && (* profile).gpu_should_boost) {
+	if(!(* profile).gpu_should_boost)
+	    return;
 	write_string(GPU_ANIM_BOOST_PATH,"1\n");
-	power_hint_cpu_boost(on);
-    } else {
-	write_string(GPU_ANIM_BOOST_PATH,"0\n");
-    }
+
 }
 
 static void power_hint_vsync(int on) {
 	if(on) {
 	    if((* profile).gpu_should_boost) {
-	    	write_string(GPU_VSYNCUP_PATH, "50\n");
-	    	write_string(GPU_NOVSYNCUP_PATH,"50\n");
+	    	write_string(GPU_FREQ_MIN_PATH, (* profile).gpu_freq_boost);
+	    	write_string(GPU_FREQ_POLL_PATH,"1000\n");
 	    }
 	    if((* profile).ddr_should_boost) {
-	    	write_string(DDR_FREQ_MAX_PATH, (* profile).ddr_freq_boost);
-	    	write_string(DDR_FREQ_POLL_PATH,"100\n");
+	    	write_string(DDR_FREQ_MIN_PATH, (* profile).ddr_freq_boost);
+	    	write_string(DDR_FREQ_POLL_PATH,"1000\n");
 	    }
 	} else {
 	    if((* profile).gpu_should_boost) {
-	    	write_string(GPU_VSYNCUP_PATH, "85\n");
-	    	write_string(GPU_NOVSYNCUP_PATH,"85\n");
+	        write_string(GPU_FREQ_MIN_PATH, (* profile).gpu_freq_low);
+	        write_string(GPU_FREQ_POLL_PATH,"3000\n");
 	    }
 	    if((* profile).ddr_should_boost) {
-	        write_string(DDR_FREQ_MAX_PATH, (* profile).ddr_freq_max);
-	        write_string(DDR_FREQ_POLL_PATH,"300\n");
+	        write_string(DDR_FREQ_MIN_PATH, (* profile).ddr_freq_low);
+	        write_string(DDR_FREQ_POLL_PATH,"3000\n");
             }
 	}
 }
@@ -222,8 +162,8 @@ static void power_hint_low_power(int on) {
 	write_string(GPU_FREQ_MIN_PATH,(* profile).gpu_freq_low);
 	write_string(DDR_FREQ_MAX_PATH,(* profile).ddr_freq_low);
 	write_string(DDR_FREQ_MIN_PATH,(* profile).ddr_freq_low);
-	write_string(GPU_FREQ_POLL_PATH,"1200\n");
-	write_string(DDR_FREQ_POLL_PATH,"1200\n");
+	write_string(GPU_FREQ_POLL_PATH,"0\n");
+	write_string(DDR_FREQ_POLL_PATH,"0\n");
     } else {
 	write_string(CPU0_FREQ_MAX_PATH,(* profile).cpu0_freq_max);
 	write_string(CPU0_FREQ_MIN_PATH,(* profile).cpu0_freq_low);
@@ -231,8 +171,8 @@ static void power_hint_low_power(int on) {
 	write_string(GPU_FREQ_MIN_PATH,(* profile).gpu_freq_low);
 	write_string(DDR_FREQ_MAX_PATH,(* profile).ddr_freq_max);
 	write_string(DDR_FREQ_MIN_PATH,(* profile).ddr_freq_low);
-	write_string(GPU_FREQ_POLL_PATH,"300\n");
-	write_string(DDR_FREQ_POLL_PATH,"300\n");
+	write_string(GPU_FREQ_POLL_PATH,"3000\n");
+	write_string(DDR_FREQ_POLL_PATH,"3000\n");
     }
 }
 
@@ -243,21 +183,18 @@ static void power_hint_set_profile(struct power_module *module, int p) {
 	    profile = &power_save;
 	    sel_profile = &power_save;
 	    power_init(module);
-	    master_boost = 1;
 	    ALOGI("Set power save profile.");
 	    break;
 	case 1:
 	    profile = &balanced;
 	    sel_profile = &balanced;
 	    power_init(module);
-	    master_boost = 1;
 	    ALOGI("Set balanced profile.");
 	    break;
 	case 2:
 	    profile = &performance;
 	    sel_profile = &performance;
 	    power_init(module);
-	    master_boost = 0;
 	    ALOGI("Set performance profile.");
 	    break;
         default:
@@ -297,11 +234,6 @@ static void power_hint(struct power_module *module, power_hint_t hint,
 		DEBUG_LOG("POWER_HINT_LOW_POWER %d", var);
 		power_hint_low_power(var);
 		break;
-	case POWER_HINT_LAUNCH:
-		DEBUG_LOG("POWER_HINT_LAUNCH");
-		if(!low_power)
-		    power_hint_interactive(0);
-		break;
 #ifndef AOSP
 	case POWER_HINT_CPU_BOOST:
 		if(data != NULL)
@@ -309,6 +241,11 @@ static void power_hint(struct power_module *module, power_hint_t hint,
 		DEBUG_LOG("POWER_HINT_CPU_BOOST %d", var);
 		if(!low_power)
 		    power_hint_cpu_boost(var);
+		break;
+	case POWER_HINT_LAUNCH:
+		DEBUG_LOG("POWER_HINT_LAUNCH");
+		if(!low_power)
+		    power_hint_interactive(0);
 		break;
 #endif
 #ifdef CMEXTRAS
