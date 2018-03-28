@@ -1,17 +1,24 @@
-# AOSP 8 for the Huawei P9 Lite (hi6250)
+# Code Of Honor : AOSP 8 for the Huawei P9 Lite (hi6250)
 
 ### Kernel
 This device tree is intended to be used with this kernel repo:
 
-See: https://github.com/Meticulus/android_kernel_huawei_hi6250
+See: https://github.com/codeofhonor-dev/android_kernel_huawei_hi6250
 
-branch: master
+branch: o-emui-5
 ### Vendor
 This device tree is intented to be used with this vendor repo
 
-https://github.com/Meticulus/android_vendor_huawei_hi6250
+https://github.com/codeofhonor-dev/android_vendor_huawei_hi6250
+
+branch: o-emui5
+
+### CoH Vendor Project
+
+https://github.com/codeofhonor-dev/android_vendor_coh
 
 branch: master
+
 # How To Build
 This "How to" is scoped for new builders with moderate PC skills.
 
@@ -23,27 +30,11 @@ You'll need Linux to be able to build LineageOS. You have three choices here; yo
 2. Dual boot Linux and Windows.
 3. Use virtual machine software ( virtual box, vmware ) to run linux.
 
-NOTE: I recommend you use Ubuntu 14.04 LTS to build. That's what I use.
+NOTE: I recommend you use Ubuntu 16.04 LTS to build. That's what I use.
 
 NOTE: DISK SPACE - You'll need about 110GB of free space for the build; swap space ( depending on PC specs ), and some head room. I'd say 130GB at a minimum but more is better if you can spare it.
 
 ## Now read this: http://source.android.com/source/initializing.html
-
-Update OpenJava for Ubuntu 14.04: The OpenJava files listed on the above page are out-dated. Refer to this post on XDA: 
-https://forum.xda-developers.com/oneplus-3/how-to/guide-complete-guide-building-t3477198/post70646310#post70646310
-
-Terminal:
-```bash
-sudo add-apt-repository ppa:openjdk-r/ppa
-sudo apt-get update
-sudo apt-get install openjdk-8-jdk
-```
-LineageOS 14.1 uses ImageMagick in building the bootanimation.zip
-
-Terminal:
-```bash
-sudo apt-get install imagemagick
-```
 
 ### Step 2: Downloading the Source.
 
@@ -82,9 +73,7 @@ Copy the following into hi6250.xml, save and close.
   <project name="codeofhonor-dev/android_kernel_huawei_hi6250" path="kernel/huawei/hi6250" remote="github" revision="o-emui5"/>
   <project name="codeofhonor-dev/android_device_huawei_hi6250" path="device/huawei/hi6250" remote="github" revision="o-emui5"/>
   <project name="codeofhonor-dev/android_vendor_huawei_hi6250" path="vendor/huawei/hi6250" remote="github" revision="o-emui5"/>
-  <!--<project name="LineageOS/android_vendor_nxp-nfc_opensource_Nfc" path="vendor/nxp-nfc/opensource/Nfc" remote="github" revision="cm-14.1"/>
-  <project name="LineageOS/android_vendor_nxp-nfc_opensource_libnfc-nci" path="vendor/nxp-nfc/opensource/libnfc-nci" remote="github" revision="cm-14.1"/>
-  <project name="LineageOS/android_vendor_nxp-nfc_opensource_frameworks" path="vendor/nxp-nfc/opensource/frameworks" remote="github" revision="cm-14.1"/>-->
+  <project name="codeofhonor-dev/android_vendor_coh" path="vendor/coh" remote="github" revision="master"/>
 </manifest>
 ```
 
@@ -95,10 +84,8 @@ Alternatively, if you would like to include Meticulus Development's "extras" the
   <project name="Meticulus/android_kernel_huawei_hi6250" path="kernel/huawei/hi6250" remote="github" revision="o-emui5"/>
   <project name="Meticulus/android_device_huawei_hi6250" path="device/huawei/hi6250" remote="github" revision="o-emui5"/>
   <project name="Meticulus/android_vendor_huawei_hi6250" path="vendor/huawei/hi6250" remote="github" revision="o-emui5"/>
-  <!-- <project name="LineageOS/android_vendor_nxp-nfc_opensource_Nfc" path="vendor/nxp-nfc/opensource/Nfc" remote="github" revision="cm-14.1"/>
-  <project name="LineageOS/android_vendor_nxp-nfc_opensource_libnfc-nci" path="vendor/nxp-nfc/opensource/libnfc-nci" remote="github" revision="cm-14.1"/>
-  <project name="LineageOS/android_vendor_nxp-nfc_opensource_frameworks" path="vendor/nxp-nfc/opensource/frameworks" remote="github" revision="cm-14.1"/>
-  <project name="codeofhonor-dev/android_packages_apps_CodinalteParts" path="packages/apps/CodinalteParts" remote="github" revision="hi6250"/>-->
+  <project name="codeofhonor-dev/android_vendor_coh" path="vendor/coh" remote="github" revision="master"/>
+  <project name="codeofhonor-dev/android_packages_apps_CodinalteParts" path="packages/apps/CodinalteParts" remote="github" revision="hi6250"/>
 </manifest>
 ```
 
@@ -115,19 +102,11 @@ NOTE: Yes we are syncing again and No, it shouldn't take quite as long. Every ti
 ### Step 4: Building
 
 #### Are you Meticulus? (optional)
-If you want to include Meticulus Development extras
+If you want to include Code Of Honor's extras
 
 Terminal:
 ```bash
-export I_AM_METICULUS=true
-```
-
-#### Turn off Ninja (optional)
-Ninja is supposed to help make incremental updates more efficient but you aren't doing an incremental update; are you?
-
-Terminal:
-```bash
-export USE_NINJA=false
+export I_AM_CODEOFHONOR=true
 ```
 
 #### Make sure there is enough memory for Jack(recommended).
@@ -136,13 +115,6 @@ This may not be neccessary depending on your PC's specs. On my previous laptop (
 Terminal:
 ```bash
 export ANDROID_JACK_VM_ARGS="-Xmx4g -Dfile.encoding=UTF-8 -XX:+TieredCompilation"
-```
-
-#### Bake su, "root ", inside bacon (optional)
-
-Terminal:
-```bash
-export WITH_SU=true
 ```
 
 #### Turn on autopatch (recommended)
@@ -170,13 +142,9 @@ Terminal:
 ```bash
 cd /home/$USER/los
 . build/envsetup.sh
-lunch lineage_hi6250-userdebug
+lunch aosp_hi6250-userdebug
 make -j8 bacon
 ```
-
-NOTE: These trees can also build Resurection Remix (nougat), SlimRoms (nougat), and OmniRom (nougat) without modification but with logical changes to these instructions.
-1. When running "repo init ...", you will obviously want to download the code for the respective ROM.
-2. When building SlimRoms (nougat) or OmniRom (nougat) and running "lunch ...", you want slim_hi6250-userdebug or omni_hi6260-userdebug respectively.
 
 
 ### Please let me know if there are mistakes,typos, mis/outdated - information in these instructions by creating an "issue".
