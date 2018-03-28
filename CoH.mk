@@ -38,4 +38,5 @@ $(shell cd prebuilts/build-tools && git checkout linux-x86/bin/ninja)
 endif
 
 PRODUCT_PACKAGES += \
-    hwkeystore
+    hwkeystore \
+    hwgatekeeperd
