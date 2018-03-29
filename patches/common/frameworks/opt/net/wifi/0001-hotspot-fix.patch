@@ -1,0 +1,60 @@
+From 7d17588a62e6a91f38e6fe776edaa2e59a8d1a15 Mon Sep 17 00:00:00 2001
+From: Meticulus <theonejohnnyd@gmail.com>
+Date: Thu, 29 Mar 2018 17:44:42 -0500
+Subject: [PATCH] hotspot fix.
+
+-Apparently our blob of hostapd (hostapd_hisi) doesn't support
+ssid2 nor does it support the other config.
+
+Change-Id: I5ca2586d0e2c25c0685d035733b2c279a5123357
+---
+ libwifi_system/hostapd_manager.cpp | 16 +++++++++-------
+ 1 file changed, 9 insertions(+), 7 deletions(-)
+
+diff --git a/libwifi_system/hostapd_manager.cpp b/libwifi_system/hostapd_manager.cpp
+index 658eecd..af6782d 100644
+--- a/libwifi_system/hostapd_manager.cpp
++++ b/libwifi_system/hostapd_manager.cpp
+@@ -134,6 +134,8 @@ string HostapdManager::CreateHostapdConfig(
+     EncryptionType encryption_type,
+     const vector<uint8_t> passphrase) {
+   string result;
++  int i = 0;
++  char realssid[255];
+ 
+   if (channel < 0) {
+     channel = kDefaultApChannel;
+@@ -174,23 +176,23 @@ string HostapdManager::CreateHostapdConfig(
+       return result;
+     }
+   }
+-
++  for (uint8_t b : ssid) {
++    realssid[i] = (char)b;
++    i ++;
++  }
++  realssid[i] = '\0';
+   result = StringPrintf(
+       "interface=%s\n"
+       "driver=nl80211\n"
+       "ctrl_interface=/data/misc/wifi/hostapd/ctrl\n"
+-      // ssid2 signals to hostapd that the value is not a literal value
+-      // for use as a SSID.  In this case, we're giving it a hex string
+-      // and hostapd needs to expect that.
+-      "ssid2=%s\n"
++      "ssid=%s\n"
+       "channel=%d\n"
+       "ieee80211n=1\n"
+       "hw_mode=%c\n"
+       "ignore_broadcast_ssid=%d\n"
+-      "wowlan_triggers=any\n"
+       "%s",
+       interface_name.c_str(),
+-      ssid_as_string.c_str(),
++      realssid,
+       channel,
+       (channel <= 14) ? 'g' : 'a',
+       (is_hidden) ? 1 : 0,
+-- 
+2.7.4
+
