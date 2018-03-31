@@ -77,13 +77,13 @@ Copy the following into hi6250.xml, save and close.
 </manifest>
 ```
 
-Alternatively, if you would like to include Meticulus Development's "extras" then copy the following into hi6250.xml, save and close.
+Alternatively, if you would like to include Code Of Honor's "extras" then copy the following into hi6250.xml, save and close.
 ```bash
 <?xml version="1.0" encoding="UTF-8"?>
 <manifest>
-  <project name="Meticulus/android_kernel_huawei_hi6250" path="kernel/huawei/hi6250" remote="github" revision="o-emui5"/>
-  <project name="Meticulus/android_device_huawei_hi6250" path="device/huawei/hi6250" remote="github" revision="o-emui5"/>
-  <project name="Meticulus/android_vendor_huawei_hi6250" path="vendor/huawei/hi6250" remote="github" revision="o-emui5"/>
+  <project name="codeofhonor-dev/android_kernel_huawei_hi6250" path="kernel/huawei/hi6250" remote="github" revision="o-emui5"/>
+  <project name="codeofhonor-dev/android_device_huawei_hi6250" path="device/huawei/hi6250" remote="github" revision="o-emui5"/>
+  <project name="codeofhonor-dev/android_vendor_huawei_hi6250" path="vendor/huawei/hi6250" remote="github" revision="o-emui5"/>
   <project name="codeofhonor-dev/android_vendor_coh" path="vendor/coh" remote="github" revision="master"/>
   <project name="codeofhonor-dev/android_packages_apps_CodinalteParts" path="packages/apps/CodinalteParts" remote="github" revision="hi6250"/>
 </manifest>
@@ -101,7 +101,7 @@ NOTE: Yes we are syncing again and No, it shouldn't take quite as long. Every ti
 
 ### Step 4: Building
 
-#### Are you Meticulus? (optional)
+#### Are you Code Of Honor? (optional)
 If you want to include Code Of Honor's extras
 
 Terminal:
