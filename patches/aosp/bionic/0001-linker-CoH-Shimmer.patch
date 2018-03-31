@@ -1,0 +1,92 @@
+From 871cac9ea9d4c687d92fd248e60904c74886b24e Mon Sep 17 00:00:00 2001
+From: Meticulus <theonejohnnyd@gmail.com>
+Date: Thu, 29 Mar 2018 11:21:33 -0500
+Subject: [PATCH] linker-CoH-Shimmer
+
+Change-Id: Iabb78fa3e00aac8967783a4ec976e2a81a1f9ab2
+---
+ linker/Android.bp | 10 ++++++++--
+ linker/linker.cpp | 25 ++++++++++++++++++++++++-
+ 2 files changed, 32 insertions(+), 3 deletions(-)
+
+diff --git a/linker/Android.bp b/linker/Android.bp
+index fda7eb5..4d9b6c6 100644
+--- a/linker/Android.bp
++++ b/linker/Android.bp
+@@ -69,7 +69,11 @@ cc_binary {
+     },
+ 
+     // We need to access Bionic private headers in the linker.
+-    include_dirs: ["bionic/libc"],
++    include_dirs: [
++	"bionic/libc",
++        "vendor/coh/coh_hisi/include",
++        "vendor/coh/coh_common/include",
++	],
+ 
+     // -shared is used to overwrite the -Bstatic and -static
+     // flags triggered by LOCAL_FORCE_STATIC_EXECUTABLE.
+@@ -87,7 +91,7 @@ cc_binary {
+         "-Wall",
+         "-Wextra",
+         "-Wunused",
+-        "-Werror",
++	"-Werror",
+     ],
+ 
+     // TODO: split out the asflags.
+@@ -131,6 +135,8 @@ cc_binary {
+ 
+         "liblog",
+         "libc++_static",
++	"libcoh_hisi_bp_static",
++	"libcoh_common_bp_static",
+ 
+         // Important: The liblinker_malloc should be the last library in the list
+         // to overwrite any other malloc implementations by other static libraries.
+diff --git a/linker/linker.cpp b/linker/linker.cpp
+index 078b3d5..9df04f4 100644
+--- a/linker/linker.cpp
++++ b/linker/linker.cpp
+@@ -69,7 +69,14 @@
+ #include "android-base/strings.h"
+ #include "android-base/stringprintf.h"
+ #include "ziparchive/zip_archive.h"
+-
++/*
++ * START [ CoH Shimmer ]
++ */
++#include <coh_hisi/shimmer.h>
++#include <coh/list.h>
++/*
++ * END [CoH Shimmer ]
++ */
+ // Override macros to use C++ style casts.
+ #undef ELF_ST_TYPE
+ #define ELF_ST_TYPE(x) (static_cast<uint32_t>(x) & 0xf)
+@@ -1117,6 +1124,22 @@ const char* fix_dt_needed(const char* dt_needed, const char* sopath __unused) {
+ template<typename F>
+ static void for_each_dt_needed(const ElfReader& elf_reader, F action) {
+   for (const ElfW(Dyn)* d = elf_reader.dynamic(); d->d_tag != DT_NULL; ++d) {
++  /* START [CoH Shimmer]
++   * Meticulus:
++   * The following lines of code should be the first lines
++   * in the function "for_each_dt_needed" if the ROM does
++   * not have shim support like pure AOSP. This patch
++   * is for ROMs that do not have shim support like AOSP.
++   */
++  list_t coh_shims = list_create(NULL,0,1);
++  coh_get_shims_for_path(&coh_shims, get_executable_path());
++  coh_get_shims_for_path(&coh_shims, elf_reader.name());
++  for (int i = 0; i < coh_shims.count; i++)
++    action(static_cast<char *>(list_get_at_index(&coh_shims, i)));
++  list_free(&coh_shims);
++  /*
++   * END [Coh Shimmer]
++   */
+     if (d->d_tag == DT_NEEDED) {
+       action(fix_dt_needed(elf_reader.get_string(d->d_un.d_val), elf_reader.name()));
+     }
+-- 
+2.7.4
+

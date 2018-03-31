@@ -1,17 +1,24 @@
-From f4e41af0e2b9fc44bcc6a38a8b6029c405493883 Mon Sep 17 00:00:00 2001
+From 94a0427a0424fef0090d817d96708076b41ab5a7 Mon Sep 17 00:00:00 2001
 From: Meticulus <theonejohnnyd@gmail.com>
-Date: Wed, 28 Mar 2018 08:39:38 -0500
-Subject: [PATCH] linker: CoH Shimmer
+Date: Sat, 31 Mar 2018 09:39:03 -0500
+Subject: [PATCH] "0001-linker-CoH-Shimmer _______________________________
 
--Plug into the Coh Vendor Project for getting shim list.
--Hopefully this will simplify shimming accross ROMs.
--Sould work in addition to any ROMs shim solution.
+*Previous From f4e41af0e2b9fc44bcc6a38a8b6029c405493883 Mon Sep 17 00:00:00 2001
+*Previous From: Meticulus <theonejohnnyd@gmail.com>
+*Previous Date: Wed, 28 Mar 2018 08:39:38 -0500
+*Previous Subject: [PATCH] linker: CoH Shimmer
+*
+*-Plug into the Coh Vendor Project for getting shim list.
+*-Hopefully this will simplify shimming accross ROMs.
+*-Sould work in addition to any ROMs shim solution.
+*
+*Change-Id: If2697911d225ec2338db97ef6c505d40c00a9d2e"
 
-Change-Id: If2697911d225ec2338db97ef6c505d40c00a9d2e
+Change-Id: Ide67e4a7bfde0bf2a39f0d0d130546c945efbd2d
 ---
  linker/Android.bp | 10 ++++++++--
- linker/linker.cpp | 25 ++++++++++++++++++++++++-
- 2 files changed, 32 insertions(+), 3 deletions(-)
+ linker/linker.cpp | 24 +++++++++++++++++++++++-
+ 2 files changed, 31 insertions(+), 3 deletions(-)
 
 diff --git a/linker/Android.bp b/linker/Android.bp
 index d74fbd3..6ef8df0 100644
@@ -49,7 +56,7 @@ index d74fbd3..6ef8df0 100644
          // Important: The liblinker_malloc should be the last library in the list
          // to overwrite any other malloc implementations by other static libraries.
 diff --git a/linker/linker.cpp b/linker/linker.cpp
-index 6ecb9eb..eb187ff 100644
+index 6ecb9eb..c8c48d5 100644
 --- a/linker/linker.cpp
 +++ b/linker/linker.cpp
 @@ -69,7 +69,14 @@
@@ -68,7 +75,7 @@ index 6ecb9eb..eb187ff 100644
  // Override macros to use C++ style casts.
  #undef ELF_ST_TYPE
  #define ELF_ST_TYPE(x) (static_cast<uint32_t>(x) & 0xf)
-@@ -1184,6 +1191,22 @@ static void for_each_dt_needed(const ElfReader& elf_reader, F action) {
+@@ -1184,6 +1191,21 @@ static void for_each_dt_needed(const ElfReader& elf_reader, F action) {
    for_each_matching_shim(get_executable_path(), action);
    for_each_matching_shim(elf_reader.name(), action);
  #endif
@@ -80,7 +87,6 @@ index 6ecb9eb..eb187ff 100644
 +   * is for ROMs that have shim support like LineageOS.
 +   */
 +  list_t coh_shims = list_create(NULL,0,1);
-+  coh_get_shims_for_path(&coh_shims, get_executable_path());
 +  coh_get_shims_for_path(&coh_shims, elf_reader.name());
 +  for (int i = 0; i < coh_shims.count; i++)
 +    action(static_cast<char *>(list_get_at_index(&coh_shims, i)));

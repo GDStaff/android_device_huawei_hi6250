@@ -24,7 +24,7 @@ This "How to" is scoped for new builders with moderate PC skills.
 
 ### Step 1: Setting up the Build Environment.
 
-You'll need Linux to be able to build LineageOS. You have three choices here; you can:
+You'll need Linux to be able to build AOSP. You have three choices here; you can:
 
 1. Install Linux natively on your computer.
 2. Dual boot Linux and Windows.
@@ -46,9 +46,9 @@ Execute the following commands in a linux terminal:
 
 Terminal:
 ```bash
-mkdir /home/$USER/los
-cd /home/$USER/los
-repo init -u git://github.com/LineageOS/android.git -b cm-14.1
+mkdir /home/$USER/aosp
+cd /home/$USER/aosp
+repo init -u https://android.googlesource.com/platform/manifest -b android-8.1.0_r18
 repo sync
 ```
 WARNING: There may be times, towards the end when it seem like, the download is stuck and not making any progress because there are no updates on the screen. BE PATIENT!, open a program that will show how much bandwidth you are using to be sure!
@@ -63,10 +63,10 @@ Execute the following commands:
 
 Terminal:
 ```bash
-mkdir /home/$USER/los/.repo/local_manifests
-gedit /home/$USER/los/.repo/local_manifests/hi6250.xml
+mkdir /home/$USER/aosp/.repo/local_manifests
+gedit /home/$USER/aosp/.repo/local_manifests/hi6250.xml
 ```
-Copy the following into hi6250.xml, save and close.
+Copy the following into hi6250.xml, save and caospe.
 ```bash
 <?xml version="1.0" encoding="UTF-8"?>
 <manifest>
@@ -77,7 +77,7 @@ Copy the following into hi6250.xml, save and close.
 </manifest>
 ```
 
-Alternatively, if you would like to include Meticulus Development's "extras" then copy the following into hi6250.xml, save and close.
+Alternatively, if you would like to include Meticulus Development's "extras" then copy the following into hi6250.xml, save and caospe.
 ```bash
 <?xml version="1.0" encoding="UTF-8"?>
 <manifest>
@@ -93,7 +93,7 @@ Execute the following commands:
 
 Terminal:
 ```bash
-cd /home/$USER/los
+cd /home/$USER/aosp
 repo sync
 ```
 
@@ -130,17 +130,17 @@ Execute the following commands:
 
 Terminal:
 ```bash
-cd /home/$USER/los/device/huawei/hi6250/patches && ./patch.sh
+cd /home/$USER/aosp/device/huawei/hi6250/patches && ./patch.sh
 ```
 
-NOTE: Now you have everything that you need to build LineageOS 14.1 for your hi6250 device. Build times depend on your PC's performance specifications. In the following terminal command "-j8" represents the number of concurrent tasks to execute. For low specs machines (such as mine) lowering the value to "-j3" may help speed things up. For high spec'd machines raising the value may speed things up.
+NOTE: Now you have everything that you need to build AOSP Oreo for your hi6250 device. Build times depend on your PC's performance specifications. In the following terminal command "-j8" represents the number of concurrent tasks to execute. For low specs machines (such as mine) lowering the value to "-j3" may help speed things up. For high spec'd machines raising the value may speed things up.
 
 NOTE: It may take anywhere from 1 hours to 15 hours depending on system specs for a complete build.
 Execute the following commands:
 
 Terminal:
 ```bash
-cd /home/$USER/los
+cd /home/$USER/aosp
 . build/envsetup.sh
 lunch aosp_hi6250-userdebug
 make -j8 bacon
