@@ -20,7 +20,7 @@ DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay/cm
 # Inherit cm
 $(call inherit-product, device/huawei/hi6250/cm.mk)
 
-PRODUCT_NAME := lineage_hi6250
+PRODUCT_NAME := aim_hi6250
 
 ifeq ($(AUTOPATCH),true)
     $(shell cd device/huawei/hi6250/patches 2>&1 > /dev/null && ./patch.sh lineage >&2)

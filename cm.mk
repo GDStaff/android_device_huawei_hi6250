@@ -15,7 +15,7 @@
 #
 
 # Inherit CM common Phone stuff.
-$(call inherit-product-if-exists, vendor/cm/config/common_full_phone.mk)
+$(call inherit-product-if-exists, vendor/aim/config/common_full_phone.mk)
 
 # Inherit device configuration
 $(call inherit-product, device/huawei/hi6250/device.mk)

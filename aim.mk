@@ -1,4 +1,4 @@
-# 
+#
 # Copyright (C) 2016 Jonathan Jason Dennis (theonejohnnyd@gmail.com)
 # Copyright (C) 2018 Francesco M. (dil3mm4.dev@gmail.com)
 #
@@ -21,8 +21,8 @@ DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay/cm
 # Inherit cm
 $(call inherit-product, device/huawei/hi6250/cm.mk)
 # Inherit viper
-$(call inherit-product, vendor/viper/config/common_full_phone.mk)
-PRODUCT_NAME := viper_hi6250
+$(call inherit-product, vendor/aim/config/common_full_phone.mk)
+PRODUCT_NAME := aim_hi6250
 
 ifeq ($(AUTOPATCH),true)
     $(shell cd device/huawei/hi6250/patches 2>&1 > /dev/null && ./patch.sh lineage >&2)
