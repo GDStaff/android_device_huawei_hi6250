@@ -19,6 +19,7 @@ PRODUCT_MAKEFILES := \
     cm_hi6250:$(LOCAL_DIR)/cm.mk \
     slim_hi6250:$(LOCAL_DIR)/slim.mk \
     aim_hi6250:$(LOCAL_DIR)/lineage.mk \
+    lineage_hi6250:$(LOCAL_DIR)/lineage.mk \
     validus_hi6250:$(LOCAL_DIR)/validus.mk \
     aosp_hi6250:$(LOCAL_DIR)/aosp.mk
 
