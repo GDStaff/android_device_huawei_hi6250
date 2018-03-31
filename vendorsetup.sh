@@ -3,7 +3,7 @@ if [[ -e vendor/slim ]]; then
 elif [[ -e vendor/omni ]]; then
     add_lunch_combo omni_hi6250-userdebug
 elif [[ -e vendor/cm ]]; then
-    add_lunch_combo aim_hi6250-userdebug
+    add_lunch_combo lineage_hi6250-userdebug
 elif [[ -e vendor/validus ]]; then
     add_lunch_combo validus_hi6250-userdebug
 elif [[ -e vendor/viper ]]; then 
