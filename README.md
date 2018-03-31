@@ -170,7 +170,7 @@ Terminal:
 ```bash
 cd /home/$USER/los
 . build/envsetup.sh
-lunch aim_hi6250-userdebug
+lunch lineage_hi6250-userdebug
 make -j8 bacon
 ```
 
