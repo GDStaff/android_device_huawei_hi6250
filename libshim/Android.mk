@@ -17,20 +17,12 @@ LOCAL_PATH := $(call my-dir)
 include $(CLEAR_VARS)
 
 LOCAL_C_INCLUDES += \
-    external/libexif \
-    frameworks/base/libs \
-    external/skia/include/config \
-    external/skia/include/core \
-    external/skia/include/private \
-    external/skia/src/core \
-    external/skia/src/effects \
-    external/skia/src/image \
-    external/skia/src/utils \
-    external/skia/src/gpu
+    external/libexif
 
 LOCAL_MODULE := libshim
 LOCAL_SRC_FILES := shim.cpp
-LOCAL_SHARED_LIBRARIES := libexif libhwui
+LOCAL_SHARED_LIBRARIES := libexif liblog
+#LOCAL_SHARED_LIBRARIES += libhwui
 #ifeq ($(TARGET_PRODUCT), aosp_hi6250)
 #LOCAL_CFLAGS += -DAOSP
 #endif
