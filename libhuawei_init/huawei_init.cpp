@@ -103,6 +103,8 @@ void vendor_load_default_properties() {
     /* All Berlin needs this */
     } else if(!strncmp(model, "BLN", 3) || !strncmp(model, "BLL", 3)) {
 	set_property(BOARDID_PRODUCT_PROP, "61202");
+	/* switch to belin key */
+	write_int("/sys/module/tc_client_driver/parameters/usekey", 1);
     /* All Prague needs this */
     } else if(!strncmp(model, "PRA", 3)) {
 	set_property(BOARDID_PRODUCT_PROP, "61285");
