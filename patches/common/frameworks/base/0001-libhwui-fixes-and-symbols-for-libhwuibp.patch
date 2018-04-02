@@ -1,30 +1,37 @@
-From e42118636aa4ea41ffe5c28cbfbb7c114ce85ed2 Mon Sep 17 00:00:00 2001
+From fe35e2f6894722d395e9c4e2ed72e40bc15774c8 Mon Sep 17 00:00:00 2001
 From: Meticulus <theonejohnnyd@gmail.com>
-Date: Tue, 6 Feb 2018 09:03:32 -0600
+Date: Mon, 2 Apr 2018 08:37:14 -0500
 Subject: [PATCH] "0001-libhwui-fixes-and-symbols-for-libhwuibp
  _______________________________
 
-*Previous From 624bb7cadb895f1e6377a6c33953e93239bdb1eb Mon Sep 17 00:00:00 2001
+*Previous From e42118636aa4ea41ffe5c28cbfbb7c114ce85ed2 Mon Sep 17 00:00:00 2001
 *Previous From: Meticulus <theonejohnnyd@gmail.com>
-*Previous Date: Tue, 12 Dec 2017 05:49:11 -0600
+*Previous Date: Tue, 6 Feb 2018 09:03:32 -0600
 *Previous Subject: [PATCH] "0001-libhwui-fixes-and-symbols-for-libhwuibp
 *_______________________________
 *
-**Previous From 258d77921d91b6786706d7ec326c6d9146b4d902 Mon Sep 17 00:00:00 2001
+**Previous From 624bb7cadb895f1e6377a6c33953e93239bdb1eb Mon Sep 17 00:00:00 2001
 **Previous From: Meticulus <theonejohnnyd@gmail.com>
-**Previous Date: Tue, 14 Nov 2017 04:59:06 -0600
-**Previous Subject: [PATCH] libhwui: fixes and symbols for libhwuibp
+**Previous Date: Tue, 12 Dec 2017 05:49:11 -0600
+**Previous Subject: [PATCH] "0001-libhwui-fixes-and-symbols-for-libhwuibp
+**_______________________________
 **
-**-define out unused code and add missing symbol referenced
-**by libhwuibp
-**
-**Change-Id: I5237e41f7155349967d7fc22f769dbce2d9b150e""
+***Previous From 258d77921d91b6786706d7ec326c6d9146b4d902 Mon Sep 17 00:00:00 2001
+***Previous From: Meticulus <theonejohnnyd@gmail.com>
+***Previous Date: Tue, 14 Nov 2017 04:59:06 -0600
+***Previous Subject: [PATCH] libhwui: fixes and symbols for libhwuibp
+***
+***-define out unused code and add missing symbol referenced
+***by libhwuibp
+***
+***Change-Id: I5237e41f7155349967d7fc22f769dbce2d9b150e""
+*
+*Change-Id: Ifc023d1ae81f47b8c4bc088dd579f90c9c9560b7"
 
-Change-Id: Ifc023d1ae81f47b8c4bc088dd579f90c9c9560b7
+Change-Id: Ie80b9eb3d91b80ca1b6a2cd59112abc2d2fe739c
 ---
- libs/hwui/Android.bp       | 1 -
- libs/hwui/ProgramCache.cpp | 4 ++++
- 2 files changed, 4 insertions(+), 1 deletion(-)
+ libs/hwui/Android.bp | 1 -
+ 1 file changed, 1 deletion(-)
 
 diff --git a/libs/hwui/Android.bp b/libs/hwui/Android.bp
 index 770a57a..0d0b3ca 100644
@@ -38,18 +45,6 @@ index 770a57a..0d0b3ca 100644
  
          // GCC false-positives on this warning, and since we -Werror that's
          // a problem
-diff --git a/libs/hwui/ProgramCache.cpp b/libs/hwui/ProgramCache.cpp
-index b767046..b401554 100644
---- a/libs/hwui/ProgramCache.cpp
-+++ b/libs/hwui/ProgramCache.cpp
-@@ -905,3 +905,7 @@ void ProgramCache::printLongString(const String8& shader) const {
- 
- }; // namespace uirenderer
- }; // namespace android
-+
-+extern "C" void _ZN7android10uirenderer12ProgramCache14generateShaderERKNS0_18ProgramDescriptionERNS_7String8ES6_(const android::uirenderer::ProgramDescription& description, android::String8& shader) {
-+    PROGRAM_LOGD("Meticulus: '%s'\n", shader.string());
-+}
 -- 
 2.7.4
 
