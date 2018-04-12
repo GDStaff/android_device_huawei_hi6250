@@ -131,3 +131,5 @@ ifneq ($(TARGET_PRODUCT), aosp_hi6250)
 BOARD_SEPOLICY_DIRS += $(TOP)/device/huawei/hi6250/cm_sepolicy
 endif
 
+TARGET_EXFAT_DRIVER := exfat
+
