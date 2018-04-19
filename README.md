@@ -1,15 +1,15 @@
-# LineageOS 14.1 for the Huawei P9 Lite (hi6250)
+# AOSPA 7.3.1 for HI6250 Devices
 
 ### Kernel
 This device tree is intended to be used with this kernel repo:
 
-See: https://github.com/Meticulus/android_kernel_huawei_hi6250
+See: https://github.com/codeofhonor-dev/android_kernel_huawei_hi6250
 
 branch: master
 ### Vendor
 This device tree is intented to be used with this vendor repo
 
-https://github.com/Meticulus/android_vendor_huawei_hi6250
+https://github.com/codeofhonor-dev/android_vendor_huawei_hi6250
 
 branch: master
 # How To Build
@@ -57,7 +57,7 @@ Terminal:
 ```bash
 mkdir /home/$USER/los
 cd /home/$USER/los
-repo init -u git://github.com/LineageOS/android.git -b cm-14.1
+repo init -u repo init -u https://github.com/AOSPA/manifest -b nougat-mr2
 repo sync
 ```
 WARNING: There may be times, towards the end when it seem like, the download is stuck and not making any progress because there are no updates on the screen. BE PATIENT!, open a program that will show how much bandwidth you are using to be sure!
@@ -79,9 +79,10 @@ Copy the following into hi6250.xml, save and close.
 ```bash
 <?xml version="1.0" encoding="UTF-8"?>
 <manifest>
-  <project name="codeofhonor-dev/android_kernel_huawei_hi6250" path="kernel/huawei/hi6250" remote="github" revision="master"/>
-  <project name="codeofhonor-dev/android_device_huawei_hi6250" path="device/huawei/hi6250" remote="github" revision="master"/>
-  <project name="codeofhonor-dev/android_vendor_huawei_hi6250" path="vendor/huawei/hi6250" remote="github" revision="master"/>
+  <project name="codeofhonor-dev/android_kernel_huawei_hi6250" path="kernel/huawei/hi6250"   remote="github" revision="master"/>
+  <project name="codeofhonor-dev/android_device_huawei_hi6250" path="device/huawei/hi6250"   remote="github" revision="master"/>
+  <project name="codeofhonor-dev/android_vendor_huawei_hi6250" path="vendor/huawei/hi6250"   remote="github" revision="master"/>
+  <project name="LineageOS/android_packages_apps_Recorder"     path="packages/apps/Recorder" remote="github" revision="cm-14.1"/>
   <project name="LineageOS/android_vendor_nxp-nfc_opensource_Nfc" path="vendor/nxp-nfc/opensource/Nfc" remote="github" revision="cm-14.1"/>
   <project name="LineageOS/android_vendor_nxp-nfc_opensource_libnfc-nci" path="vendor/nxp-nfc/opensource/libnfc-nci" remote="github" revision="cm-14.1"/>
   <project name="LineageOS/android_vendor_nxp-nfc_opensource_frameworks" path="vendor/nxp-nfc/opensource/frameworks" remote="github" revision="cm-14.1"/>
@@ -95,6 +96,7 @@ Alternatively, if you would like to include Code Of Honor Development's "extras"
   <project name="codeofhonor-dev/android_kernel_huawei_hi6250" path="kernel/huawei/hi6250" remote="github" revision="master"/>
   <project name="codeofhonor-dev/android_device_huawei_hi6250" path="device/huawei/hi6250" remote="github" revision="master"/>
   <project name="codeofhonor-dev/android_vendor_huawei_hi6250" path="vendor/huawei/hi6250" remote="github" revision="master"/>
+  <project name="LineageOS/android_packages_apps_Recorder"     path="packages/apps/Recorder" remote="github" revision="cm-14.1"/>
   <project name="LineageOS/android_vendor_nxp-nfc_opensource_Nfc" path="vendor/nxp-nfc/opensource/Nfc" remote="github" revision="cm-14.1"/>
   <project name="LineageOS/android_vendor_nxp-nfc_opensource_libnfc-nci" path="vendor/nxp-nfc/opensource/libnfc-nci" remote="github" revision="cm-14.1"/>
   <project name="LineageOS/android_vendor_nxp-nfc_opensource_frameworks" path="vendor/nxp-nfc/opensource/frameworks" remote="github" revision="cm-14.1"/>
@@ -115,7 +117,7 @@ NOTE: Yes we are syncing again and No, it shouldn't take quite as long. Every ti
 ### Step 4: Building
 
 #### Are you Code Of Honor? (optional)
-If you want to include Meticulus Development extras
+If you want to include CodeOfHonor Development extras
 
 Terminal:
 ```bash
