@@ -14,18 +14,36 @@
 # limitations under the License.
 #
 
-# Common overlay
-DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay/
-
-# Inherit from those products. Most specific first.
+# Android Open Source Project Common Stuff
+$(call inherit-product, build/target/product/core_64_bit.mk)
 $(call inherit-product, build/target/product/full_base_telephony.mk)
 $(call inherit-product, build/target/product/languages_full.mk)
+
+PRODUCT_PACKAGES += \
+    Snap \
+    mkuserimg.sh \
+    mkyaffs2image
+
+# ADB
+ADDITIONAL_DEFAULT_PROPERTIES += \
+    ro.zygote=zygote64_32 \
+    ro.secure=0 \
+    ro.adb.secure=0 \
+    sys.usb.configfs=1 \
+    sys.usb.controller=hisi-usb-otg
+
+# Common Overlay
+DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay/
 
 # Blobs
 $(call inherit-product, vendor/huawei/hi6250/vendor.mk)
 
-# 64 bit
-$(call inherit-product, build/target/product/core_64_bit.mk)
+# CodeOfHonor's Repos
+$(call inherit-product, device/huawei/hi6250/CoH.mk)
+
+# Display
+TARGET_SCREEN_HEIGHT := 1920
+TARGET_SCREEN_WIDTH := 1080
 
 # Ramdisk
 PRODUCT_COPY_FILES += \
@@ -127,7 +145,6 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.vulkan.level-0.xml:system/etc/permissions/android.hardware.vulkan.level-0.xml \
     $(LOCAL_PATH)/configs/etc/permissions/android.hardware.huawei.xml:system/etc/permissions/android.hardware.huawei.xml
 
-
 # Non-device-specific props
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.com.google.locationfeatures=1 \
@@ -135,39 +152,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.setupwizard.enable_bypass=1 \
     ro.config.sync=yes
 
-# CodeOfHonor recovery init rc
-PRODUCT_COPY_FILES += \
-        $(LOCAL_PATH)/recovery/init.recovery.meticulus.rc:root/init.recovery.meticulus.rc
-
-# CodeOfHonor recovery checks
-PRODUCT_COPY_FILES += \
-	$(LOCAL_PATH)/recovery/stock-check.sh:install/bin/stock-check.sh \
-	$(LOCAL_PATH)/recovery/finalize.sh:install/bin/finalize.sh \
-	$(LOCAL_PATH)/recovery/data-formatter.sh:install/bin/data-formatter.sh
-
-
-# CodeOfHonor Settings Integration
-PRODUCT_PACKAGES += \
-    CodinalteParts \
-    volumeinput
-
 # CodeOfHonor Releasetools
 TARGET_RELEASETOOLS_EXTENSIONS := device/huawei/hi6250
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.telephony.ril_class=HuaweiRIL
-
-PRODUCT_PACKAGES += \
-    Snap \
-    mkyaffs2image \
-    mkuserimg.sh
-
-ADDITIONAL_DEFAULT_PROPERTIES += \
-    ro.zygote=zygote64_32 \
-    ro.secure=0 \
-    ro.adb.secure=0 \
-    sys.usb.configfs=1 \
-    sys.usb.controller=hisi-usb-otg
-
-TARGET_SCREEN_HEIGHT := 1920
-TARGET_SCREEN_WIDTH := 1080
-
