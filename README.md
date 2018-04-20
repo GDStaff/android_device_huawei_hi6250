@@ -55,8 +55,8 @@ Execute the following commands in a linux terminal:
 
 Terminal:
 ```bash
-mkdir /home/$USER/los
-cd /home/$USER/los
+mkdir /home/$USER/aospa
+cd /home/$USER/aospa
 repo init -u repo init -u https://github.com/AOSPA/manifest -b nougat-mr2
 repo sync
 ```
@@ -72,8 +72,8 @@ Execute the following commands:
 
 Terminal:
 ```bash
-mkdir /home/$USER/los/.repo/local_manifests
-gedit /home/$USER/los/.repo/local_manifests/hi6250.xml
+mkdir /home/$USER/aospa/.repo/local_manifests
+gedit /home/$USER/aospa/.repo/local_manifests/hi6250.xml
 ```
 Copy the following into hi6250.xml, save and close.
 ```bash
