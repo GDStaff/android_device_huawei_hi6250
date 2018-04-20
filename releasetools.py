@@ -75,7 +75,6 @@ def FullOTA_InstallBegin(info):
   info.script.AppendExtra('ui_print("                                                    ");');
   info.script.AppendExtra('ui_print("   THE TEAM:                                        ");');
   info.script.AppendExtra('ui_print("                                                    ");');
-  info.script.AppendExtra('ui_print("   Dil3mm4           : [Lazy Dev]                   ");');
   info.script.AppendExtra('ui_print("   felix-development : [Honor 6X Maintainer]        ");');
   info.script.AppendExtra('ui_print("   Haky 86           : [Tester]                     ");');
   info.script.AppendExtra('ui_print("   HassanMirza01     : [All Rounder (Pakistan)]     ");');
