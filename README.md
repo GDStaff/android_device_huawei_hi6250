@@ -80,7 +80,7 @@ Copy the following into hi6250.xml, save and close.
 <?xml version="1.0" encoding="UTF-8"?>
 <manifest>
   <project name="codeofhonor-dev/android_kernel_huawei_hi6250" path="kernel/huawei/hi6250"   remote="github" revision="master"/>
-  <project name="codeofhonor-dev/android_device_huawei_hi6250" path="device/huawei/hi6250"   remote="github" revision="master"/>
+  <project name="codeofhonor-dev/android_device_huawei_hi6250" path="device/huawei/hi6250"   remote="github" revision="aospa-nougat-mr2"/>
   <project name="codeofhonor-dev/android_vendor_huawei_hi6250" path="vendor/huawei/hi6250"   remote="github" revision="master"/>
   <project name="LineageOS/android_packages_apps_Recorder"     path="packages/apps/Recorder" remote="github" revision="cm-14.1"/>
   <project name="LineageOS/android_vendor_nxp-nfc_opensource_Nfc" path="vendor/nxp-nfc/opensource/Nfc" remote="github" revision="cm-14.1"/>
@@ -94,7 +94,7 @@ Alternatively, if you would like to include Code Of Honor Development's "extras"
 <?xml version="1.0" encoding="UTF-8"?>
 <manifest>
   <project name="codeofhonor-dev/android_kernel_huawei_hi6250" path="kernel/huawei/hi6250" remote="github" revision="master"/>
-  <project name="codeofhonor-dev/android_device_huawei_hi6250" path="device/huawei/hi6250" remote="github" revision="master"/>
+  <project name="codeofhonor-dev/android_device_huawei_hi6250" path="device/huawei/hi6250" remote="github" revision="aospa-nougat-mr2"/>
   <project name="codeofhonor-dev/android_vendor_huawei_hi6250" path="vendor/huawei/hi6250" remote="github" revision="master"/>
   <project name="LineageOS/android_packages_apps_Recorder"     path="packages/apps/Recorder" remote="github" revision="cm-14.1"/>
   <project name="LineageOS/android_vendor_nxp-nfc_opensource_Nfc" path="vendor/nxp-nfc/opensource/Nfc" remote="github" revision="cm-14.1"/>
@@ -108,7 +108,7 @@ Execute the following commands:
 
 Terminal:
 ```bash
-cd /home/$USER/los
+cd /home/$USER/aospa
 repo sync
 ```
 
@@ -139,28 +139,12 @@ Terminal:
 ```bash
 export ANDROID_JACK_VM_ARGS="-Xmx4g -Dfile.encoding=UTF-8 -XX:+TieredCompilation"
 ```
-
-#### Bake su, "root ", inside bacon (optional)
-
-Terminal:
-```bash
-export WITH_SU=true
-```
-
-#### Turn on autopatch (recommended)
-This will apply device specific patches everytime you lunch.
-
-Terminal:
-```bash
-export AUTOPATCH=true
-```
-
 If you did not turn on autopatch, you will want to apply the repo patches manually. These patches modify code in the ROM to work with this device.
 Execute the following commands:
 
 Terminal:
 ```bash
-cd /home/$USER/los/device/huawei/hi6250/patches && ./patch.sh
+cd /home/$USER/aospa/device/huawei/hi6250/patches && ./patch.sh -p aospa
 ```
 
 NOTE: Now you have everything that you need to build LineageOS 14.1 for your hi6250 device. Build times depend on your PC's performance specifications. In the following terminal command "-j8" represents the number of concurrent tasks to execute. For low specs machines (such as mine) lowering the value to "-j3" may help speed things up. For high spec'd machines raising the value may speed things up.
@@ -170,15 +154,7 @@ Execute the following commands:
 
 Terminal:
 ```bash
-cd /home/$USER/los
-. build/envsetup.sh
-lunch lineage_hi6250-userdebug
-make -j8 bacon
+cd /home/$USER/aospa
+./rom-build.sh hi6250
 ```
-
-NOTE: These trees can also build Resurection Remix (nougat), SlimRoms (nougat), and OmniRom (nougat) without modification but with logical changes to these instructions.
-1. When running "repo init ...", you will obviously want to download the code for the respective ROM.
-2. When building SlimRoms (nougat) or OmniRom (nougat) and running "lunch ...", you want slim_hi6250-userdebug or omni_hi6260-userdebug respectively.
-
-
 ### Please let me know if there are mistakes,typos, mis/outdated - information in these instructions by creating an "issue".
