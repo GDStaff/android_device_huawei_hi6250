@@ -138,9 +138,3 @@ BOARD_HARDWARE_CLASS := device/huawei/hi6250/cmhw/
 # SELinux
 BOARD_SEPOLICY_DIRS += \
 	device/huawei/hi6250/sepolicy
-
-ifneq ($(TARGET_PRODUCT), aosp_hi6250)
-BOARD_SEPOLICY_DIRS += \
-	device/huawei/hi6250/cm_sepolicy
-endif
-

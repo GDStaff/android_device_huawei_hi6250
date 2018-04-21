@@ -84,6 +84,10 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     hostapd_cli
 
+# Doze
+PRODUCT_PACKAGES += \
+    HisiDoze
+
 # NFC
 PRODUCT_PACKAGES += \
     NQNfcNci \

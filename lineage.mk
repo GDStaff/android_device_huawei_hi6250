@@ -34,3 +34,11 @@ else
     $(shell echo ---------------------------------------------------------------- >&2)
 endif
 
+# Include Meticulus' Stuff
+PRODUCT_PACKAGES += \
+    CodinalteParts 
+
+PRODUCT_COPY_FILES += \
+        $(LOCAL_PATH)/recovery/init.recovery.meticulus.rc:root/init.recovery.meticulus.rc
+
+
